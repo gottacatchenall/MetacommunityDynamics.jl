@@ -1,0 +1,4 @@
+name = "MetacommunityDynamics"
+uuid = "24e8287d-3f0b-4585-bd3b-4b75104d71ce"
+authors = ["michael catchen <mdcatchen@gmail.com>"]
+version = "0.1.0"
