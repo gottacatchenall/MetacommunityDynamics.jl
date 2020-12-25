@@ -18,13 +18,13 @@ Split out representation of metacommunities and their dynamics into the followin
 - Envrionmental Conditions across Space
 
 2. Dynamics
-- Measurement (what is the thing that is changing, e.g. abundance, occupancy, traits, phylogenetic distance, etc.)
+-  Measurement (what is the thing that is changing, e.g. abundance, occupancy, traits, phylogenetic distance, etc.)
 - DynamicsModel (how does this measure change over time, as a function of the state/environment/etc.)
 - DynamicsState a set of Meaurements for each Location
 - DynamicsTrajectory a list of DynamicsStates over time  
 
-3. Metacommunity
-- EcologicalNetwork
+3. Metaweb
+- Superclass of `EcologicalNetwork`
 
 
 
