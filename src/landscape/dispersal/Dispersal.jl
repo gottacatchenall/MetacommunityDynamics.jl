@@ -2,6 +2,8 @@ module Dispersal
     using ..MetacommunityDynamics
     using ..Landscape
 
+    # Abstract type definitions
+
     #=
     DispersalKernel
     -----------------------------------------------------------
