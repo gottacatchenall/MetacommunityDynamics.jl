@@ -2,6 +2,7 @@
 Location(; dimensions::Int=2) = Location(rand(Distributions.Uniform(), dimensions))
 Base.ndims(a::Location) = length(a.coordinate)
 
+
 struct PoissonProcess <: LocationSetGenerator
         number_of_locations::Int
         dimensions::Int
@@ -23,7 +24,7 @@ LocationSet(; number_of_locations = 20, dimensions = 2) = PoissonProcess(; numbe
 Base.length(a::LocationSet) = length(a.locations)
 Base.size(a::LocationSet) = length(a.locations)
 Base.isempty(a::LocationSet) = (length(a.locations) == 0)
-
+Base.getindex(a::LocationSet, i::Int64) = a.locations[i]
 
 function Base.iterate(S::LocationSet)
     isempty(S) && return nothing

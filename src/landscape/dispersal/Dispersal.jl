@@ -1,7 +1,7 @@
 module Dispersal
     using ..MetacommunityDynamics
     using ..Landscape
-
+    using ..MetacommunityDynamics.MCDParams
     # Abstract type definitions
 
     #=
@@ -12,6 +12,15 @@ module Dispersal
     =#
     abstract type DispersalKernel end
 
+
+    #DispersalPotential(S::LocationSet) = IBDwCutoff()(S)
+
+    #=
+    DispersalPotentialGenerator
+    -----------------------------------------------------------
+        An abstract type for an object that generates a dispersal potentital according to a set of parameters.
+    =#
+    abstract type DispersalPotentialGenerator end
 
     #=
     DispersalPotential
@@ -27,19 +36,9 @@ module Dispersal
         matrix::Array{Float64}
     end
 
-    #DispersalPotential(S::LocationSet) = IBDwCutoff()(S)
-
-    #=
-    DispersalPotentialGenerator
-    -----------------------------------------------------------
-        An abstract type for an object that generates a dispersal potentital according
-        to a set of parameters.
-    =#
-    abstract type DispersalPotentialGenerator end
-
-
     # Include files with constructors for dispersal stuff
     include(joinpath(".", "dispersal_kernels.jl"))
     include(joinpath(".", "dispersal_potential.jl"))
 
+    export DispersalPotential, distance
 end

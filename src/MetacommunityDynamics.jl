@@ -11,7 +11,7 @@ module MetacommunityDynamics
     # parameters
     # ===========================================
     include(joinpath(".", "parameters/Parameters.jl"))
-    using .Parameters
+    using .MCDParams
     export Parameter
 
     # ===========================================

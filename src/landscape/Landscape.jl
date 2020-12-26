@@ -11,8 +11,9 @@ module Landscape
     mutable struct Location
        coordinate::Vector{Float64}
     end
+    distance(L1::Location, L2::Location) = sqrt(sum( (L1.coordinate - L2.coordinate).^2 ))
 
-    export Location
+    export Location, distance
 
 
     #=
@@ -23,6 +24,8 @@ module Landscape
     mutable struct LocationSet
         locations::Vector{Location}
     end
+
+
     export LocationSet
 
     #=
