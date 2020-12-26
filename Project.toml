@@ -4,6 +4,5 @@ authors = ["michael catchen <mdcatchen@gmail.com>"]
 version = "0.1.0"
 
 [deps]
-BioEnergeticFoodWebs = "9b49b652-2545-5b88-a3af-87b516beb26f"
-EcoBase = "a58aae7d-b440-5a11-b283-399458f99aac"
-EcologicalNetworks = "f03a62fe-f8ab-5b77-a061-bb599b765229"
+Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
