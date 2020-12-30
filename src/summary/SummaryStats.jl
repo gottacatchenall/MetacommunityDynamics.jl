@@ -1,4 +1,4 @@
 module SummaryStats
-     
+
 
 end

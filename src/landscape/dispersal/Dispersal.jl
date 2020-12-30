@@ -1,6 +1,6 @@
 module Dispersal
     using ..MetacommunityDynamics
-    using ..Landscape
+    using ..Landscapes
     using ..MetacommunityDynamics.MCDParams
     # Abstract type definitions
 
@@ -11,9 +11,11 @@ module Dispersal
         for a specific dynamics model.
     =#
     abstract type DispersalKernel end
+    export DispersalKernel
 
+    # Include files with constructors for dispersal stuff
+    include(joinpath(".", "dispersal_kernels.jl"))
 
-    #DispersalPotential(S::LocationSet) = IBDwCutoff()(S)
 
     #=
     DispersalPotentialGenerator
@@ -21,6 +23,8 @@ module Dispersal
         An abstract type for an object that generates a dispersal potentital according to a set of parameters.
     =#
     abstract type DispersalPotentialGenerator end
+    export DispersalPotentialGenerator
+
 
     #=
     DispersalPotential
@@ -32,13 +36,27 @@ module Dispersal
         Note that this forms a probabiity distribution over j for all i,
         meaning that sum_j matrix[i,j] = 1 for all i.
     "=#
+
     struct DispersalPotential
         matrix::Array{Float64}
     end
+    Base.size(potential::DispersalPotential) = size(potential.matrix)
+    Base.length(potential::DispersalPotential) = size(potential.matrix)[1]
+    Base.getindex(potential::DispersalPotential, x, y) = potential.matrix[x,y]
 
-    # Include files with constructors for dispersal stuff
-    include(joinpath(".", "dispersal_kernels.jl"))
-    include(joinpath(".", "dispersal_potential.jl"))
+    include(joinpath(".", "dispersal_potential_generators.jl"))
+    DispersalPotential(; locations = LocationSet(), generator=DispersalPotentialGenerators.IBDandCutoff()) = generator(locations=locations)
 
-    export DispersalPotential, distance
+    export DispersalPotential
+
+    abstract type DispersalType end
+
+    struct DispersalModel
+        locations::LocationSet
+        potential::DispersalPotential
+    end
+    DispersalModel(; locations=LocationSet()) = DispersalModel(locations, DispersalPotential(locations=locations))
+    export DispersalModel
+
+
 end

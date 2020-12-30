@@ -2,7 +2,11 @@ using MetacommunityDynamics
 using Test
 
 test_list = [
-  "./landscapes/generator_tests.jl"
+"./parameter_tests.jl",
+  "./landscapes/landscape_generator_tests.jl",
+  "./landscapes/dispersal_potential_tests.jl",
+  "./dynamics/constructor_tests.jl",
+  "./dynamics/simulation_tests.jl"
 ]
 
 global test_n

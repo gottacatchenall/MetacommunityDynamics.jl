@@ -18,13 +18,15 @@ module MetacommunityDynamics
     # landscapes
     # ===========================================
     include(joinpath(".", "landscape/Landscape.jl"))
-    using .Landscape
+    using .Landscapes
+    export Landscape,Location, LocationSet, DispersalKernel, DispersalPotential, EnvironmentalMeasurement, EnvironmentalMeasurementSet, EnvironmentModel
 
     # ===========================================
     # metaweb
     # ===========================================
     include(joinpath(".", "metaweb/Metaweb.jl"))
-    using .Metaweb
+    using .Metawebs
+    export Metaweb
 
 
     # ===========================================

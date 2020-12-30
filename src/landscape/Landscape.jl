@@ -1,7 +1,8 @@
-module Landscape
+module Landscapes
     using ..MetacommunityDynamics
     using Distributions
     using Base
+
 
     #=
         Location()
@@ -42,9 +43,6 @@ module Landscape
         abstract type IBD <: DispersalStructure end
         abstract type IBR <: DispersalStructure end # omniscape.jl integration (eventually)
 
-    abstract type DispersalPotential end
-    abstract type DispersalKernel end
-    #
 
 
     include(joinpath(".", "generators.jl"))
@@ -52,11 +50,19 @@ module Landscape
     #dispersal
     include(joinpath(".", "dispersal/Dispersal.jl"))
     using .Dispersal
+    export DispersalPotential
 
     #
     include(joinpath(".", "./environment/Environment.jl"))
     using .Environment
 
+    struct Landscape
+        locations::LocationSet
+        dispersal::DispersalModel
+        environment::EnvironmentModel
+    end
+    Landscape(; locations = LocationSet(), dispersal_model = DispersalModel(locations=locations), environment=EnvironmentModel()) = Landscape(locations, dispersal_model, environment)
 
+    export Landscape
 
 end
