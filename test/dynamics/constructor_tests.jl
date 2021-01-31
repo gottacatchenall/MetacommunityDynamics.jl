@@ -12,6 +12,9 @@ module DynamicsConstructorTests
     instance = DynamicsInstance()
     @test typeof(instance) <: DynamicsInstance
 
-    @show instance
+    @test instance.has_been_run == false
+    simulate(instance)
+
+    @test instance.has_been_run == true
 
 end

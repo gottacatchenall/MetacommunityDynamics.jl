@@ -29,29 +29,25 @@ module Dynamics
     export SimulationSettings
 
 
-    abstract type Measurement end
-    struct Abundance <: Measurement
-        dimensions::Int
+
+    abstract type MeasurementType end
+
+    struct EnvironmentalMeasurement <: MeasurementType
+        value::Array{Number,2}
     end
-    Abundance() = Abundance(1)
-
-
-    mutable struct DynamicsTrajectory
-        state::Array{Float64} 
+    struct MetacommunityMeasurement <: MeasurementType
+        value::Array{Number,3}
     end
 
-    DynamicsTrajectory(;locations=LocationSet(), settings=SimulationSettings()) = begin
-        dimensions::Int = size(locations)
-        number_of_timesteps::Int = settings.number_of_timesteps
-        log_frequency::Int = settings.log_frequency
-        delta_time::Float64 = settings.timestep_width
-        number_logged_timepoints::Int = Int(floor(number_of_timesteps/log_frequency))
-        
-        empty_trajectory::Array{Float64} = zeros(number_logged_timepoints, dimensions)
-        return DynamicsTrajectory(empty_trajectory)
-    end
-    export DynamicsTrajectory
+    struct Trait <: MeasurementType end
+    struct Abundance <: MeasurementType end
+    struct Occupancy <: MeasurementType end
 
+    ### TODO
+    #   think about the best data structure for sp/location/time cube
+    mutable struct Measurement{T <: EnvironmentalMeasurement}
+        value::T
+    end
 
 
     # Include files with constructors for dispersal stuff
@@ -66,17 +62,23 @@ module Dynamics
         An instance of a treatment, which contains the resulting
         abundance matrix.
     """
-    struct DynamicsInstance{T <: DynamicsModel}
+    mutable struct DynamicsInstance{T <: DynamicsModel}
         dynamics_model::T
         landscape::Landscape
         settings::SimulationSettings
-        trajectory::DynamicsTrajectory
         has_been_run::Bool
     end
     DynamicsInstance(;  dynamics_model::DynamicsModel= Neutral(),
                         landscape::Landscape = Landscape(),
                         settings::SimulationSettings = SimulationSettings()
-                        ) = DynamicsInstance(dynamics_model, landscape, settings, DynamicsTrajectory(settings=settings, locations=landscape.locations), false)
+                        ) = DynamicsInstance(dynamics_model, landscape, settings, false)
 
     export DynamicsInstance
+
+    # Include files with constructors for dispersal stuff
+    include(joinpath(".", "simulation.jl"))
+    using .MCDSimulation
+    export simulate
+
+
 end

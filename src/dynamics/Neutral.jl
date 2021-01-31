@@ -24,7 +24,21 @@ module NeutralModel
     struct Neutral <: DynamicsModel
         parameters::NeutralParameters
     end
+    
     Neutral(; parameters = NeutralParameters()) = Neutral(parameters)
+
+
+    function (model::Neutral)(state::Vector) 
+        for s in state
+            # extinciton is an absorbing boundary condition 
+            if s > 0
+                s = s + rand(Normal(model.σ[p]))
+            else 
+                s = 0
+            end
+        end 
+    end
+
     export Neutral
 
 end
