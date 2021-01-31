@@ -9,12 +9,8 @@ module DynamicsConstructorTests
     model = Neutral()
     @test typeof(model) <: DynamicsModel
 
-    instance = DynamicsInstance()
-    @test typeof(instance) <: DynamicsInstance
+    @show model
 
-    @test instance.has_been_run == false
-    simulate(instance)
-
-    @test instance.has_been_run == true
-
+    trajectory = model()
+    @test typeof(trajectory) == Trajectory
 end

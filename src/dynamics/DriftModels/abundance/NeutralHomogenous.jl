@@ -5,12 +5,13 @@
 
 module NeutralModel
     using ..Dynamics
+    using ..Landscapes
+    using ..Metawebs
     using ..MetacommunityDynamics.MCDParams
 
     """
         NeutralParameters
         -----------------------------------------------------------
-        A parameter bundle for the Ricker model.
     """
     struct NeutralParameters <: DynamicsParameterSet
         σ::Vector{Parameter}   # A vector of standard deviation (σᵢ) for each species abundance Nᵢ(t+1) = N(t) +  σᵢ(t), where σᵢ(t) ∼ Normal(σᵢ)
@@ -23,20 +24,23 @@ module NeutralModel
 
     struct Neutral <: DynamicsModel
         parameters::NeutralParameters
+        landscape::Landscape
+        metaweb::Metaweb
+        settings::SimulationSettings
     end
-    
+
     Neutral(; parameters = NeutralParameters()) = Neutral(parameters)
 
 
-    function (model::Neutral)(state::Vector) 
+    function (model::Neutral)(state::Vector)
         for s in state
-            # extinciton is an absorbing boundary condition 
+            # extinciton is an absorbing boundary condition
             if s > 0
                 s = s + rand(Normal(model.σ[p]))
-            else 
+            else
                 s = 0
             end
-        end 
+        end
     end
 
     export Neutral
