@@ -25,6 +25,7 @@ module Landscapes
     mutable struct LocationSet
         locations::Vector{Location}
     end
+    Base.size(l::LocationSet) = length(l.locations)
 
 
     export LocationSet
@@ -62,6 +63,8 @@ module Landscapes
         environment::EnvironmentModel
     end
     Landscape(; locations = LocationSet(), dispersal_model = DispersalModel(locations=locations), environment=EnvironmentModel()) = Landscape(locations, dispersal_model, environment)
+
+    Base.size(l::Landscape) = size(l.locations)
 
     export Landscape
 

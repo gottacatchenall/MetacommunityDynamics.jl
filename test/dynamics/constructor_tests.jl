@@ -2,15 +2,16 @@ module DynamicsConstructorTests
     using Test
     using MetacommunityDynamics
     using MetacommunityDynamics.Dynamics
-    using MetacommunityDynamics.NeutralModel
+    using MetacommunityDynamics.Dynamics.AbundanceNeutral
 
 
 
-    model = Neutral()
+    model = AbundanceNeutralModel()
     @test typeof(model) <: DynamicsModel
 
-    @show model
-
     trajectory = model()
-    @test typeof(trajectory) == Trajectory
+    @test typeof(trajectory) == MetacommunityTrajectory
+
+    
+
 end

@@ -39,18 +39,45 @@ module Dynamics
     end
     export EnvironmentalTrajectory
 
-    struct MetacommunityTrajectory <: Trajectory
-        value::Array{Number,3}
+    struct MetacommunityState
+        state::Array{Number,2}
     end
-    export EnvironmentalTrajectory
+    MetacommunityState(; metaweb::Metaweb=Metaweb(), landscape::Landscape=Landscape()) = MetacommunityState(zeros(size(landscape), size(metaweb)))
+    Base.size(state::MetacommunityState) = size(state.state)
+    Base.getindex(state::MetacommunityState, location_index::Int, species_index::Int) = state.state[location_index, species_index]
+    Base.setindex!(state::MetacommunityState, value, location_index::Int, species_index::Int) = Base.setindex!(state.state, value, location_index, species_index)
+
+
+
+    Base.show(io::IO, state::MetacommunityState) = println(io, size(state)[1], "x", size(state)[2], " metacommunity state")
+
+    export MetacommunityState
+
+    struct MetacommunityTrajectory <: Trajectory
+        trajectory::Vector{MetacommunityState}
+    end
+
+    Base.length(trajectory::MetacommunityTrajectory) = length(trajectory.trajectory)
+    MetacommunityTrajectory(; number_of_timesteps::Int64 = 100, metaweb::Metaweb=Metaweb(), landscape::Landscape = Landscape()) = MetacommunityTrajectory(collect(MetacommunityState(;metaweb = Metaweb(), landscape = Landscape()) for i in 1:number_of_timesteps))
+
+    Base.iterate(trajectory::MetacommunityTrajectory) =Base.iterate(trajectory.trajectory)
+    Base.iterate(trajectory::MetacommunityTrajectory, i) =Base.iterate(trajectory.trajectory, i)
+
+    Base.getindex(trajectory::MetacommunityTrajectory, time_index) = trajectory.trajectory[time_index]
+
+
+
+    Base.show(io::IO, trajectory::MetacommunityTrajectory) = println(io, "metacommunity dynamics trajectory with ", length(trajectory), " timesteps" )
+
+    export MetacommunityTrajectory
 
 
 
 
     # Include files with constructors for dispersal stuff
     include(joinpath(".","DriftModels/abundance","NeutralHomogenous.jl"))
-    using .NeutralModel
-    export NeutralModel, Neutral
+    using .AbundanceNeutral
+    export AbundanceNeutralModel
 
     # Include files with constructors for dispersal stuff
     include(joinpath(".", "simulation.jl"))
