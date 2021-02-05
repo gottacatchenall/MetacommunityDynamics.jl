@@ -5,7 +5,7 @@ module Metawebs
     struct Metaweb
         edgelist::Array{Number,2}
     end
-    Metaweb(; numSpecies::Int = 30, connectance::Float64 = 0.1) = Metaweb(Array(nichemodel(numSpecies, connectance).edges))
+    Metaweb(; numberOfSpecies::Int = 10, connectance::Float64 = 0.15) = Metaweb(Array(nichemodel(numberOfSpecies, connectance).edges))
     Base.size(m::Metaweb) = size(m.edgelist)[1]
 
 

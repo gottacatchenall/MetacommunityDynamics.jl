@@ -16,9 +16,9 @@ module LandscapeGenerationTests
         #2.1
             @test typeof(locs) == LocationSet
         # 2.2
-            @test length(locs) == 20
+            @test length(locs) == 5
         # 2.3
-            @test size(locs) == 20
+            @test size(locs) == 5
 
         for l in locs
             # 2.4
@@ -28,7 +28,7 @@ module LandscapeGenerationTests
     #=
         3.    Test LocationSet constructor with options
     =#
-        locs = LocationSet(number_of_locations=30, dimensions=7)
+        locs = LocationSet(numberOfLocations=30, dimensions=7)
             # 3.1
                 @test typeof(LocationSet()) == LocationSet # test default constructor
 

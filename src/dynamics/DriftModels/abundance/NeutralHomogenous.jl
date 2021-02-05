@@ -16,7 +16,7 @@ module AbundanceNeutral
     using ..Landscapes
     using ..Metawebs
     using ..MetacommunityDynamics.MCDParams
-    using Distributions: Normal
+    using Distributions: Uniform, Normal
 
     struct AbundanceNeutralParameters <: DynamicsParameterSet
          # A vector of standard deviation (σᵢ) for each species abundance Nᵢ(t+1) = N(t) +  σᵢ(t), where σᵢ(t) ∼ Normal(σᵢ)
@@ -24,8 +24,10 @@ module AbundanceNeutral
     end
     AbundanceNeutralParameters(;
         metaweb=Metaweb(),
-        σ = Parameter(Normal(0.3, 0))
+        σ = Parameter(Normal(0, 0.3))
     ) = AbundanceNeutralParameters(σ)
+    
+
     export AbundanceNeutralParameters
 
     struct AbundanceNeutralModel <: DynamicsModel
@@ -41,17 +43,26 @@ module AbundanceNeutral
         parameters= AbundanceNeutralParameters(metaweb=metaweb)
     ) = AbundanceNeutralModel(landscape, metaweb, settings, parameters)
 
-    function (model::AbundanceNeutralModel)()
-        trajectory = MetacommunityTrajectory(number_of_timesteps=model.settings.number_of_timesteps)
+    Base.show(io::IO, model::AbundanceNeutralModel) = print("abundance neutral model with ", size(model.metaweb), " species and ", size(model.landscape), " locations")
 
-        n_t = length(trajectory ) - 1
-        for i in 1:n_t
-            model(trajectory[i], trajectory[i+1])
+    function (model::AbundanceNeutralModel)()
+
+        trajectory = MetacommunityTrajectory(
+            number_of_timesteps=model.settings.number_of_timesteps,
+            metaweb = model.metaweb,
+            landscape = model.landscape
+        )
+
+        trajectory[1] = [rand(Uniform()) for i in 1:size(model.landscape), j in 1:size(model.metaweb)]
+
+        n_t = length(trajectory)
+        for t in 2:n_t
+            model(trajectory, t-1, t)
         end
         return trajectory
     end
 
-    function (model::AbundanceNeutralModel)(old_state::MetacommunityState, new_state::MetacommunityState)
+    function (model::AbundanceNeutralModel)(trajectory::MetacommunityTrajectory, old_time::Int, new_time::Int) where {T <: Number}
         # species x location matrix
         num_species = size(model.metaweb)
         num_locations = size(model.landscape)
@@ -59,11 +70,12 @@ module AbundanceNeutral
         for s in 1:num_species
             for l in 1:num_locations
                 # extinciton is an absorbing boundary condition
-                if old_state[l,s] > 0
-                    new_state[l,s] = old_state[l,s] + rand(model.σ[p])
-                else
-                    new_state[l,s] = 0
+                old_state = trajectory[l,s,old_time]
+                new_state = 0
+                if old_state >  0
+                    new_state = max(old_state + rand(model.parameters.σ), 0)
                 end
+                trajectory[l,s,new_time] = new_state
             end
         end
     end

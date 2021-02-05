@@ -2,6 +2,8 @@ module Dynamics
     using ..MetacommunityDynamics
     using ..Landscapes
     using ..Metawebs
+    using DataFrames
+    using Distributions
 
     """
         DynamicsModel
@@ -39,35 +41,63 @@ module Dynamics
     end
     export EnvironmentalTrajectory
 
-    struct MetacommunityState
-        state::Array{Number,2}
+    
+
+    struct MetacommunityTrajectory{T}
+        trajectory::Array{T,3}
     end
-    MetacommunityState(; metaweb::Metaweb=Metaweb(), landscape::Landscape=Landscape()) = MetacommunityState(zeros(size(landscape), size(metaweb)))
-    Base.size(state::MetacommunityState) = size(state.state)
-    Base.getindex(state::MetacommunityState, location_index::Int, species_index::Int) = state.state[location_index, species_index]
-    Base.setindex!(state::MetacommunityState, value, location_index::Int, species_index::Int) = Base.setindex!(state.state, value, location_index, species_index)
+    MetacommunityTrajectory(; 
+        number_of_timesteps::Int64 = 100, 
+        metaweb::Metaweb=Metaweb(), 
+        landscape::Landscape = Landscape()
+    ) = MetacommunityTrajectory( zeros(size(landscape), size(metaweb), number_of_timesteps))
 
+    Base.size(trajectory::MetacommunityTrajectory) = Base.size(trajectory.trajectory)
 
-
-    Base.show(io::IO, state::MetacommunityState) = println(io, size(state)[1], "x", size(state)[2], " metacommunity state")
-
-    export MetacommunityState
-
-    struct MetacommunityTrajectory <: Trajectory
-        trajectory::Vector{MetacommunityState}
+    Base.setindex!(trajectory::MetacommunityTrajectory, state::Array, time_index::Int) = begin 
+        trajectory.trajectory[:,:,time_index] =  state
+    end
+    Base.setindex!(trajectory::MetacommunityTrajectory, value::Number, location_index::Int, species_index::Int, time_index::Int) = begin 
+        trajectory.trajectory[location_index, species_index,time_index] = value
     end
 
-    Base.length(trajectory::MetacommunityTrajectory) = length(trajectory.trajectory)
-    MetacommunityTrajectory(; number_of_timesteps::Int64 = 100, metaweb::Metaweb=Metaweb(), landscape::Landscape = Landscape()) = MetacommunityTrajectory(collect(MetacommunityState(;metaweb = Metaweb(), landscape = Landscape()) for i in 1:number_of_timesteps))
+    Base.getindex(trajectory::MetacommunityTrajectory, time_index::Int) = (trajectory.trajectory[:,:,time_index])
+    Base.getindex(trajectory::MetacommunityTrajectory, a,b,c) = trajectory.trajectory[a,b,c]
+    Base.firstindex(trajectory::MetacommunityTrajectory) = 1
 
-    Base.iterate(trajectory::MetacommunityTrajectory) =Base.iterate(trajectory.trajectory)
+    Base.length(trajectory::MetacommunityTrajectory) = length(trajectory.trajectory[1,1,:])
+    Base.iterate(trajectory::MetacommunityTrajectory) = Base.iterate(trajectory.trajectory)
     Base.iterate(trajectory::MetacommunityTrajectory, i) =Base.iterate(trajectory.trajectory, i)
-
-    Base.getindex(trajectory::MetacommunityTrajectory, time_index) = trajectory.trajectory[time_index]
-
-
-
     Base.show(io::IO, trajectory::MetacommunityTrajectory) = println(io, "metacommunity dynamics trajectory with ", length(trajectory), " timesteps" )
+
+    nlocations(trajectory::MetacommunityTrajectory) = size(trajectory)[1]
+    nspecies(trajectory::MetacommunityTrajectory) = size(trajectory)[2]
+    ntimepoints(trajectory::MetacommunityTrajectory) = size(trajectory)[3]
+    export nlocations, nspecies, ntimepoints
+
+    # interface to dataframe
+
+    DataFrames.DataFrame(trajectory::MetacommunityTrajectory) = begin
+            nt = length(trajectory)
+            nl = size(trajectory[1])[1]
+            ns = size(trajectory[1])[2]
+
+            total_number_points = nt*nl*ns
+
+            df = DataFrame(time=zeros(total_number_points), location=zeros(total_number_points), species=zeros(total_number_points), value=zeros(total_number_points))
+
+            row_count = 1
+            for t = 1:nt, l = 1:nl, s = 1:ns
+                df.time[row_count] = t
+                df.location[row_count] = l
+                df.species[row_count] = s
+                df.value[row_count] = trajectory[l,s,t]
+
+                row_count += 1
+            end
+
+            return df
+    end
 
     export MetacommunityTrajectory
 
@@ -77,7 +107,7 @@ module Dynamics
     # Include files with constructors for dispersal stuff
     include(joinpath(".","DriftModels/abundance","NeutralHomogenous.jl"))
     using .AbundanceNeutral
-    export AbundanceNeutralModel
+    export AbundanceNeutralModel, AbundanceNeutralParameters
 
     # Include files with constructors for dispersal stuff
     include(joinpath(".", "simulation.jl"))

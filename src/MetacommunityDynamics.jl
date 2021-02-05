@@ -34,6 +34,8 @@ module MetacommunityDynamics
     # ===========================================
     include(joinpath(".", "dynamics/Dynamics.jl"))
     using .Dynamics
+    export DynamicsModel, DynamicsParameterSet, SimulationSettings, EnvironmentalTrajectory, MetacommunityTrajectory, AbundanceNeutralModel, Abundance, NeutralParameters, simulate, nlocations, nspecies, ntimepoints
+
 
 
     # ===========================================
@@ -41,7 +43,6 @@ module MetacommunityDynamics
     # ===========================================
     include(joinpath(".", "summary/SummaryStats.jl"))
     using .SummaryStats
-
 
 
 end

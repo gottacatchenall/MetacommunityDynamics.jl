@@ -4,22 +4,22 @@ Base.ndims(a::Location) = length(a.coordinate)
 
 
 struct PoissonProcess <: LocationSetGenerator
-        number_of_locations::Int
+        numberOfLocations::Int
         dimensions::Int
 end
-PoissonProcess(; number_of_locations = 10, dimensions = 2) = PoissonProcess(number_of_locations, dimensions)
+PoissonProcess(; numberOfLocations = 10, dimensions = 2) = PoissonProcess(numberOfLocations, dimensions)
 function (gen::PoissonProcess)()
     locations::Vector{Location} = []
-    number_of_locations = gen.number_of_locations
+    numberOfLocations = gen.numberOfLocations
     # random locations in the unit square
-    for p = 1:number_of_locations
+    for p = 1:numberOfLocations
         push!(locations, Location(dimensions=gen.dimensions))
     end
 
     return(LocationSet(locations))
 end
 
-LocationSet(; number_of_locations = 20, dimensions = 2) = PoissonProcess(; number_of_locations = number_of_locations, dimensions = dimensions)()
+LocationSet(; numberOfLocations = 5, dimensions = 2) = PoissonProcess(; numberOfLocations = numberOfLocations, dimensions = dimensions)()
 
 Base.length(a::LocationSet) = length(a.locations)
 Base.size(a::LocationSet) = length(a.locations)

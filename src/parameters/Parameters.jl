@@ -13,6 +13,8 @@ module MCDParams
     end
     Base.show(io::IO, p::Parameter) = print(io, "Parameter ~ ", p.distribution, "\n")
 
+    Distributions.rand(param::Parameter) = Distributions.rand(param.distribution)
+
     draw(param::Parameter) = rand(param.distribution)
 
 
