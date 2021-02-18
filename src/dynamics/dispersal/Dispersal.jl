@@ -26,6 +26,14 @@ module Dispersal
     export DispersalPotentialGenerator
 
 
+    # Dispersal abstract types
+    abstract type DispersalStructure end
+    abstract type IBD <: DispersalStructure end
+    abstract type IBR <: DispersalStructure end # omniscape.jl integration (eventually)
+
+
+
+
     #=
     DispersalPotential
     -----------------------------------------------------------

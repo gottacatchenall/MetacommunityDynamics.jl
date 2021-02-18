@@ -19,7 +19,6 @@ function (gen::PoissonProcess)()
     return(LocationSet(locations))
 end
 
-LocationSet(; numberOfLocations = 5, dimensions = 2) = PoissonProcess(; numberOfLocations = numberOfLocations, dimensions = dimensions)()
 
 Base.length(a::LocationSet) = length(a.locations)
 Base.size(a::LocationSet) = length(a.locations)

@@ -2,7 +2,7 @@ module DispersalPotentialTests
     using Test
     using MetacommunityDynamics.MCDParams
     using MetacommunityDynamics.Landscapes
-    using MetacommunityDynamics.Landscapes.Dispersal
+    using MetacommunityDynamics.Dynamics.Dispersal
 
 
     #=

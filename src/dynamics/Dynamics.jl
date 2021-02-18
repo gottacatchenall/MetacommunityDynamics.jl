@@ -2,7 +2,6 @@ module Dynamics
     using ..MetacommunityDynamics
     using ..Landscapes
     using ..Metawebs
-    using DataFrames
     using Distributions
 
     """
@@ -41,23 +40,23 @@ module Dynamics
     end
     export EnvironmentalTrajectory
 
-    
+
 
     struct MetacommunityTrajectory{T}
         trajectory::Array{T,3}
     end
-    MetacommunityTrajectory(; 
-        number_of_timesteps::Int64 = 100, 
-        metaweb::Metaweb=Metaweb(), 
+    MetacommunityTrajectory(;
+        number_of_timesteps::Int64 = 100,
+        metaweb::Metaweb=Metaweb(),
         landscape::Landscape = Landscape()
     ) = MetacommunityTrajectory( zeros(size(landscape), size(metaweb), number_of_timesteps))
 
     Base.size(trajectory::MetacommunityTrajectory) = Base.size(trajectory.trajectory)
 
-    Base.setindex!(trajectory::MetacommunityTrajectory, state::Array, time_index::Int) = begin 
+    Base.setindex!(trajectory::MetacommunityTrajectory, state::Array, time_index::Int) = begin
         trajectory.trajectory[:,:,time_index] =  state
     end
-    Base.setindex!(trajectory::MetacommunityTrajectory, value::Number, location_index::Int, species_index::Int, time_index::Int) = begin 
+    Base.setindex!(trajectory::MetacommunityTrajectory, value::Number, location_index::Int, species_index::Int, time_index::Int) = begin
         trajectory.trajectory[location_index, species_index,time_index] = value
     end
 
@@ -76,7 +75,7 @@ module Dynamics
     export nlocations, nspecies, ntimepoints
 
     # interface to dataframe
-
+"""
     DataFrames.DataFrame(trajectory::MetacommunityTrajectory) = begin
             nt = length(trajectory)
             nl = size(trajectory[1])[1]
@@ -98,14 +97,24 @@ module Dynamics
 
             return df
     end
+"""
 
     export MetacommunityTrajectory
 
 
 
+    #dispersal
+    include(joinpath(".", "dispersal", "Dispersal.jl"))
+    using .Dispersal
+    export DispersalPotential
+
+    #
+    include(joinpath(".", "environment", "Environment.jl"))
+    using .Environment
+
 
     # Include files with constructors for dispersal stuff
-    include(joinpath(".","DriftModels/abundance","NeutralHomogenous.jl"))
+    include(joinpath(".","drift", "abundance","NeutralHomogenous.jl"))
     using .AbundanceNeutral
     export AbundanceNeutralModel, AbundanceNeutralParameters
 

@@ -26,6 +26,7 @@ module Landscapes
         locations::Vector{Location}
     end
     Base.size(l::LocationSet) = length(l.locations)
+    LocationSet(; numberOfLocations = 5, dimensions = 2) = PoissonProcess(; numberOfLocations = numberOfLocations, dimensions = dimensions)()
 
 
     export LocationSet
@@ -39,31 +40,14 @@ module Landscapes
     abstract type LocationSetGenerator end
     abstract type EnvironmentGenerator end
 
-    # Dispersal abstract types
-    abstract type DispersalStructure end
-        abstract type IBD <: DispersalStructure end
-        abstract type IBR <: DispersalStructure end # omniscape.jl integration (eventually)
-
 
 
     include(joinpath(".", "generators.jl"))
 
-    #dispersal
-    include(joinpath(".", "dispersal/Dispersal.jl"))
-    using .Dispersal
-    export DispersalPotential
-
-    #
-    include(joinpath(".", "./environment/Environment.jl"))
-    using .Environment
-
     struct Landscape
         locations::LocationSet
-        dispersal::DispersalModel
-        environment::EnvironmentModel
     end
-    Landscape(; locations = LocationSet(), dispersal_model = DispersalModel(locations=locations), environment=EnvironmentModel()) = Landscape(locations, dispersal_model, environment)
-
+    Landscape(; locations = LocationSet()) = Landscape(locations)
     Base.size(l::Landscape) = size(l.locations)
 
     export Landscape

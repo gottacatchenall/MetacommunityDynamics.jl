@@ -10,13 +10,14 @@ model = MetacommunityDynamics.Dynamics.AbundanceNeutralModel(
 
 
 trajectory = model()
+
 p = plot_trajectory_across_locations(trajectory)
 
 
 
 using DataFrames
 using StatsPlots
-plot(trajectory[3].state, layout=30, dpi=600) 
+plot(trajectory[3].state, layout=30, dpi=600)
 
 
 data = DataFrame(trajectory)

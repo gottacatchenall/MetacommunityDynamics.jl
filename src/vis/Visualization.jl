@@ -1,4 +1,4 @@
-module MetacommunityDynamicsVisualization
+module Visualization
     using ..MetacommunityDynamics
     using ..Dynamics
     using Plots
@@ -12,7 +12,7 @@ module MetacommunityDynamicsVisualization
         locations_plots = []
 
         for l = 1:nl
-            p = plot(legend=:none, dpi=300, aspectratio=1, ylim=(0,1.2),  title = "location $l")
+            p = plot(legend=:none, dpi=300, ylim=(0,1.2),  title = "location $l")
 
             for s = 1:ns
                 plot!(1:nt, traj[l,s,:])

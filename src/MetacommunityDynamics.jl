@@ -45,4 +45,13 @@ module MetacommunityDynamics
     using .SummaryStats
 
 
+    # ===========================================
+    # visualization 
+    # ===========================================
+    include(joinpath(".", "vis/Visualization.jl"))
+    using .Visualization
+    export plot_trajectory_across_locations
+
+
+
 end
