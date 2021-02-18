@@ -21,3 +21,4 @@ module Environment
         EnvironmentModel(;  locations::LocationSet = LocationSet(), environment = EnvironmentalMeasurementSet()) = EnvironmentModel(locations, environment)
     export EnvironmentModel
 end
+
