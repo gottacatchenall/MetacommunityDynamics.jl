@@ -8,8 +8,8 @@ This software is design to simulate trajectories of _metacommunity dynamics_.
 
 A metacommunity (Leibold et al. 2004) consists of a species pool distributed
 across a landscape. The composition of metacommunities (what species can be found, and where)
-changes over time as move through space, interact with other species, and face selection both
-on conditions imposed by abiotic environment and other species.
+changes over time as organisms move through space, interact with one another, and face selection both
+on conditions imposed by abiotic environment and interactions with others.
 
 Understanding how metacommunities change over time, their _dynamics_,   
 is crucial to understand how ecological mechanisms scale up to determine
