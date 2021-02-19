@@ -1,7 +1,7 @@
 name = "MetacommunityDynamics"
 uuid = "24e8287d-3f0b-4585-bd3b-4b75104d71ce"
 authors = ["michael catchen <mdcatchen@gmail.com>"]
-version = "0.1.0"
+version = "0.0.1"
 
 [deps]
 Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
