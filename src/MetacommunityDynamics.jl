@@ -1,57 +1,21 @@
 module MetacommunityDynamics
-    # ===========================================
-    # Dependencies
-    # ===========================================
-    #using EcoBase
-    #using EcologicalNetworks
-    #using BioEnergeticFoodWebs
+    using DynamicGrids
+    using DynamicGrids: applyrule
     using Distributions
 
-    # ===========================================
-    # parameters
-    # ===========================================
-    include(joinpath(".", "parameters/Parameters.jl"))
-    using .MCDParams
-    export Parameter
 
-    # ===========================================
-    # landscapes
-    # ===========================================
-    include(joinpath(".", "landscape/Landscape.jl"))
-    using .Landscapes
-    export Landscape,Location, LocationSet, DispersalKernel, DispersalPotential, EnvironmentalMeasurement, EnvironmentalMeasurementSet, EnvironmentModel
+    include(joinpath("layers", "occupancy.jl"))
+    export Occupancy
 
-    # ===========================================
-    # metaweb
-    # ===========================================
-    include(joinpath(".", "metaweb/Metaweb.jl"))
-    using .Metawebs
-    export Metaweb
+    include(joinpath("mechanisms", "selection.jl"))
+    export FitnessFunction, GaussianFitness, DensityDependentFitness, AbioticSelection, BioticSelection
+
+    include(joinpath("mechanisms", "colonization.jl"))
+    export RandomColonization
+
+    include(joinpath("mechanisms", "extinction.jl"))
+    export RandomExtinction
 
 
-    # ===========================================
-    # dynamics
-    # ===========================================
-    include(joinpath(".", "dynamics/Dynamics.jl"))
-    using .Dynamics
-    export DynamicsModel, DynamicsParameterSet, SimulationSettings, EnvironmentalTrajectory, MetacommunityTrajectory, AbundanceNeutralModel, Abundance, NeutralParameters, simulate, nlocations, nspecies, ntimepoints
+end # module
 
-
-
-    # ===========================================
-    # summary stats
-    # ===========================================
-    include(joinpath(".", "summary/SummaryStats.jl"))
-    using .SummaryStats
-
-
-    # ===========================================
-    # visualization 
-    # ===========================================
-    include(joinpath(".", "vis/Visualization.jl"))
-    using .Visualization
-    export plot_trajectory_across_locations
-
-
-
-end
