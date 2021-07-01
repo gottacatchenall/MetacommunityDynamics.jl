@@ -1,0 +1,4 @@
+[deps]
+Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
+DynamicGrids = "a5dba43e-3abc-5203-bfc5-584ca68d3f5b"
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
