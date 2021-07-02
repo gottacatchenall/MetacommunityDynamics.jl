@@ -12,7 +12,7 @@ struct ExponentialFitness{LT} <: FitnessFunction
     λ::LT
 end 
 ExponentialFitness(; λ=0.1) = ExponentialFitness(λ)
-(gf::ExponentialFitness)(dist::Number) = @fastmath exp(-1*gf.λ*dist)
+(ef::ExponentialFitness)(dist::Number) = @fastmath exp(-1*ef.λ*dist)
 
 
 

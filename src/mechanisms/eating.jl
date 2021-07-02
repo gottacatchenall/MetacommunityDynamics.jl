@@ -52,6 +52,10 @@ function DynamicGrids.applyrule(data, rule::Eating, (C,R), index)
     C += C*fr*rule.dt
     R -= C*fr*rule.dt
 
+    # TODO
+    # in the case this causes R to go extinct,
+    # this should only grow C as much as the remaining value of R
+
     C > zero(C) || return zero(C),R 
     R > zero(R) || return C,zero(R)
     return C,R

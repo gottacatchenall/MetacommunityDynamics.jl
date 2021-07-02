@@ -8,20 +8,13 @@ using Distributions
 using ColorSchemes 
 using Plots
 
-
-
-levinsmodel = RandomExtinction{:O}(0.1) + LevinsColonization{:O}(0.3)
-
+levinsmodel = 
+    RandomExtinction{:O}(0.1) + 
+    LevinsColonization{:O}(0.3)
 
 latticesize = 100
-
-ic, ir = 10.,1.
-
-initconsumer = zeros(Biomass, latticesize,latticesize)
-initresource = zeros(Biomass, latticesize,latticesize)
-
-
-
+initocc = 0.2
+init = fill(rand() < initocc, latticesize,latticesize)
 
 arrayout = ArrayOutput((C=initconsumer, R=initresource ), tspan=1:500)
 @time sim!(arrayout, model) 
