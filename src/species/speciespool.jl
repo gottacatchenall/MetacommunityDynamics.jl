@@ -44,15 +44,6 @@ function speciespool(net::UnipartiteNetwork)
 end
 
 
-net = EcologicalNetworks.nichemodel(10, 0.3)
-
-Matrix(net.edges)
-
-sp = speciespool(net)
-
-layers = specieslayers(sp)
-
-
 
 
 
