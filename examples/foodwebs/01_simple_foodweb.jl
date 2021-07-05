@@ -9,24 +9,26 @@ connectance = 0.3
 
 dims = (250, 250)
 
-foodweb = DiscreteUnipartiteSpeciesPool(nichemodel(number_of_species, connectance))
+foodweb = nichemodel(number_of_species, connectance)
+speciespool = DiscreteUnipartiteSpeciesPool(Symbol.(foodweb.S), Matrix(foodweb.edges)) # move these type changes to a method
 trophicdict = trophic_level(foodweb)  # returns a dictionary 
 
-plantpool = filter(s -> trophicdict[s] == 1.0, foodweb)
-notplantpool = filter(s -> trophicdict[s] != 1.0, foodweb)
+plantpool = filter(s -> trophicdict[s] == 1.0, speciespool)
+notplantpool = filter(s -> trophicdict[s] != 1.0, speciespool)
 
 plants = layernames(plantspecies)
 notplants = layernames(notplants)
 
 # one approach would be to make mass layer for every species which is the same everywhere are doesn't change
 # waste of memory perhaps, should make a way to flag that a species trait does not vary over space 
-masslayers = [fill(2^l, dims...) for l in trophiclevels(foodweb)]
+masslayers = [fill(2^l, dims...) for (s, l) in trophicdict]
 masslayers = generate(StaticTrait, trophcdict, l -> 2^l) # allometric scaling via yodzis innes
 
-everylayer = layers(plants) + layers(notplants) + masslayers
+# this should be a dictionary/namedtuple of :a => layer for a 
+init = layers(plants) + layers(notplants) + masslayers
 
 consumermodel = 
-    Eating{notplants}(YodzisInnes(masses)) +
+    Eating{notplants}(YodzisInnes(masslayers)) +  # must assert masslayers has same names as notplants
     DiffusionDispersal{notplants}() +
     LinearMortality{notplants}(0.2)
 
@@ -36,6 +38,7 @@ plantmodel =
     LinearMortality{plants}(0.1)   
 
     
+
 
 
 

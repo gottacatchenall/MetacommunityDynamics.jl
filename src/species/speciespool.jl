@@ -26,7 +26,12 @@ species(sp::T) where {T <: DiscreteSpeciesPool} = sp.species
 
 
 # some interfaces to EN generators 
+"""
+    layers(speciespool::ST; element=Biomass, dims=(100,100))
 
+    Converts a species pool to a set of layers of type `element`.
+    Should be able to apply generic function. Mostly used to generate initial conditions. 
+"""
 function layers(speciespool::ST; element=Biomass, dims=(100,100)) where {ST <: DiscreteSpeciesPool}
     specieslist = species(speciespool)
     layerlist = []
@@ -38,12 +43,20 @@ function layers(speciespool::ST; element=Biomass, dims=(100,100)) where {ST <: D
 end
 layers(speciespool::SPT, element::ET; dims=(100,100)) where {SPT <: DiscreteSpeciesPool, ET <: Measurement} = layers(speciespool, element=element, dims=dims)
 
-
+"""
+    speciespool(net::UnipartiteNetwork)
+"""
 function speciespool(net::UnipartiteNetwork)
     DiscreteUnipartiteSpeciesPool([Symbol(i) for i in net.S], Matrix(net.edges))
 end
 
 
+
+function Base.filter(f::Function, sp::T) where {T <: DiscreteSpeciesPool}
+    for spec in species(sp)
+        f(String(spec))
+    end
+end
 
 
 
