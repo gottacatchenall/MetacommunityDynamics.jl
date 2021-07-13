@@ -52,15 +52,25 @@ function speciespool(net::UnipartiteNetwork)
 end
 
 
+"""
+    bad code. to be sped up ... later....
 
+"""
 function Base.filter(f::Function, sp::T) where {T <: DiscreteSpeciesPool}
 
-   # newspecieslist = 
-   # newmetaweb = 
+    newspecieslist = []
+    indecies = []
 
-    for spec in species(sp)
-        @show f(String(spec))
+    for (i,spec) in enumerate(species(sp))
+        if f(String(spec)) == true
+            push!(newspecieslist, spec)
+            push!(indecies, i)
+        end
     end
+
+    newmetaweb = sp.metaweb[indecies, indecies]
+
+    return T(newspecieslist, newmetaweb)
 end
 
 
