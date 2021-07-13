@@ -18,19 +18,10 @@ This software is designed to simulate how the composition of ecological communit
 The Lotka-Volterra (LV) system is a set of coupled differential equations
 which describe a system of consumers and resources (also called predators and prey).
 
-***Diffusion***
-
-![this is kind of neat](./docs/static/lv.gif)
-
-***Stochastic Extinction and Dispersal***
-
-![this is kind of neat](./docs/static/spicylv.gif)
-
 
 
 ### Normal LV
 
-See the code below: <details>
 ```
 using MetacommunityDynamics
 using DynamicGrids
@@ -76,7 +67,6 @@ xlabel!("time")
 ylabel!("biomass")
 
 ```
-</details>
 
 ![LV](./docs/static/lv.png)
 
