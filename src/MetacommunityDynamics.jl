@@ -3,6 +3,7 @@ module MetacommunityDynamics
     using DynamicGrids: CellRule, SetCellRule, applyrule, Rule, Ruleset,Neighborhood,Moore;
     using Dispersal: OutwardsDispersal
     using Distributions
+    using Crayons
     using EcologicalNetworks
 
     include(joinpath("types.jl"))
@@ -54,7 +55,10 @@ module MetacommunityDynamics
     include(joinpath("species", "speciespool.jl"))
     export ContinuousSpeciesPool, DiscreteSpeciesPool 
     export SingleSpecies, DiscreteUnipartiteSpeciesPool, DiscreteKpartiteSpeciesPool,ContinuousUnipartiteSpeciesPool, ContinuousKpartiteSpeciesPool
-    export speciespool, specieslayers
+    export speciespool, specieslayers, nspecies, species
+    include(joinpath("species", "printing.jl"))
+
+
 end # module
 
 

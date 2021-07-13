@@ -22,13 +22,13 @@ notplants = layernames(notplants)
 # one approach would be to make mass layer for every species which is the same everywhere are doesn't change
 # waste of memory perhaps, should make a way to flag that a species trait does not vary over space 
 masslayers = [fill(2^l, dims...) for (s, l) in trophicdict]
-masslayers = generate(StaticTrait, trophcdict, l -> 2^l) # allometric scaling via yodzis innes
+masslayers = generate(StaticTrait, trophicdict, l -> 2^l) # allometric scaling via yodzis innes
 
 # this should be a dictionary/namedtuple of :a => layer for a 
 init = layers(plants) + layers(notplants) + masslayers
 
 consumermodel = 
-    Eating{notplants}(YodzisInnes(masslayers)) +  # must assert masslayers has same names as notplants
+    Eating{notplants, plants}(LotkaVolterra()) +  # must assert masslayers has same names as notplants
     DiffusionDispersal{notplants}() +
     LinearMortality{notplants}(0.2)
 

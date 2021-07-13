@@ -4,10 +4,10 @@ authors = ["michael catchen <michael.catchen@colorado.edu>"]
 version = "0.1.0"
 
 [deps]
+Crayons = "a8cc5b0e-0ffa-5ad4-8c14-923d3ee1735f"
 Dispersal = "8797f018-3445-11e9-3969-c13eb94a0661"
 Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
 DynamicGrids = "a5dba43e-3abc-5203-bfc5-584ca68d3f5b"
-DynamicGridsGtk = "db222a54-9a4e-11e9-2a63-0f03ae0fd449"
 EcologicalNetworks = "f03a62fe-f8ab-5b77-a061-bb599b765229"
 ImageMagick = "6218d12a-5da1-5696-b52f-db25d2ecc6d1"
 NeutralLandscapes = "71847384-8354-4223-ac08-659a5128069f"

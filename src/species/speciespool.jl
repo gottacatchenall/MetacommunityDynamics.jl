@@ -22,6 +22,7 @@ struct ContinuousKpartiteSpeciesPool <: ContinuousSpeciesPool
     partitions::Int
 end 
 
+numspecies(sp::T) where {T <: DiscreteSpeciesPool} = length(species(sp))
 species(sp::T) where {T <: DiscreteSpeciesPool} = sp.species
 
 
@@ -53,8 +54,12 @@ end
 
 
 function Base.filter(f::Function, sp::T) where {T <: DiscreteSpeciesPool}
+
+   # newspecieslist = 
+   # newmetaweb = 
+
     for spec in species(sp)
-        f(String(spec))
+        @show f(String(spec))
     end
 end
 

@@ -1,6 +1,5 @@
 using MetacommunityDynamics
 using DynamicGrids
-using DynamicGridsGtk
 using Dispersal
 using Distributions 
 using ColorSchemes 
