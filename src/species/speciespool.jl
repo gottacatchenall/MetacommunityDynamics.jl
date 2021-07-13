@@ -44,6 +44,13 @@ function layers(speciespool::ST; element=Biomass, dims=(100,100)) where {ST <: D
 end
 layers(speciespool::SPT, element::ET; dims=(100,100)) where {SPT <: DiscreteSpeciesPool, ET <: Measurement} = layers(speciespool, element=element, dims=dims)
 
+
+function layernames(sp::SPT) where {SPT <: DiscreteSpeciesPool}
+    @show sp
+end
+
+
+
 """
     speciespool(net::UnipartiteNetwork)
 """

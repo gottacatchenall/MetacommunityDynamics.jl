@@ -16,8 +16,8 @@ trophicdict = trophic_level(foodweb)  # returns a dictionary
 plantpool = filter(s -> trophicdict[s] == 1.0, speciespool)
 notplantpool = filter(s -> trophicdict[s] != 1.0, speciespool)
 
-plants = layernames(plantspecies)
-notplants = layernames(notplants)
+plants = layernames(plantpool)
+notplants = layernames(notplantpool)
 
 # one approach would be to make mass layer for every species which is the same everywhere are doesn't change
 # waste of memory perhaps, should make a way to flag that a species trait does not vary over space 
