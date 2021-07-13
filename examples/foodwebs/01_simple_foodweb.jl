@@ -9,10 +9,16 @@ connectance = 0.3
 
 dims = (250, 250)
 
+# todo : wrap these two functions in a foodweb() method which takes args for S and C 
 foodweb = nichemodel(number_of_species, connectance)
 speciespool = DiscreteUnipartiteSpeciesPool(Symbol.(foodweb.S), Matrix(foodweb.edges)) # move these type changes to a method
-trophicdict = trophic_level(foodweb)  # returns a dictionary 
 
+
+trophicdict = trophic_level(metaweb(speciespool))  # returns a dictionary 
+
+# the issue with this returning a species pool is they 
+# need different metawebs
+# perhaps filter names instead of the speciespool 
 plantpool = filter(s -> trophicdict[s] == 1.0, speciespool)
 notplantpool = filter(s -> trophicdict[s] != 1.0, speciespool)
 # can't lose metaweb information about notplants <- plants which happens here
@@ -40,7 +46,6 @@ plantmodel =
     LinearMortality{plants}(0.1)   
 
     
-
 
 
 
