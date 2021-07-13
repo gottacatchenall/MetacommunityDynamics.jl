@@ -46,7 +46,7 @@ layers(speciespool::SPT, element::ET; dims=(100,100)) where {SPT <: DiscreteSpec
 
 
 function layernames(sp::SPT) where {SPT <: DiscreteSpeciesPool}
-    @show sp
+    return Symbol.(sp.species)
 end
 
 

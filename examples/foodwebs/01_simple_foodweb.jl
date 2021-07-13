@@ -15,6 +15,8 @@ trophicdict = trophic_level(foodweb)  # returns a dictionary
 
 plantpool = filter(s -> trophicdict[s] == 1.0, speciespool)
 notplantpool = filter(s -> trophicdict[s] != 1.0, speciespool)
+# can't lose metaweb information about notplants <- plants which happens here
+# metaweb as type with named axes is a possible solution
 
 plants = layernames(plantpool)
 notplants = layernames(notplantpool)
@@ -25,7 +27,7 @@ masslayers = [fill(2^l, dims...) for (s, l) in trophicdict]
 masslayers = generate(StaticTrait, trophicdict, l -> 2^l) # allometric scaling via yodzis innes
 
 # this should be a dictionary/namedtuple of :a => layer for a 
-init = layers(plants) + layers(notplants) + masslayers
+init = [layers(plantpool)..., layers(notplantpool)..., masslayers...]
 
 consumermodel = 
     Eating{notplants, plants}(LotkaVolterra()) +  # must assert masslayers has same names as notplants
