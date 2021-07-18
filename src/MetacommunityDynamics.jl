@@ -1,7 +1,7 @@
 module MetacommunityDynamics
     using DynamicGrids
     using DynamicGrids: CellRule, SetCellRule, applyrule, Rule, Ruleset,Neighborhood,Moore;
-    using Dispersal: OutwardsDispersal
+    using Dispersal: OutwardsDispersal, DispersalKernel
     using Distributions
     using Crayons
     using EcologicalNetworks
