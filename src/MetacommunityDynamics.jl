@@ -16,10 +16,12 @@ module MetacommunityDynamics
     include(joinpath("layers", "biomass.jl"))
     export Biomass
 
+    
 
     include(joinpath("generators", "poissonprocess.jl"))
     export generate, PoissonProcess, grid, pointstogrid
-
+    include(joinpath("layers", "traits.jl"))
+    export StaticTraitLayer
 
     include(joinpath("generators", "environment.jl"))
     export StaticEnvironmentalLayer
@@ -55,7 +57,7 @@ module MetacommunityDynamics
     include(joinpath("species", "speciespool.jl"))
     export ContinuousSpeciesPool, DiscreteSpeciesPool 
     export SingleSpecies, DiscreteUnipartiteSpeciesPool, DiscreteKpartiteSpeciesPool,ContinuousUnipartiteSpeciesPool, ContinuousKpartiteSpeciesPool
-    export speciespool, specieslayers, nspecies, species
+    export speciespool, specieslayers, nspecies, species, metaweb
     include(joinpath("species", "printing.jl"))
 
 

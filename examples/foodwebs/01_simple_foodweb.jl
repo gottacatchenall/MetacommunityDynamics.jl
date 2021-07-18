@@ -2,52 +2,51 @@ using MetacommunityDynamics
 using DynamicGrids
 using Plots
 using Distributions
-using EcologicalNetworks: nichemodel, trophic_level
+using Dispersal: Moore, DispersalKernel
+using EcologicalNetworks: nichemodel, trophic_level, UnipartiteNetwork
 
 number_of_species = 30
 connectance = 0.3
 
 dims = (250, 250)
 
-# todo : wrap these two functions in a foodweb() method which takes args for S and C 
 foodweb = nichemodel(number_of_species, connectance)
 speciespool = DiscreteUnipartiteSpeciesPool(Symbol.(foodweb.S), Matrix(foodweb.edges)) # move these type changes to a method
 
+trophicdict = trophic_level(foodweb)  # returns a dictionary 
 
-trophicdict = trophic_level(metaweb(speciespool))  # returns a dictionary 
+resourcenames = filter(s -> trophicdict[String(s)] == 1.0, species(speciespool))
+consumernames = filter(s -> trophicdict[String(s)] != 1.0, species(speciespool))
 
-# the issue with this returning a species pool is they 
-# need different metawebs
-# perhaps filter names instead of the speciespool 
-plantpool = filter(s -> trophicdict[s] == 1.0, speciespool)
-notplantpool = filter(s -> trophicdict[s] != 1.0, speciespool)
-# can't lose metaweb information about notplants <- plants which happens here
-# metaweb as type with named axes is a possible solution
+massnames = []
+masses = Dict()
+for (k,v) in zip(keys(trophicdict), values(trophicdict))
+    layername = Symbol("mass_", k)
+    push!(massnames, layername)
+    masses[layername] = fill(Trait, 2^v, dims)  # allometric scaling via yodzis innes
+end 
 
-plants = layernames(plantpool)
-notplants = layernames(notplantpool)
-
-# one approach would be to make mass layer for every species which is the same everywhere are doesn't change
-# waste of memory perhaps, should make a way to flag that a species trait does not vary over space 
-masslayers = [fill(2^l, dims...) for (s, l) in trophicdict]
-masslayers = generate(StaticTrait, trophicdict, l -> 2^l) # allometric scaling via yodzis innes
-
-# this should be a dictionary/namedtuple of :a => layer for a 
-init = [layers(plantpool)..., layers(notplantpool)..., masslayers...]
 
 consumermodel = 
-    Eating{notplants, plants}(LotkaVolterra()) +  # must assert masslayers has same names as notplants
-    DiffusionDispersal{notplants}() +
-    LinearMortality{notplants}(0.2)
+    Eating{Tuple{consumernames..., resourcenames..., massnames...}}() +  # must assert masslayers has same names as notplants
+    AdjacentBernoulliDispersal{Tuple{consumernames...}}(DispersalKernel(radius=1), 0.1) +
+    LinearMortality{Tuple{consumernames...}}(0.2)
 
 plantmodel = 
-    LogisticGrowth{plants}() +
-    WindDispersal{plants}() + 
-    LinearMortality{plants}(0.1)   
+    LogisticGrowth{Tuple{resourcenames...}}() +
+    AdjacentBernoulliDispersal{Tuple{resourcenames...}}(DispersalKernel(radius=3), 0.1) + 
+    LinearMortality{Tuple{resourcenames...}}(0.1)   
+
+
+fullmodel = consumermodel + plantmodel
+    
+# this should be a dictionary/namedtuple of :a => Matrix for a 
+init = merge(
+    rand(Biomass, resourcenames, Exponential(10), dims...),
+    rand(Biomass, consumernames, Exponential(10), dims...),
+    masses);
+
+
+
 
     
-
-
-
-
-

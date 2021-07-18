@@ -24,7 +24,7 @@ end
 
 numspecies(sp::T) where {T <: DiscreteSpeciesPool} = length(species(sp))
 species(sp::T) where {T <: DiscreteSpeciesPool} = sp.species
-
+metaweb(sp::T) where {T <: DiscreteSpeciesPool} = sp.metaweb
 
 # some interfaces to EN generators 
 """
@@ -60,14 +60,15 @@ end
 
 
 """
-    bad code. to be sped up ... later....
+    interesting idea but getting names is better for filtering
+    because returning a sub-metaweb losess information about interactions
 
 """
 function Base.filter(f::Function, sp::T) where {T <: DiscreteSpeciesPool}
 
     newspecieslist = []
     indecies = []
-
+    
     for (i,spec) in enumerate(species(sp))
         if f(String(spec)) == true
             push!(newspecieslist, spec)

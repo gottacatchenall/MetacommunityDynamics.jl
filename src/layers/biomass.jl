@@ -2,6 +2,17 @@ struct Biomass{V} <: Measurement
     val::V
 end
 
+
+Base.rand(::Type{Biomass}, names::Vector{Symbol}, dist::Distribution, x::Int, y::Int) = begin
+    dict = Dict()
+
+    for name in names
+        dict[name] = rand(Biomass, dist, x,y);
+    end
+    return dict
+end
+
+
 Base.rand(::Type{Biomass}, x::Int,y ::Int) = Base.rand(Biomass, 0.5, x, y)
 Base.rand(::Type{Biomass}, dist::Distribution, x::Int, y::Int) = begin
     z = zeros(Biomass, x,y)
