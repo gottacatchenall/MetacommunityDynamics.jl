@@ -62,3 +62,22 @@ function DynamicGrids.applyrule(data, rule::Eating, (C,R), index)
 end
 
 
+"""
+    Shortcut to make many C->R layers. Instead of having all of the eating between pairs
+    of species in a single rule, builds a ruleset where each rule is a single consumer-resource interaction. 
+"""
+function FoodWebEating(consumernames::Vector{Symbol}, resourcenames::Vector{Symbol}, fr::FunctionalResponse, metaweb::Matrix; dt=0.1)
+    nspecies = size(metaweb)[1]
+
+    allrules = Ruleset()
+    for r in 1:length(resourcenames), c in 1:length(consumernames)
+        if metaweb[r,c] == 1
+            Csym = consumernames[c]
+            Rsym = resourcenames[r]
+            thisrule = Eating{Tuple{Csym,Rsym}}(functionalresponse=fr, dt=dt)
+            allrules +=  thisrule
+        end
+    end
+
+    return allrules
+end
