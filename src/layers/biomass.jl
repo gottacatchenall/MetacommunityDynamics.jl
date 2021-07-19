@@ -13,6 +13,7 @@ Base.rand(::Type{Biomass}, names::Vector{Symbol}, dist::Distribution, x::Int, y:
 end
 
 
+
 Base.rand(::Type{Biomass}, x::Int,y ::Int) = Base.rand(Biomass, 0.5, x, y)
 Base.rand(::Type{Biomass}, dist::Distribution, x::Int, y::Int) = begin
     z = zeros(Biomass, x,y)
@@ -25,6 +26,9 @@ end
 Base.zero(::Biomass{T}) where {T} = Biomass{T}(zero(T))
 Base.zero(::Type{Biomass}) = Biomass{Float64}(0)
 Base.zero(::Type{<:Biomass{T}}) where {T} = Biomass(zero(T))
+
+Base.zero(::NamedTuple{T,V}) where {T,V <: Tuple{Biomass}} = Biomass{Float32(0.)}
+
 
 Base.show(io::IO, t::Biomass{T}) where {T} = Base.show(io, T(t.val))
 

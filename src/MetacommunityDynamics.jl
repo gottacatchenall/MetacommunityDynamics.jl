@@ -1,6 +1,6 @@
 module MetacommunityDynamics
     using DynamicGrids
-    using DynamicGrids: CellRule, SetCellRule, applyrule, Rule, Ruleset,Neighborhood,Moore;
+    using DynamicGrids: CellRule, SetCellRule, applyrule, Rule, Ruleset,Neighborhood,Moore, Chain;
     using Dispersal: OutwardsDispersal, DispersalKernel
     using Distributions
     using Crayons
@@ -38,7 +38,7 @@ module MetacommunityDynamics
     export RandomExtinction, AbioticExtinction
 
     include(joinpath("mechanisms", "eating.jl"))
-    export Eating, FunctionalResponse, HollingTypeI, HollingTypeII, HollingTypeIII, LinearFunctionalResponse, LotkaVolterra, MichaelisMenten, CrowleyMartin
+    export Eating, FunctionalResponse, HollingTypeI, HollingTypeII, HollingTypeIII, LinearFunctionalResponse, LotkaVolterra, MichaelisMenten, CrowleyMartin, FoodWebEating
 
     include(joinpath("mechanisms", "mortality.jl"))
     export Mortality, LinearMortality
@@ -50,9 +50,6 @@ module MetacommunityDynamics
     include(joinpath("mechanisms", "growth.jl"))
     export LogisticGrowth
 
-
-    include(joinpath("mechanisms", "growth.jl"))
-    export LogisticGrowth
 
     include(joinpath("species", "speciespool.jl"))
     export ContinuousSpeciesPool, DiscreteSpeciesPool 

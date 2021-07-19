@@ -6,7 +6,7 @@ using Dispersal: Moore, DispersalKernel
 using EcologicalNetworks: nichemodel, trophic_level, UnipartiteNetwork
 
 number_of_species = 30
-connectance = 0.3
+connectance = 0.15
 
 dims = (25,25)
 
@@ -26,19 +26,15 @@ for (k,v) in zip(keys(trophicdict), values(trophicdict))
     masses[Symbol(k)] = 2^v
 end 
 masses = NamedTuple(masses)
-
-# shortcut to make many independent rules instead of one big rule
-fwe = FoodWebEating(LotkaVolterra(1.5), speciespool.metaweb, consumernames, resourcenames)  
-
     
 consumermodel = 
     FoodWebEating(consumernames, resourcenames, LotkaVolterra(1.5), speciespool.metaweb) +
-    AdjacentBernoulliDispersal(consumernames, DispersalKernel(radius=1), 0.1) +
+  #  AdjacentBernoulliDispersal(consumernames, DispersalKernel(radius=1), 0.1) +
     LinearMortality(consumernames, 0.2);
 
 plantmodel = 
     LogisticGrowth(resourcenames) +
-    AdjacentBernoulliDispersal(resourcenames, DispersalKernel(radius=3), 0.1) + 
+  #  AdjacentBernoulliDispersal(resourcenames, DispersalKernel(radius=3), 0.1) + 
     LinearMortality(resourcenames, 0.1);
 
 

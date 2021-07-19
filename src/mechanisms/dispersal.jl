@@ -30,7 +30,7 @@ function DynamicGrids.applyrule!(data, rule::AdjacentBernoulliDispersal{R,W}, N,
     end
 end
 
-function AdjacentBernoulliDispersal(consumernames::Vector{Symbol}, dk::DispersalKernel, prob::Float32) 
+function AdjacentBernoulliDispersal(consumernames::Vector{Symbol}, dk, prob::Float32) 
     allrules = Ruleset()
     for c in consumernames 
         allrules += AdjacentBernoulliDispersal{c}(dk, prob)
