@@ -3,7 +3,7 @@ using DynamicGrids
 using Plots
 using Distributions
 using Dispersal: Moore, DispersalKernel
-using EcologicalNetworks: mpnmodel, trophic_level, UnipartiteNetwork, initial, degree, richness
+using EcologicalNetworks: mpnmodel, trophic_level, UnipartiteNetwork, degree, richness
 using EcologicalNetworksPlots
 using ColorSchemes
 
