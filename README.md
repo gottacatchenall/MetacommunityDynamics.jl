@@ -74,45 +74,45 @@ using DynamicGrids
 using Plots
 using Distributions
 using Dispersal: Moore, DispersalKernel
-using EcologicalNetworks: nichemodel, trophic_level, UnipartiteNetwork
+using EcologicalNetworks: nichemodel, mpnmodel, trophic_level, UnipartiteNetwork, degree, richness
+using ColorSchemes
 
-number_of_species = 30
-connectance = 0.15
+number_of_species = 50
+connectance = 0.05
+forbiddenlinkprob = 0.5
 
-dims = (25,25)
+foodweb = mpnmodel(number_of_species, connectance, forbiddenlinkprob)
 
-foodweb = nichemodel(number_of_species, connectance)
-speciespool = DiscreteUnipartiteSpeciesPool(Symbol.(foodweb.S), Matrix(foodweb.edges)) 
-trophicdict = trophic_level(foodweb)  
+speciespool = DiscreteUnipartiteSpeciesPool(Symbol.(foodweb.S), Matrix(foodweb.edges)) # move these type changes to a method
+trophicdict = trophic_level(foodweb)  # returns a dictionary 
 
-resourcenames = filter(s -> trophicdict[String(s)] == 1.0, species(speciespool))
-consumernames = filter(s -> trophicdict[String(s)] != 1.0, species(speciespool))
-
-masses = Dict()
-for (k,v) in zip(keys(trophicdict), values(trophicdict))
-    masses[Symbol(k)] = 2^v
-end 
-masses = NamedTuple(masses)
+resource = filter(s -> trophicdict[String(s)] == 1, species(speciespool))
+consumers = filter(s -> trophicdict[String(s)] > 1, species(speciespool))
     
 consumermodel = 
-    FoodWebEating(consumernames, resourcenames, LotkaVolterra(0.03), speciespool.metaweb) +
-    AdjacentBernoulliDispersal(consumernames, DispersalKernel(radius=1), 0.1) +
-    LinearMortality(consumernames, 0.01);
+    FoodWebEating(consumers, resource, LotkaVolterra(0.2), metaweb(speciespool)) +
+    AdjacentBernoulliDispersal(consumers, DispersalKernel(radius=1), 0.1) +
+    RandomExtinction(consumers, probability=0.1) +
+    LinearMortality(consumers, 0.01);
 
 plantmodel = 
-    LogisticGrowth(resourcenames) +
-    AdjacentBernoulliDispersal(resourcenames, DispersalKernel(radius=3), 0.1) + 
-    LinearMortality(resourcenames, 0.01);
+    LogisticGrowth(resource) +
+    AdjacentBernoulliDispersal(resource, DispersalKernel(radius=2), 0.1) ;
+
+fullmodel = consumermodel + plantmodel;
 
 
-fullmodel = consumermodel + plantmodel
+
+dim = (50,50)
+ntimesteps = 300
 
 init = NamedTuple(merge(
-    rand(Biomass, resourcenames, Exponential(10), dims...),
-    rand(Biomass, consumernames, Exponential(10), dims...)));
+    rand(Biomass, resource, Exponential(10), dim...),
+    rand(Biomass, consumers, Exponential(10), dim...)));
 
-arrayout = ArrayOutput(init, tspan=1:1000, aux=(masses=masses, speciespool=speciespool,))
-@time sim!(arrayout, fullmodel) 
+arrayout = ArrayOutput(init, tspan=1:ntimesteps)
+@time sim!(arrayout, fullmodel); 
+
 
 
 
