@@ -6,9 +6,19 @@ abstract type Extinction{R,W} <: CellRule{R,W} end
 struct RandomExtinction{R,W,C} <: Extinction{R,W}
     probability::C
 end
-function RandomExtinction{R,W}(; probability=0.1,) where {R,W}
-    RandomExtinction{R,W}(probability)
+function RandomExtinction{R,W}(; probability::PT=0.1) where {R,W,PT}
+    RandomExtinction{R,W,PT}(probability)
 end
+
+function RandomExtinction(names::T; probability=0.1)  where {T <: Vector{Symbol}}
+    rules = Ruleset()
+    for n in names
+        rules += RandomExtinction{n}(probability=probability)
+    end
+    return rules
+end
+
+
 function DynamicGrids.applyrule(data, rule::RandomExtinction, N, I)
     N > zero(N) || return zero(N)
     rand() < rule.probability || return (N)
@@ -33,4 +43,5 @@ function DynamicGrids.applyrule(data, rule::AbioticExtinction, O, I)
     rand() < extinctprob && return one(O)
     return zero(O)
 end
+
 

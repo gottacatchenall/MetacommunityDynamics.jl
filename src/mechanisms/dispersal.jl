@@ -8,12 +8,12 @@
     E[D] = B_i * k_{ij}
 
 """
-struct AdjacentBernoulliDispersal{R,W,N<:AbstractKernelNeighborhood,P<:Float64} <: SetNeighborhoodRule{R,W}
+struct AdjacentBernoulliDispersal{R,W,N,P<:Float64} <: SetNeighborhoodRule{R,W}
     neighborhood::N 
     probability::P # probability of dispersal
 end
-function AdjacentBernoulliDispersal{R,W}(; kw...) where {R,W}
-    AdjacentBernoulliDispersal{R,W}(AdjacentBernoulliDispersal(; kw...))
+function AdjacentBernoulliDispersal{R,W}(; neighborhood=DispersalKernel(radius=1), probability=0.1) where {R,W}
+    AdjacentBernoulliDispersal{R,W}(AdjacentBernoulliDispersal(neighborhood, probability))
 end
 
 function DynamicGrids.applyrule!(data, rule::AdjacentBernoulliDispersal{R,W}, N, I) where {R,W}
@@ -30,7 +30,7 @@ function DynamicGrids.applyrule!(data, rule::AdjacentBernoulliDispersal{R,W}, N,
     end
 end
 
-function AdjacentBernoulliDispersal(consumernames::Vector{Symbol}, dk, prob::Float32) 
+function AdjacentBernoulliDispersal(consumernames::Vector{Symbol}, dk::KT, prob::FT) where {KT, FT <: AbstractFloat} 
     allrules = Ruleset()
     for c in consumernames 
         allrules += AdjacentBernoulliDispersal{c}(dk, prob)

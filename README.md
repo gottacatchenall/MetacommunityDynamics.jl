@@ -18,10 +18,6 @@ This software is designed to simulate how the composition of ecological communit
 The Lotka-Volterra (LV) system is a set of coupled differential equations
 which describe a system of consumers and resources (also called predators and prey).
 
-
-
-### Normal LV
-
 ```
 using MetacommunityDynamics
 using DynamicGrids
@@ -70,62 +66,58 @@ ylabel!("biomass")
 
 ![LV](./docs/static/lv.png)
 
-### LV with random dispersal 
-
-<details>
+## Food Web
 
 ```
+using MetacommunityDynamics
+using DynamicGrids
+using Plots
+using Distributions
+using Dispersal: Moore, DispersalKernel
+using EcologicalNetworks: nichemodel, trophic_level, UnipartiteNetwork
+
+number_of_species = 30
+connectance = 0.15
+
+dims = (25,25)
+
+foodweb = nichemodel(number_of_species, connectance)
+speciespool = DiscreteUnipartiteSpeciesPool(Symbol.(foodweb.S), Matrix(foodweb.edges)) 
+trophicdict = trophic_level(foodweb)  
+
+resourcenames = filter(s -> trophicdict[String(s)] == 1.0, species(speciespool))
+consumernames = filter(s -> trophicdict[String(s)] != 1.0, species(speciespool))
+
+masses = Dict()
+for (k,v) in zip(keys(trophicdict), values(trophicdict))
+    masses[Symbol(k)] = 2^v
+end 
+masses = NamedTuple(masses)
+    
 consumermodel = 
-    Eating{Tuple{:C,:R}}(
-        functionalresponse=LotkaVolterra(0.1), 
-        dt=0.1) +
-    AdjacentBernoulliDispersal{:C}(DispersalKernel(radius=3), 0.5) + 
-    LinearMortality{:C}(0.1);
+    FoodWebEating(consumernames, resourcenames, LotkaVolterra(0.03), speciespool.metaweb) +
+  #  AdjacentBernoulliDispersal(consumernames, DispersalKernel(radius=1), 0.1) +
+    LinearMortality(consumernames, 0.01);
 
-resourcemodel = 
-    MetacommunityDynamics.LogisticGrowth{:R}(λ=1.4, K=200., dt=0.1) +
-    AdjacentBernoulliDispersal{:R}(DispersalKernel(radius=5), 0.2) +
-    LogisticGrowth{:R}(λ=2, K=200., dt=0.1);
-
-model = resourcemodel + consumermodel
-
-```
-</details>
+plantmodel = 
+    LogisticGrowth(resourcenames) +
+  #  AdjacentBernoulliDispersal(resourcenames, DispersalKernel(radius=3), 0.1) + 
+    LinearMortality(resourcenames, 0.01);
 
 
-### LV with random dispersal and extinction
+fullmodel = consumermodel + plantmodel
 
-<details>
+init = NamedTuple(merge(
+    rand(Biomass, resourcenames, Exponential(10), dims...),
+    rand(Biomass, consumernames, Exponential(10), dims...)));
 
-```
-consumermodel = 
-    Eating{Tuple{:C,:R}}(
-        functionalresponse=LotkaVolterra(0.1), 
-        dt=0.1) +
-    AdjacentBernoulliDispersal{:C}(DispersalKernel(radius=3), 0.5) + 
-    RandomExtinction{:C}(0.05) + 
-    LinearMortality{:C}(0.1);
+arrayout = ArrayOutput(init, tspan=1:1000, aux=(masses=masses, speciespool=speciespool,))
+@time sim!(arrayout, fullmodel) 
 
-resourcemodel = 
-    MetacommunityDynamics.LogisticGrowth{:R}(λ=1.4, K=200., dt=0.1) +
-    AdjacentBernoulliDispersal{:R}(DispersalKernel(radius=5), 0.2) +
-    RandomExtinction{:R}(0.05);
 
-model = resourcemodel + consumermodel
-
-gifoutput = GifOutput((C=initconsumer, R=initresource ),
-    filename="out.gif", 
-    tspan=1:750, 
-    fps=25, 
-    minval=(0,0), maxval=(3,10),
-    scheme = (ColorSchemes.Blues_5, ColorSchemes.Greens_4),
-    padval = 100
-)
-sim!(gifoutput, model)
 
 ```
 
-</details>
 
 ![this is kind of neat](./docs/static/spicylvtimeseries.png)
 
