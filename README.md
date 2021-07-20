@@ -96,12 +96,12 @@ masses = NamedTuple(masses)
     
 consumermodel = 
     FoodWebEating(consumernames, resourcenames, LotkaVolterra(0.03), speciespool.metaweb) +
-  #  AdjacentBernoulliDispersal(consumernames, DispersalKernel(radius=1), 0.1) +
+    AdjacentBernoulliDispersal(consumernames, DispersalKernel(radius=1), 0.1) +
     LinearMortality(consumernames, 0.01);
 
 plantmodel = 
     LogisticGrowth(resourcenames) +
-  #  AdjacentBernoulliDispersal(resourcenames, DispersalKernel(radius=3), 0.1) + 
+    AdjacentBernoulliDispersal(resourcenames, DispersalKernel(radius=3), 0.1) + 
     LinearMortality(resourcenames, 0.01);
 
 
@@ -119,7 +119,7 @@ arrayout = ArrayOutput(init, tspan=1:1000, aux=(masses=masses, speciespool=speci
 ```
 
 
-![this is kind of neat](./docs/static/spicylvtimeseries.png)
+![this is kind of neat](./examples/foodwebs_biomass/foodwebtraj.png)
 
 
 ## Contributing
