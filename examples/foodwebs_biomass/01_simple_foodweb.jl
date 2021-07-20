@@ -3,12 +3,11 @@ using DynamicGrids
 using Plots
 using Distributions
 using Dispersal: Moore, DispersalKernel
-using EcologicalNetworks: nichemodel, mpnmodel, trophic_level, UnipartiteNetwork, degree, richness
+using EcologicalNetworks: mpnmodel, trophic_level, UnipartiteNetwork, initial, degree, richness
 using EcologicalNetworksPlots
 using ColorSchemes
 
-
-number_of_species = 50
+number_of_species = 300
 connectance = 0.05
 forbiddenlinkprob = 0.5
 
@@ -28,6 +27,7 @@ function foodwebplot(N)
     scatter!(I, N, nodefill=trophic_level(N), nodesize=degree(N), c=:YlGn)
 end
 foodwebplot(foodweb)
+
 savefig("foodweb.png")
 
 speciespool = DiscreteUnipartiteSpeciesPool(Symbol.(foodweb.S), Matrix(foodweb.edges)) # move these type changes to a method
@@ -95,7 +95,7 @@ end
 plt
 
 
-savefig(plt, "mpn_timeseries.png")
+savefig(plt, "manyspeciestimeseries.png")
 
 # ----
 sz = dim[1]
@@ -119,25 +119,3 @@ end
 
 
 
-
-anim = @animate for i ∈ 1:ntimesteps
-    heatmap(biomass[i], title="time $i",  colorbar_title="biomass",  aspectratio=1, frame=:box, xlims=(1,sz), ylims=(1,sz), clims=(0, max(biomass[end]...)), c=:viridis)
-end
-
-gif(anim, "mpnbiomass.gif" , fps=15)
-
-
-
-anim = @animate for i ∈ 1:ntimesteps
-    heatmap(speciesrichness[i], 
-        title="time $i", 
-        aspectratio=1, 
-        frame=:box, 
-        xlims=(1,sz), 
-        ylims=(1,sz), 
-        clims=(0, number_of_species), 
-        c=:viridis,
-        colorbar_title="species richness")
-end
-
-gif(anim, "mpn_richness.gif" , fps=15)
