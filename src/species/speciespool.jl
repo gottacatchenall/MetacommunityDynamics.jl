@@ -1,11 +1,38 @@
 struct SingleSpecies <: DiscreteSpeciesPool 
     species::Vector{Symbol}
+   
 end
 
+"""
+    DiscreteUnipartiteSpeciesPool
+"""
 struct DiscreteUnipartiteSpeciesPool <: DiscreteSpeciesPool 
     species::Vector{Symbol}
     metaweb::Matrix
+    function DiscreteUnipartiteSpeciesPool(s::Vector{Symbol}, adjmat::T) where {U <: Number, T <: AbstractArray{U,2}} 
+        new(s, adjmat) 
+    end 
 end 
+
+function DiscreteUnipartiteSpeciesPool(en::T) where {T <: EcologicalNetworks.UnipartiteNetwork} 
+    DiscreteUnipartiteSpeciesPool(en.S, Matrix(en.edges))
+end
+
+function DiscreteUnipartiteSpeciesPool(; numspecies=30, connectance=0.1)
+    nm = EcologicalNetworks.nichemodel(numspecies, connectance)
+    return DiscreteUnipartiteSpeciesPool(nm)
+end
+function DiscreteUnipartiteSpeciesPool(s::Vector{ST}) where {ST<:String} 
+    DiscreteUnipartiteSpeciesPool(Symbol.(s), zeros(Int32,length(s), length(s))) 
+end
+function DiscreteUnipartiteSpeciesPool(s::Vector{ST}) where {ST<:Symbol} 
+    DiscreteUnipartiteSpeciesPool(s, zeros(Int32,length(s), length(s))) 
+end
+
+function DiscreteUnipartiteSpeciesPool(s::Vector{String}, adjmat::T) where {U <: Number, T <: AbstractArray{U,2}} 
+    DiscreteUnipartiteSpeciesPool(Symbol.(s), adjmat) 
+end
+
 
 struct DiscreteKpartiteSpeciesPool <: DiscreteSpeciesPool 
     species::Vector{Symbol}

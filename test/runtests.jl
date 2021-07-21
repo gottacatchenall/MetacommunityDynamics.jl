@@ -4,7 +4,7 @@ using DynamicGrids: CellRule, SetCellRule, applyrule,Rule,Ruleset;
 using Test
 
 test_list = [
-"./occupancy.jl",
+  "./constructors/speciespools.jl",
 ]
 
 global test_n
