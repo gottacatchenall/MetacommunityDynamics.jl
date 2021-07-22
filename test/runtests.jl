@@ -5,6 +5,8 @@ using Test
 
 test_list = [
   "./constructors/speciespools.jl",
+  "./constructors/mechanisms/colonization.jl",
+
 ]
 
 global test_n

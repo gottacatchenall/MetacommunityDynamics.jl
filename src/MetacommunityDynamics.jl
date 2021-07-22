@@ -32,7 +32,7 @@ module MetacommunityDynamics
     export FitnessFunction, GaussianFitness, ExponentialFitness, DensityDependentFitness, AbioticSelection, BioticSelection
 
     include(joinpath("mechanisms", "colonization.jl"))
-    export RandomColonization, SpatiallyExplicitLevinsColonization, LevinsColonization
+    export Colonization, RandomColonization, SpatiallyExplicitLevinsColonization, LevinsColonization
 
     include(joinpath("mechanisms", "extinction.jl"))
     export RandomExtinction, AbioticExtinction

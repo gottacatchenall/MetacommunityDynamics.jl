@@ -13,6 +13,9 @@ function DynamicGrids.applyrule!(data, rule::RandomColonization{R,W}, N, I) wher
     return zero(N)
 end
 
+"""
+    TODO 
+"""
 struct SpatiallyExplicitLevinsColonization{R,W,C} <: Colonization{R,W}
     probability::C
 end

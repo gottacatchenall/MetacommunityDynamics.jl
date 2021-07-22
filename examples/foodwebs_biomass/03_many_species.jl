@@ -3,6 +3,7 @@ using DynamicGrids
 using Plots
 using Distributions
 using Dispersal: Moore, DispersalKernel
+using ColorSchemes
 using EcologicalNetworks: mpnmodel, trophic_level, UnipartiteNetwork, degree, richness
 
 
