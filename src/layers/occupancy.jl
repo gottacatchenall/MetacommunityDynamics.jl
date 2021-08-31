@@ -2,9 +2,9 @@ struct Occupancy{V} <: Measurement
     val::V
 end
 
-Base.rand(::Type{Occupancy}, x::Int,y ::Int) = Base.rand(Occupancy, 0.5, x, y)
-Base.rand(::Type{Occupancy}, p::Float64, x::Int,y ::Int) = begin
-    z = zeros(Occupancy, x,y)
+Base.rand(::Type{Occupancy}, x::Int, y::Int) = Base.rand(Occupancy, 0.5, x, y)
+Base.rand(::Type{Occupancy}, p::Float64, x::Int, y::Int) = begin
+    z = zeros(Occupancy, x, y)
     for i in eachindex(z)
         z[i] = rand() < p
     end
@@ -19,7 +19,7 @@ Base.zero(::Type{<:Occupancy{T}}) where {T} = Occupancy(zero(T))
 
 Base.show(io::IO, t::Occupancy{T}) where {T} = Base.show(io, T(t.val))
 
-Base.convert(::Type{Occupancy}, v::V) where {V <: Bool} = Occupancy{V}(v)
+Base.convert(::Type{Occupancy}, v::V) where {V<:Bool} = Occupancy{V}(v)
 
 Base.isless(a::Occupancy, b::Occupancy) = isless(a.val, b.val)
 Base.oneunit(::Type{<:Occupancy{T}}) where {T} = Occupancy(one(T))

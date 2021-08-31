@@ -9,16 +9,24 @@
 
 """
 struct AdjacentBernoulliDispersal{R,W,N,P<:Float64} <: SetNeighborhoodRule{R,W}
-    neighborhood::N 
+    neighborhood::N
     probability::P # probability of dispersal
 end
-function AdjacentBernoulliDispersal{R,W}(; neighborhood=DispersalKernel(radius=1), probability=0.1) where {R,W}
+function AdjacentBernoulliDispersal{R,W}(;
+    neighborhood = DispersalKernel(radius = 1),
+    probability = 0.1,
+) where {R,W}
     AdjacentBernoulliDispersal{R,W}(AdjacentBernoulliDispersal(neighborhood, probability))
 end
 
-function DynamicGrids.applyrule!(data, rule::AdjacentBernoulliDispersal{R,W}, N, I) where {R,W}
+function DynamicGrids.applyrule!(
+    data,
+    rule::AdjacentBernoulliDispersal{R,W},
+    N,
+    I,
+) where {R,W}
     N == zero(N) && return nothing
-    
+
     if rand() < rule.probability
         sum = zero(N)
         for (offset, k) in zip(offsets(rule), kernel(rule))
@@ -30,9 +38,13 @@ function DynamicGrids.applyrule!(data, rule::AdjacentBernoulliDispersal{R,W}, N,
     end
 end
 
-function AdjacentBernoulliDispersal(consumernames::Vector{Symbol}, dk::KT, prob::FT) where {KT, FT <: AbstractFloat} 
+function AdjacentBernoulliDispersal(
+    consumernames::Vector{Symbol},
+    dk::KT,
+    prob::FT,
+) where {KT,FT<:AbstractFloat}
     allrules = Ruleset()
-    for c in consumernames 
+    for c in consumernames
         allrules += AdjacentBernoulliDispersal{c}(dk, prob)
     end
     return allrules
@@ -47,8 +59,9 @@ end
     E[D] = B_i * k_{ij}
 
 """
-struct AdjacentTruncatedNormalDispersal{R,W,N<:AbstractKernelNeighborhood,P<:Float64} <: SetNeighborhoodRule{R,W}
-    neighborhood::N 
+struct AdjacentTruncatedNormalDispersal{R,W,N<:AbstractKernelNeighborhood,P<:Float64} <:
+       SetNeighborhoodRule{R,W}
+    neighborhood::N
     probability::P # unit probability of dispersal
 end
 function AdjacentTruncatedNormalDispersal{R,W}(; kw...) where {R,W}
@@ -65,8 +78,9 @@ end
     Only returns integers. Do we care? not really
 
 """
-struct AdjacentPoissonDispersal{R,W,N<:AbstractKernelNeighborhood,P<:Float64} <: SetNeighborhoodRule{R,W}
-    neighborhood::N 
+struct AdjacentPoissonDispersal{R,W,N<:AbstractKernelNeighborhood,P<:Float64} <:
+       SetNeighborhoodRule{R,W}
+    neighborhood::N
     probability::P # unit probability of dispersal
 end
 function AdjacentPoissonDispersal{R,W}(; kw...) where {R,W}

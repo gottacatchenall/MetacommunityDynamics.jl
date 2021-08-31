@@ -3,20 +3,21 @@ struct Biomass{V} <: Measurement
 end
 
 
-Base.rand(::Type{Biomass}, names::Vector{Symbol}, dist::Distribution, x::Int, y::Int) = begin
-    dict = Dict()
+Base.rand(::Type{Biomass}, names::Vector{Symbol}, dist::Distribution, x::Int, y::Int) =
+    begin
+        dict = Dict()
 
-    for name in names
-        dict[name] = rand(Biomass, dist, x,y);
+        for name in names
+            dict[name] = rand(Biomass, dist, x, y)
+        end
+        return dict
     end
-    return dict
-end
 
 
 
-Base.rand(::Type{Biomass}, x::Int,y ::Int) = Base.rand(Biomass, 0.5, x, y)
+Base.rand(::Type{Biomass}, x::Int, y::Int) = Base.rand(Biomass, 0.5, x, y)
 Base.rand(::Type{Biomass}, dist::Distribution, x::Int, y::Int) = begin
-    z = zeros(Biomass, x,y)
+    z = zeros(Biomass, x, y)
     for i in eachindex(z)
         z[i] = rand(dist)
     end
@@ -27,12 +28,12 @@ Base.zero(::Biomass{T}) where {T} = Biomass{T}(zero(T))
 Base.zero(::Type{Biomass}) = Biomass{Float64}(0)
 Base.zero(::Type{<:Biomass{T}}) where {T} = Biomass(zero(T))
 
-Base.zero(::NamedTuple{T,V}) where {T,V <: Tuple{Biomass}} = Biomass{Float32(0.)}
+Base.zero(::NamedTuple{T,V}) where {T,V<:Tuple{Biomass}} = Biomass{Float32(0.0)}
 
 
 Base.show(io::IO, t::Biomass{T}) where {T} = Base.show(io, T(t.val))
 
-Base.convert(::Type{Biomass}, v::V) where {V <: Number} = Biomass{V}(v)
+Base.convert(::Type{Biomass}, v::V) where {V<:Number} = Biomass{V}(v)
 
 Base.isless(a::Biomass, b::Biomass) = isless(a.val, b.val)
 Base.isless(a::Number, b::Biomass) = isless(a, b.val)

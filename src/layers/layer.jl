@@ -1,1 +1,1 @@
-abstract type Layer{T <: Measurement} end
+abstract type Layer{T<:Measurement} end

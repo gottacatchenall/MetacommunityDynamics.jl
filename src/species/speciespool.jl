@@ -1,57 +1,65 @@
-struct SingleSpecies <: DiscreteSpeciesPool 
+struct SingleSpecies <: DiscreteSpeciesPool
     species::Vector{Symbol}
-   
+
 end
 
 """
     DiscreteUnipartiteSpeciesPool
 """
-struct DiscreteUnipartiteSpeciesPool <: DiscreteSpeciesPool 
+struct DiscreteUnipartiteSpeciesPool <: DiscreteSpeciesPool
     species::Vector{Symbol}
     metaweb::Matrix
-    function DiscreteUnipartiteSpeciesPool(s::Vector{Symbol}, adjmat::T) where {U <: Number, T <: AbstractArray{U,2}} 
-        new(s, adjmat) 
-    end 
-end 
+    function DiscreteUnipartiteSpeciesPool(
+        s::Vector{Symbol},
+        adjmat::T,
+    ) where {U<:Number,T<:AbstractArray{U,2}}
+        new(s, adjmat)
+    end
+end
 
-function DiscreteUnipartiteSpeciesPool(en::T) where {T <: EcologicalNetworks.UnipartiteNetwork} 
+function DiscreteUnipartiteSpeciesPool(
+    en::T,
+) where {T<:EcologicalNetworks.UnipartiteNetwork}
     DiscreteUnipartiteSpeciesPool(en.S, Matrix(en.edges))
 end
 
-function DiscreteUnipartiteSpeciesPool(; numspecies=30, connectance=0.1)
+function DiscreteUnipartiteSpeciesPool(; numspecies = 30, connectance = 0.1)
     nm = EcologicalNetworks.nichemodel(numspecies, connectance)
     return DiscreteUnipartiteSpeciesPool(nm)
 end
-function DiscreteUnipartiteSpeciesPool(s::Vector{ST}) where {ST<:String} 
-    DiscreteUnipartiteSpeciesPool(Symbol.(s), zeros(Int32,length(s), length(s))) 
+function DiscreteUnipartiteSpeciesPool(s::Vector{ST}) where {ST<:String}
+    DiscreteUnipartiteSpeciesPool(Symbol.(s), zeros(Int32, length(s), length(s)))
 end
-function DiscreteUnipartiteSpeciesPool(s::Vector{ST}) where {ST<:Symbol} 
-    DiscreteUnipartiteSpeciesPool(s, zeros(Int32,length(s), length(s))) 
-end
-
-function DiscreteUnipartiteSpeciesPool(s::Vector{String}, adjmat::T) where {U <: Number, T <: AbstractArray{U,2}} 
-    DiscreteUnipartiteSpeciesPool(Symbol.(s), adjmat) 
+function DiscreteUnipartiteSpeciesPool(s::Vector{ST}) where {ST<:Symbol}
+    DiscreteUnipartiteSpeciesPool(s, zeros(Int32, length(s), length(s)))
 end
 
+function DiscreteUnipartiteSpeciesPool(
+    s::Vector{String},
+    adjmat::T,
+) where {U<:Number,T<:AbstractArray{U,2}}
+    DiscreteUnipartiteSpeciesPool(Symbol.(s), adjmat)
+end
 
-struct DiscreteKpartiteSpeciesPool <: DiscreteSpeciesPool 
+
+struct DiscreteKpartiteSpeciesPool <: DiscreteSpeciesPool
     species::Vector{Symbol}
     metaweb::Matrix
     partitions::Int
-end 
+end
 
-struct ContinuousUnipartiteSpeciesPool <: ContinuousSpeciesPool 
-    traitdists
-end 
+struct ContinuousUnipartiteSpeciesPool <: ContinuousSpeciesPool
+    traitdists::Any
+end
 
-struct ContinuousKpartiteSpeciesPool <: ContinuousSpeciesPool 
-    traitdists
+struct ContinuousKpartiteSpeciesPool <: ContinuousSpeciesPool
+    traitdists::Any
     partitions::Int
-end 
+end
 
-numspecies(sp::T) where {T <: DiscreteSpeciesPool} = length(species(sp))
-species(sp::T) where {T <: DiscreteSpeciesPool} = sp.species
-metaweb(sp::T) where {T <: DiscreteSpeciesPool} = sp.metaweb
+numspecies(sp::T) where {T<:DiscreteSpeciesPool} = length(species(sp))
+species(sp::T) where {T<:DiscreteSpeciesPool} = sp.species
+metaweb(sp::T) where {T<:DiscreteSpeciesPool} = sp.metaweb
 
 # some interfaces to EN generators 
 """
@@ -60,7 +68,11 @@ metaweb(sp::T) where {T <: DiscreteSpeciesPool} = sp.metaweb
     Converts a species pool to a set of layers of type `element`.
     Should be able to apply generic function. Mostly used to generate initial conditions. 
 """
-function layers(speciespool::ST; element=Biomass, dims=(100,100)) where {ST <: DiscreteSpeciesPool}
+function layers(
+    speciespool::ST;
+    element = Biomass,
+    dims = (100, 100),
+) where {ST<:DiscreteSpeciesPool}
     specieslist = species(speciespool)
     layerlist = []
     for sp in specieslist
@@ -69,10 +81,15 @@ function layers(speciespool::ST; element=Biomass, dims=(100,100)) where {ST <: D
     end
     return layerlist
 end
-layers(speciespool::SPT, element::ET; dims=(100,100)) where {SPT <: DiscreteSpeciesPool, ET <: Measurement} = layers(speciespool, element=element, dims=dims)
+layers(
+    speciespool::SPT,
+    element::ET;
+    dims = (100, 100),
+) where {SPT<:DiscreteSpeciesPool,ET<:Measurement} =
+    layers(speciespool, element = element, dims = dims)
 
 
-function layernames(sp::SPT) where {SPT <: DiscreteSpeciesPool}
+function layernames(sp::SPT) where {SPT<:DiscreteSpeciesPool}
     return Symbol.(sp.species)
 end
 
@@ -91,12 +108,12 @@ end
     because returning a sub-metaweb losess information about interactions
 
 """
-function Base.filter(f::Function, sp::T) where {T <: DiscreteSpeciesPool}
+function Base.filter(f::Function, sp::T) where {T<:DiscreteSpeciesPool}
 
     newspecieslist = []
     indecies = []
-    
-    for (i,spec) in enumerate(species(sp))
+
+    for (i, spec) in enumerate(species(sp))
         if f(String(spec)) == true
             push!(newspecieslist, spec)
             push!(indecies, i)
@@ -107,6 +124,3 @@ function Base.filter(f::Function, sp::T) where {T <: DiscreteSpeciesPool}
 
     return T(newspecieslist, newmetaweb)
 end
-
-
-

@@ -2,7 +2,7 @@
     Measurements
 
 """
-abstract type Measurement end 
+abstract type Measurement end
 
 """
     Mechanisms
