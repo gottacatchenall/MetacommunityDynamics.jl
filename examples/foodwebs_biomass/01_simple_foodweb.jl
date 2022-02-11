@@ -4,40 +4,23 @@ using Plots
 using Distributions
 using Dispersal: Moore, DispersalKernel
 using EcologicalNetworks: mpnmodel, trophic_level, UnipartiteNetwork, degree, richness
-using EcologicalNetworksPlots
 using ColorSchemes
 
-number_of_species = 300
+number_of_species = 100
 connectance = 0.05
 forbiddenlinkprob = 0.5
 
 foodweb = mpnmodel(number_of_species, connectance, forbiddenlinkprob)
 heatmap(Matrix(foodweb.edges), legend=:none, aspectratio=1)
 
-
-
-function foodwebplot(N)
-    I = initial(FoodwebInitialLayout, N)
-    L = SpringElectric(1.2; gravity=0.05)
-    L.move = (true, false)
-    for step in 1:(100richness(N))
-      position!(L, I, N)
-    end
-    plot(I, N, la=0.9, frame=:box, dpi=300)
-    scatter!(I, N, nodefill=trophic_level(N), nodesize=degree(N), c=:YlGn)
-end
-foodwebplot(foodweb)
-
-savefig("foodweb.png")
-
-speciespool = DiscreteUnipartiteSpeciesPool(Symbol.(foodweb.S), Matrix(foodweb.edges)) # move these type changes to a method
+sp = DiscreteUnipartiteSpeciesPool(Symbol.(foodweb.S), Matrix(foodweb.edges)) # move these type changes to a method
 trophicdict = trophic_level(foodweb)  # returns a dictionary 
 
-resource = filter(s -> trophicdict[String(s)] == 1, species(speciespool))
-consumers = filter(s -> trophicdict[String(s)] > 1, species(speciespool))
+resource = filter(s -> trophicdict[String(s)] == 1, species(sp))
+consumers = filter(s -> trophicdict[String(s)] > 1, species(sp))
     
 consumermodel = 
-    FoodWebEating(consumers, resource, LotkaVolterra(0.2), metaweb(speciespool)) +
+    FoodWebEating(consumers, resource, LotkaVolterra(0.2), metaweb(sp)) +
     AdjacentBernoulliDispersal(consumers, DispersalKernel(radius=1), 0.1) +
     RandomExtinction(consumers, probability=0.1) +
     LinearMortality(consumers, 0.01);
@@ -84,7 +67,7 @@ end
 
 plt = plot(legend=:none)
 xaxis!(plt, xticks=[i for i in 0:20:ntimesteps],"timestep")
-yaxis!(plt, "log2(biomass)") 
+yaxis!(plt, "biomass") 
 for s in 1:number_of_species
     speciesname = spnames[s]
     thiscol = get(ColorSchemes.thermal, trophicdict[String(speciesname)]/max(values(trophicdict)...))
@@ -97,6 +80,7 @@ plt
 
 savefig(plt, "manyspeciestimeseries.png")
 
+"""
 # ----
 sz = dim[1]
 ntimesteps = ntimesteps
@@ -116,6 +100,6 @@ for t in 1:ntimesteps
     end
 end
 
-
+"""
 
 

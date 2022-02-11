@@ -5,7 +5,7 @@ abstract type Growth{R,W} <: CellRule{R,W} end
 # and compute realized λ later 
 
 struct LogisticGrowth{R,W,LT,KT,AT,TT} <: CellRule{R,W}
-    fitnessmap::LT
+    λ::LT
     K::KT
     α::AT
     dt::TT
@@ -36,7 +36,7 @@ end
 
 
 function DynamicGrids.applyrule(data, rule::LogisticGrowth, X, index)
-    w = fitness(fitnessmap(rule))
+  #  w = fitness(rule.fitnessmap)
 
     dx = @fastmath rule.λ * X * (1.0 - (X / rule.K)^rule.α)
     return @fastmath X + dx * rule.dt
