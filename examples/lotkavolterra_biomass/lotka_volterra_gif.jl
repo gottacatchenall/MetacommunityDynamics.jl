@@ -9,13 +9,12 @@ consumermodel =
     Eating{Tuple{:C,:R}}(
         functionalresponse=LotkaVolterra(0.2), 
         dt=0.1) +
-        OutwardsDispersal{:C}(DispersalKernel(radius=3)) + 
-    #RandomExtinction{:C}(0.1) + 
+        OutwardsDispersal{:C}(DispersalKernel(radius=1)) + 
     LinearMortality{:C}(0.1);
 
 resourcemodel = 
     LogisticGrowth{:R}( λ=1.1, K=200., dt=0.1) +
-    OutwardsDispersal{:R}(DispersalKernel(radius=5));
+    OutwardsDispersal{:R}(DispersalKernel(radius=2));
 
 model = resourcemodel + consumermodel
 
@@ -29,14 +28,13 @@ function plot_lv_timeseries(arrayout)
         push!(Rs, sum(t[:R]))
     end
 
-    plot(1:length(Cs),Cs, label="consumer")
-    plot!(1:length(Rs),Rs, label="resource")
-    xlabel!("time")
-    ylabel!("biomass")
+    plot(Rs, Cs)
+    xlabel!("total resource biomass")
+    ylabel!("total consumer biomass")
 end
 
 # wave initial condition 
-latticesize = 250
+latticesize = 50
 
 initresource = rand(Biomass, Exponential(10.) ,latticesize, latticesize)
 
@@ -49,13 +47,11 @@ map( i -> initconsumer[i...] = 10., rci)
 arrayout = ArrayOutput((C=initconsumer, R=initresource ), tspan=1:500)
 @time sim!(arrayout, model)
 
-max(arrayout[300][:R]...)
-
 plot_lv_timeseries(arrayout) 
 
 gifoutput = GifOutput((C=initconsumer, R=initresource ),
-    filename="./docs/static/spicylv.gif", 
-    tspan=1:750, 
+    filename="lv.gif", 
+    tspan=1:300, 
     fps=25, 
     minval=(0,0), maxval=(10, 30),
     scheme = (ColorSchemes.Blues_5, ColorSchemes.Greens_4),

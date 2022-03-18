@@ -16,7 +16,7 @@ resourcemodel =
 
 model = resourcemodel + consumermodel
 
-latticesize = 1
+latticesize = 5
 initconsumer = zeros(Biomass, latticesize,latticesize)
 initresource = zeros(Biomass, latticesize,latticesize)
 
@@ -35,7 +35,13 @@ for t in arrayout
     push!(Rs, sum(t[:R]))
 end
 
+
 plot(1:length(Cs),Cs, label="consumer")
 plot!(1:length(Rs),Rs, label="resource")
 xlabel!("time")
 ylabel!("biomass")
+
+
+plot(Cs,Rs)
+xlabel!("Consumer")
+ylabel!("Resource")

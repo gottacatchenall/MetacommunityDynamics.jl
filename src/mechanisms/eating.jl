@@ -69,21 +69,28 @@ end
     of species in a single rule, builds a ruleset where each rule is a single consumer-resource interaction. 
 """
 function FoodWebEating(
-    consumernames::Vector{Symbol},
-    resourcenames::Vector{Symbol},
-    fr::FunctionalResponse,
-    metaweb::Matrix;
+    species::DiscreteSpeciesPool,
+    fr::FunctionalResponse;
     dt = 0.1,
 )
-    nspecies = size(metaweb)[1]
 
+    """
+
+        TODO: this needs to interate over all pairs of Cs,Rs, but use
+        a different index to determine if that interation between i,j occurs
+        in the metaweb. 
+
+    """
+            
+    mw = metaweb(species)
+    spnames = species.species
+    numspecies = length(spnames)
     allrules = Ruleset()
-    for r = 1:length(resourcenames), c = 1:length(consumernames)
-        if metaweb[r, c] == 1
-            Csym = consumernames[c]
-            Rsym = resourcenames[r]
+    for i = 1:numspecies, j = 1:numspecies
+        if mw[i,j] == 1 
+            Csym, Rsym = spnames[j], spnames[i]         
             thisrule = Eating{Tuple{Csym,Rsym}}(functionalresponse = fr, dt = dt)
-            allrules += thisrule
+            allrules = Ruleset(rules(allrules)..., thisrule)
         end
     end
 

@@ -6,12 +6,16 @@ using Dispersal: Moore, DispersalKernel
 using EcologicalNetworks: mpnmodel, trophic_level, UnipartiteNetwork, degree, richness
 using ColorSchemes
 
-number_of_species = 100
-connectance = 0.05
+#= 
+number_of_species = 5
+connectance = 0.3
 forbiddenlinkprob = 0.5
 
 foodweb = mpnmodel(number_of_species, connectance, forbiddenlinkprob)
 heatmap(Matrix(foodweb.edges), legend=:none, aspectratio=1)
+=#
+
+foodweb = UnipartiteNetwork(Bool[0 1 ; 0 0])
 
 sp = DiscreteUnipartiteSpeciesPool(Symbol.(foodweb.S), Matrix(foodweb.edges)) # move these type changes to a method
 trophicdict = trophic_level(foodweb)  # returns a dictionary 
@@ -20,25 +24,25 @@ resource = filter(s -> trophicdict[String(s)] == 1, species(sp))
 consumers = filter(s -> trophicdict[String(s)] > 1, species(sp))
     
 consumermodel = 
-    FoodWebEating(consumers, resource, LotkaVolterra(0.2), metaweb(sp)) +
+    FoodWebEating(sp, LotkaVolterra(0.2)) +
     AdjacentBernoulliDispersal(consumers, DispersalKernel(radius=1), 0.1) +
-    RandomExtinction(consumers, probability=0.1) +
-    LinearMortality(consumers, 0.01);
+ #   RandomExtinction(consumers, probability=0.1) #+
+    LinearMortality(consumers, 0.1);
 
 plantmodel = 
-    LogisticGrowth(resource) +
+    LogisticGrowth(resource, λ=1.4, K=100.) 
     AdjacentBernoulliDispersal(resource, DispersalKernel(radius=2), 0.1) ;
 
 fullmodel = consumermodel + plantmodel;
 
 
 
-dim = (50,50)
-ntimesteps = 300
+dim = (5,5)
+ntimesteps = 1000
 
 init = NamedTuple(merge(
     rand(Biomass, resource, Exponential(10), dim...),
-    rand(Biomass, consumers, Exponential(10), dim...)));
+    rand(Biomass, consumers, Exponential(100), dim...)));
 
 arrayout = ArrayOutput(init, tspan=1:ntimesteps)
 @time sim!(arrayout, fullmodel); 
@@ -50,7 +54,7 @@ arrayout = ArrayOutput(init, tspan=1:ntimesteps)
     plots : 
 """
 
-mat = zeros(number_of_species, ntimesteps)
+mat = zeros(2, ntimesteps)
 
 spnames = []
 for t = 1:ntimesteps
@@ -65,15 +69,16 @@ end
 
 
 
-plt = plot(legend=:none)
-xaxis!(plt, xticks=[i for i in 0:20:ntimesteps],"timestep")
+plt = plot()
+xaxis!(plt, xticks=[i for i in 0:50:ntimesteps],"timestep")
 yaxis!(plt, "biomass") 
-for s in 1:number_of_species
+yaxis!(plt)
+for s in 1:2
     speciesname = spnames[s]
     thiscol = get(ColorSchemes.thermal, trophicdict[String(speciesname)]/max(values(trophicdict)...))
 
     @show thiscol, speciesname, trophicdict[String(speciesname)]
-    plot!(plt, 1:ntimesteps, mat[s,:], la=0.7, lw=3, c=thiscol, colorbar_title="trophic level")
+    plot!(plt, 1:ntimesteps, mat[s,:], la=0.7, lw=3, label="trophic $(trophicdict[String(speciesname)])", c=thiscol, colorbar_title="trophic level")
 end
 plt
 

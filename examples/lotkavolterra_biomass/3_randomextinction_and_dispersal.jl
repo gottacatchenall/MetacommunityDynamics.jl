@@ -20,7 +20,7 @@ resourcemodel =
 
 model = resourcemodel + consumermodel
 
-latticesize = 100
+latticesize = 20
 initconsumer = zeros(Biomass, latticesize,latticesize)
 initresource = zeros(Biomass, latticesize,latticesize)
 
@@ -33,6 +33,7 @@ map(i -> initconsumer[i...] = 5., rand(DiscreteUniform(1, latticesize), (initc,2
 
 arrayout = ArrayOutput((C=initconsumer, R=initresource ), tspan=1:1500)
 @time sim!(arrayout, model)     
+ProfileView.@profview sim!(arrayout, model)
 
 gtkout = GtkOutput((C=initconsumer, R=initresource ), tspan=1:1000, scheme=(ColorSchemes.Blues_5, ColorSchemes.Greens_4),  minval=(0,0), maxval=(3,10),)
 sim!(gtkout, model)

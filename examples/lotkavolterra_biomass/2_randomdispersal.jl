@@ -3,6 +3,7 @@ using DynamicGrids
 using Dispersal
 using Distributions 
 using ColorSchemes 
+using ProfileView
 using Plots
 
 consumermodel = 
@@ -17,19 +18,21 @@ resourcemodel =
 
 model = resourcemodel + consumermodel
 
-latticesize = 100
+latticesize = 5
 initconsumer = zeros(Biomass, latticesize,latticesize)
 initresource = zeros(Biomass, latticesize,latticesize)
 
-initr = 58000
-initc = 5000
+initr = 580
+initc = 50
 
 map(i -> initresource[i...] = 10., rand(DiscreteUniform(1, latticesize), (initr,2)))
 map(i -> initconsumer[i...] = 5., rand(DiscreteUniform(1, latticesize), (initc,2)))
 
 
-arrayout = ArrayOutput((C=initconsumer, R=initresource ), tspan=1:1500)
-@time sim!(arrayout, model) 
+arrayout = ArrayOutput((C=initconsumer, R=initresource ), tspan=1:1000)
+# @time sim!(arrayout, model) 
+
+ProfileView.@profview sim!(arrayout, model) 
 
 
 ## Ploting

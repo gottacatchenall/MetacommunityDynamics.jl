@@ -110,7 +110,7 @@ end
 """
 function Base.filter(f::Function, sp::T) where {T<:DiscreteSpeciesPool}
 
-    newspecieslist = []
+    newspecieslist = Symbol[]
     indecies = []
 
     for (i, spec) in enumerate(species(sp))

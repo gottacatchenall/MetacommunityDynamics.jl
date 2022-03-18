@@ -4,6 +4,7 @@ authors = ["michael catchen <michael.catchen@colorado.edu>"]
 version = "0.1.0"
 
 [deps]
+ColorSchemes = "35d6a980-a343-548e-a6ea-1d62b119f2f4"
 Crayons = "a8cc5b0e-0ffa-5ad4-8c14-923d3ee1735f"
 Dispersal = "8797f018-3445-11e9-3969-c13eb94a0661"
 Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
@@ -12,4 +13,7 @@ EcologicalNetworks = "f03a62fe-f8ab-5b77-a061-bb599b765229"
 ImageMagick = "6218d12a-5da1-5696-b52f-db25d2ecc6d1"
 JuliaFormatter = "98e50ef6-434e-11e9-1051-2b60c6c9e899"
 NeutralLandscapes = "71847384-8354-4223-ac08-659a5128069f"
+PProf = "e4faabce-9ead-11e9-39d9-4379958e3056"
+ProfileView = "c46f51b8-102a-5cf2-8d2c-8597cb0e0da7"
+Term = "22787eb5-b846-44ae-b979-8e399b8463ab"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
