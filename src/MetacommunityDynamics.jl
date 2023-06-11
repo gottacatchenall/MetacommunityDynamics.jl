@@ -1,81 +1,19 @@
 module MetacommunityDynamics
-using DynamicGrids
-using DynamicGrids:
-    CellRule, SetCellRule, applyrule, Rule, Ruleset, Neighborhood, Moore, Chain
-using Dispersal: OutwardsDispersal, DispersalKernel
-using Distributions
-using Crayons
-using EcologicalNetworks
 
-include(joinpath("types.jl"))
-export Measurement
-
-include(joinpath("layers", "layer.jl"))
-export Layer
-include(joinpath("layers", "occupancy.jl"))
-export Occupancy
-include(joinpath("layers", "biomass.jl"))
-export Biomass
+    using Distributions
+    using Term
+    using UnicodePlots
+    using Distances
 
 
+    include(joinpath("spatialgraph.jl"))
 
-include(joinpath("generators", "poissonprocess.jl"))
-export generate, PoissonProcess, grid, pointstogrid
-include(joinpath("layers", "traits.jl"))
-export StaticTraitLayer
-
-include(joinpath("generators", "environment.jl"))
-export StaticEnvironmentalLayer
+    include(joinpath("dispersal", "kernel.jl"))
+    include(joinpath("dispersal", "potential.jl"))
 
 
-include(joinpath("mechanisms", "_combinemechanisms.jl"))
-include(joinpath("mechanisms", "selection.jl"))
-export FitnessFunction,
-    GaussianFitness,
-    ExponentialFitness,
-    DensityDependentFitness,
-    AbioticSelection,
-    BioticSelection
-
-include(joinpath("mechanisms", "colonization.jl"))
-export Colonization,
-    RandomColonization, SpatiallyExplicitLevinsColonization, LevinsColonization
-
-include(joinpath("mechanisms", "extinction.jl"))
-export RandomExtinction, AbioticExtinction
-
-include(joinpath("mechanisms", "eating.jl"))
-export Eating,
-    FunctionalResponse,
-    HollingTypeI,
-    HollingTypeII,
-    HollingTypeIII,
-    LinearFunctionalResponse,
-    LotkaVolterra,
-    MichaelisMenten,
-    CrowleyMartin,
-    FoodWebEating
-
-include(joinpath("mechanisms", "mortality.jl"))
-export Mortality, LinearMortality
-
-
-include(joinpath("mechanisms", "dispersal.jl"))
-export AdjacentBernoulliDispersal
-
-include(joinpath("mechanisms", "growth.jl"))
-export LogisticGrowth
-
-
-include(joinpath("species", "speciespool.jl"))
-export ContinuousSpeciesPool, DiscreteSpeciesPool
-export SingleSpecies,
-    DiscreteUnipartiteSpeciesPool,
-    DiscreteKpartiteSpeciesPool,
-    ContinuousUnipartiteSpeciesPool,
-    ContinuousKpartiteSpeciesPool
-export speciespool, specieslayers, nspecies, species, metaweb
-include(joinpath("species", "printing.jl"))
-
+    export SpatialGraph
+    export DispersalKernel
+    export DispersalPotential
 
 end # module
