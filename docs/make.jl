@@ -5,9 +5,6 @@ using DocumenterMarkdown
 using DocumenterCitations
 using MetacommunityDynamics
 
-using DynamicGrids 
-using DynamicGrids: CellRule, SetCellRule, applyrule,Rule,Ruleset;
-
 makedocs(
     bibliography;
     sitename = "MetacommunityDynamics",

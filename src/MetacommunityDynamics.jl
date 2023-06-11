@@ -11,9 +11,13 @@ module MetacommunityDynamics
     include(joinpath("dispersal", "kernel.jl"))
     include(joinpath("dispersal", "potential.jl"))
 
+    include("species.jl")
+
 
     export SpatialGraph
     export DispersalKernel
     export DispersalPotential
+
+    export Species, SpeciesPool, Niche, GaussianNiche
 
 end # module
