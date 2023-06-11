@@ -30,6 +30,7 @@ Base.getindex(potential::DispersalPotential, i::T, j::T) where {T<:Integer} =
 
 _possible_links(mat) = prod(size(mat)) - size(mat,1)
 
+
 Base.string(potential::DispersalPotential) = """
 {bold}{#87d6c1}DispersalPotential{/#87d6c1}{/bold} with {blue}$(length(findall(!iszero,
 potential.matrix))){/blue} out of $(_possible_links(potential.matrix)) possible links.
