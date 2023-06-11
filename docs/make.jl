@@ -5,6 +5,8 @@ using DocumenterMarkdown
 using DocumenterCitations
 using MetacommunityDynamics
 
+bibliography = CitationBibliography(joinpath(@__DIR__, "MetacommunityDynamics.bib"), sorting = :nyt)
+
 makedocs(
     bibliography;
     sitename = "MetacommunityDynamics",
