@@ -11,9 +11,9 @@ function dynamics(X)
     # dXₛᵢ = Xₛᵢ * (rₛᵢ)/(1 + ∑ⱼ αⱼᵢ) + Iᵢₛ - Eᵢₛ
 
     # Trophism
-    #
     # dXₛᵢ = Xₛᵢ * (rₛᵢ)/(1 + ∑ⱼ αⱼᵢ) 
 
+    # 
 
 end
 
