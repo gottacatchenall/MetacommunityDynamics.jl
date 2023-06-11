@@ -10,17 +10,18 @@ on:
 
 jobs:
   build:
-    name: "Build the documentation"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: julia-actions/setup-julia@latest
         with:
-          version: '1.6'
-      - uses: julia-actions/julia-buildpkg@latest
+          version: '1.9'
       - name: Install dependencies
         run: julia --project=docs/ -e 'using Pkg; Pkg.develop(PackageSpec(path=pwd())); Pkg.instantiate()'
+        env: 
+          GKSwstype: nul
       - name: Build and deploy
         env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }} # For authentication with GitHub Actions token
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GKSwstype: nul
         run: julia --project=docs/ docs/make.jl
