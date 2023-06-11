@@ -9,11 +9,3 @@ similar or do they vary widely?
 
 
 params = ()
-
-funcresps = [LotkaVolterra(α), HollingTypeII(α), HollingTypeII()
-
-traetments = 
-
-
-
-funcresps = [LotkaVolterra(), HollingTypeII(), HollingTypeII()
