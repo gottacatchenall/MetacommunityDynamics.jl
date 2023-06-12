@@ -7,8 +7,8 @@ module MetacommunityDynamics
     using NeutralLandscapes
     
     using TestItems
-
-
+    
+    include("environment.jl")
     include(joinpath("spatialgraph.jl"))
 
     include(joinpath("dispersal", "kernel.jl"))
@@ -24,5 +24,7 @@ module MetacommunityDynamics
     export Species, SpeciesPool, Niche, GaussianNiche
 
     export numsites, coordinates, environment, envdims
+
+    export EnvironmentLayer
 
 end # module

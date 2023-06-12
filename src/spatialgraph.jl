@@ -8,6 +8,8 @@ struct SpatialGraph{T}
 end
 
 
+
+
 Base.size(sg::SpatialGraph) = numsites(sg)
 envdims(sg::SpatialGraph) = size(environment(sg), 1)
 numsites(sg::SpatialGraph) = length(coordinates(sg))
@@ -37,7 +39,21 @@ end
 # 
 # 
 
-function SpatialGraph(; coordinates = nothing, environment::Matrix = nothing) 
+function _env_from_layer(coordinates, layer)
+    x,y = size(layer)
+    I = [CartesianIndex(Int32(floor(c[1]*x+1)), Int32(floor(c[2]*y+1))) for c in coordinates]
+    return layer[I]
+end 
+
+function SpatialGraph(layers::Vector{E}; coordinates = [(rand(), rand()) for _ = 1:20]) where E<:EnvironmentLayer
+    SpatialGraph(coordinates, Matrix(hcat([_env_from_layer(coordinates, l) for l in layers]...)')) 
+end
+
+function SpatialGraph(layer::E; coordinates = [(rand(), rand()) for _ = 1:20]) where E<:EnvironmentLayer
+    SpatialGraph(coordinates, Matrix(_env_from_layer(coordinates, layer)'))
+end
+
+function SpatialGraph(; coordinates = nothing, environment::Matrix = nothing)  
     _, nsite = size(environment)
     coordinates = isnothing(coordinates) ? 
         (isnothing(environment) ? [(rand(), rand()) for _ = 1:20] : [(rand(), rand()) for _ in 1:nsite]) : coordinates
@@ -123,9 +139,25 @@ end
     @test environment(sg) == m
 end
 
-@testitem "We can create a spatial graph with environmental layers as input" begin
-    using NeutralLandscapes
-    layers = [rand(MidpointDisplacement(0.5), (50,50)) for i in 1:7]
-    
+@testitem "We can create a spatial graph with environment layer as input" begin
+    el = EnvironmentLayer()
+    sg = SpatialGraph(el)
+    @test typeof(sg) <: SpatialGraph
 
+    c = [(rand(), rand()) for i in 1:15]
+    sg = SpatialGraph(el; coordinates=c)
+    @test coordinates(sg) == c
+end
+
+
+@testitem "We can create a spatial graph with many environment layers as input" begin
+    layers = [EnvironmentLayer() for i in 1:7]
+    sg = SpatialGraph(layers)
+    @test typeof(sg) <: SpatialGraph
+    @test envdims(sg) == 7
+
+    c = [(rand(), rand()) for i in 1:15]
+    sg = SpatialGraph(layers; coordinates=c)
+    @test coordinates(sg) == c
+    @test numsites(sg) == 15
 end

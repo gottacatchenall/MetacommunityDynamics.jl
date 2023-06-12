@@ -37,7 +37,7 @@ nav:
     - Bayesian Inference of community dynamics using Turing.jl: examples/community_inference.md
     - Inference of metapopulation dynamics: examples/metapopulation_inference.md  
     - Custom functional response: examples/custom_functional_response.md
-    - Transition from species sorting to neutral dynamics in a metacommunity: examples/niche_to_neutral.md
+    - Transition from species sorting to neutral dynamics in a metacommunity: examples/neutral_to_niche.md
   - Reference:
     - Population dynamics:
       - Overview: reference/population/overview.md
