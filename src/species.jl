@@ -25,22 +25,7 @@ end
 Base.size(sp::SpeciesPool) = length(sp.species)
 Base.length(sp::SpeciesPool) = size(sp)
 
-# A mapping from traits x environment to a growth value 
-abstract type Niche end
 
-@kwdef struct GaussianNiche <: Niche
-    traits = (:λ, :μ, :σ)
-    multivariate = false 
-end
-
-function (gn::GaussianNiche)(traits, env)
-    λ, μ, σ = traits
-    @fastmath λ*exp(-(μ - env)^2 /(2σ^2))
-end
-
-
-
-
-# Conditions that must be true:
-#
-# - A species pool must have same trait-dimensions ∀ species
+struct Species{T<:Number}
+    traits::Dict{Symbol, T}
+end 

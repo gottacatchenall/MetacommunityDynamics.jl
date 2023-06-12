@@ -10,7 +10,7 @@ end
 
 Base.string(kern::DispersalKernel) = """
 {bold}Decay: {/bold}{yellow}$(kern.decay){/yellow}
-{bold}Threshold: {/bold}{#a686eb}$(kern.threshold){/#a686eb}
+{bold}Maximum Dispersal Distance: {/bold}{#a686eb}$(kern.max_distance){/#a686eb}
 """
 Base.show(io::IO, ::MIME"text/plain", kern::DispersalKernel) = print(
     io,
