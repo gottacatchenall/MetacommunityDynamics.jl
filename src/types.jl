@@ -9,17 +9,6 @@ abstract type Abundance <: Measurement end
 abstract type Biomass <: Measurement end 
 
 
-
-struct SpeciesPool
-    names 
-    traits     
-end
-
-
-
-
-
-
 # Thompson et al 2020:
 # 
 # - Density independent growth
