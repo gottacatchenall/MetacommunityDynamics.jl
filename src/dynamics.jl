@@ -1,5 +1,8 @@
 using DifferentialEquations
 using Distributions
+using MetacommunityDynamics
+
+
 
 function dynamics(X)
     
@@ -11,8 +14,7 @@ function dynamics(X)
     # dXₛᵢ = Xₛᵢ * (rₛᵢ)/(1 + ∑ⱼ αⱼᵢ) + Iᵢₛ - Eᵢₛ
 
     # Trophism
-    # dXₛᵢ = Xₛᵢ * (rₛᵢ)/(1 + ∑ⱼ αⱼᵢ) 
-
+    # dXₛᵢ =
     # 
 
 end
@@ -22,15 +24,18 @@ function competition(u, p, t)
     r, α, K = p 
 
     du = zeros(size(u,1), size(u,2))
-
+    # local LV competition determined by α
     for s in axes(u,1)
         for p in axes(u,2)
             du[s,p] = u[s,p] * r[s] * (1 - (sum([u[t,p]*α[s,t] for t in 1:size(u,1)]) / K[s]))
         end
     end
-    
-    du .+= (D * u0')'
-    #du
+
+    # diffusion 
+    du .+= (D * u')'
+
+
+    du
 end
 
 
@@ -53,7 +58,7 @@ kern = DispersalKernel(decay=5, threshold=0.05)
 ϕ = DispersalPotential(kern, sg)
 
 
-D = diffusion_matrix(0.05, ϕ)
+D = diffusion_matrix(0.001, ϕ)
 
 
 
@@ -74,7 +79,7 @@ prob = ODEProblem(competition, u0, (0,tmax), θ, saveat=0:100);
 
 sol = solve(prob);
 
-#ts(sol, s) = [sum(sol.u[t][s,:]) for t in 1:length(sol.t)]
+ts(sol, s) = [sum(sol.u[t][s,:]) for t in 1:length(sol.t)]
 
 
 p = lineplot(ts(sol, 1), 
