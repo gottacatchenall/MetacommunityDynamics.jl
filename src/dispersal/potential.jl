@@ -39,6 +39,6 @@ Base.show(io::IO, ::MIME"text/plain", potential::DispersalPotential) = begin
     tprint(string(potential))
     print(
         io,
-        heatmap(potential.matrix, xlabel="Node i", ylabel="Node j", zlabel="ϕᵢⱼ")
+        heatmap(potential.matrix, xlabel="Node i", ylabel="Node j", zlabel="ϕᵢⱼ", width=30)
     )
 end

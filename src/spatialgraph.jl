@@ -164,20 +164,24 @@ end
 # =====================================================
 
 Base.string(sg::SpatialGraph) = """
-An {green}{bold}spatial graph{/bold}{/green} with {bold}{blue}$(length(sg.coordinates)){/blue}{/bold} locations.
+A {green}{bold}spatial graph{/bold}{/green} with {bold}{blue}$(length(sg.coordinates)){/blue}{/bold} locations.
 """
 
 Base.show(io::IO, ::MIME"text/plain", sg::SpatialGraph) = begin 
+    i = [coordinates(sg)[idx][1] for idx in eachindex(coordinates(sg))]
+    j = [coordinates(sg)[idx][1] for idx in eachindex(coordinates(sg))]
+
+    plt = scatterplot(
+        [x[1] for x in sg.coordinates],
+        [x[2] for x in sg.coordinates],
+        xlim = (0, 1),
+        ylim = (0, 1),
+        padding=0,
+        marker=:circle
+    );
     tprint(io, string(sg))
     print(io, 
-        scatterplot(
-            [x[1] for x in sg.coordinates],
-            [x[2] for x in sg.coordinates],
-            xlim = (0, 1),
-            ylim = (0, 1),
-            padding=0,
-            marker=:circle
-        )
+        plt
     )
 end 
 
