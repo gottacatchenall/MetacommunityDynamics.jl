@@ -4,6 +4,9 @@ module MetacommunityDynamics
     using Term
     using UnicodePlots
     using Distances
+    using NeutralLandscapes
+    
+    using TestItems
 
 
     include(joinpath("spatialgraph.jl"))
@@ -19,5 +22,7 @@ module MetacommunityDynamics
     export DispersalPotential
 
     export Species, SpeciesPool, Niche, GaussianNiche
+
+    export numsites, coordinates, environment, envdims
 
 end # module
