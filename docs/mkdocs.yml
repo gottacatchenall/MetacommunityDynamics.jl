@@ -30,5 +30,17 @@ docs_dir: 'build'
 nav:
   - Home: index.md
   - Getting started:
-    - Building a network: getting_started/demonstration.md
-    - Type system: getting_started/types.md
+    - Hello World: getting_started/hello_world.md
+    - Package design: getting_started/design.md
+  - Reference:
+    - Population dynamics:
+      - Overview: reference/population/overview.md
+    - Metapopulation dynamics:
+      - Overview: reference/metapopulation/overview.md
+    - Community dynamics: 
+      - Overview: reference/community/overview.md
+    - Metacommunity dynamics:  
+      - Overview: reference/metacommunity/overview.md
+  - API:
+    - Public: lib/public.md
+    - Internal: lib/internal.md

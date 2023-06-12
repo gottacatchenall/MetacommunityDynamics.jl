@@ -39,8 +39,6 @@ Base.show(io::IO, ::MIME"text/plain", sg::SpatialGraph) = begin
     )
 end 
 
-a = SpatialGraph(15)
-
 
 """
     distancematrix(sg::SpatialGraph; distance = Euclidean())

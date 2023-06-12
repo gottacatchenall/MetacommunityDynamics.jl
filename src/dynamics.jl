@@ -16,12 +16,12 @@ function dynamics(X)
     # Trophism
     # dXₛᵢ =
     # 
-
+    
 end
 
 
 function competition(u, p, t)
-    r, α, K = p 
+    r, α, K, _ = p 
 
     du = zeros(size(u,1), size(u,2))
     # local LV competition determined by α
@@ -45,6 +45,10 @@ function diffusion_matrix(m, ϕ)
 end
 
 
+function noise(u, p, t)
+    _, _, _, σ = p
+    σ .* u
+end
 
 num_species = 4
 num_sites = 10
@@ -70,12 +74,15 @@ r = [1, 0.72, 1.53, 1.27]
      1.21 0.51 0.35 1]
 K = [1 for _ in 1:num_species]
 
-θ = r, α, K
+σ = 0.25
+
+θ = r, α, K, σ
 
 u0 = rand(Uniform(0.5,1), num_species, num_sites)
 
 prob = ODEProblem(competition, u0, (0,tmax), θ, saveat=0:100);
 
+prob = SDEProblem(competition, noise, u0, (0, tmax), θ, saveat=0:100)
 
 sol = solve(prob);
 
@@ -86,7 +93,7 @@ p = lineplot(ts(sol, 1),
     xlabel="time (t)", 
     ylabel="Abundance", 
     width=80,
-    ylim=(0,10))
+    ylim=(0,20))
 for s in 2:4
     lineplot!(p, ts(sol, s))
 end
