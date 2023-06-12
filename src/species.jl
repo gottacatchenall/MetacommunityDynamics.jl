@@ -1,12 +1,8 @@
 
 
-# To figure out:
-# Species, traits, and environments
-
-
 @kwdef struct SpeciesPool{T}
-    ids =  [i for i in 1:5]
-    traits::Matrix{T}
+    species =  [Symbol("s$i") for i in 1:5]
+    traits::Dict{Symbol, Vector{T}} = Dict(:x=>rand(length(species)))
 end
 
 Base.getindex(sp::SpeciesPool, i::I) where I<:Integer = sp.species[i]
@@ -20,7 +16,6 @@ Base.length(sp::SpeciesPool) = size(sp)
 
 # A mapping from traits x environment to a growth value 
 abstract type Niche end
-
 
 @kwdef struct GaussianNiche <: Niche
     traits = (:λ, :μ, :σ)

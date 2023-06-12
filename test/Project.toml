@@ -1,4 +1,3 @@
 [deps]
-DynamicGrids = "a5dba43e-3abc-5203-bfc5-584ca68d3f5b"
-EcologicalNetworks = "f03a62fe-f8ab-5b77-a061-bb599b765229"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+TestItems = "1c621080-faea-4a02-84b6-bbd5e436b8fe"
