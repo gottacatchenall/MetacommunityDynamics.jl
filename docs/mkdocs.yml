@@ -5,10 +5,11 @@ site_author: Michael D. Catchen
 
 theme:
   name: material
+  logo: src/assets/logo.png
   palette:
     scheme: default
-    primary: white
-    accent: indigo
+    primary: teal
+    accent: light blue
 
 extra_css:
   - assets/Documenter.css
