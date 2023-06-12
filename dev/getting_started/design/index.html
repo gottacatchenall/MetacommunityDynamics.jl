@@ -13,17 +13,17 @@
       
       
       
-        <link rel="prev" href="../../reference/metacommunity/overview/">
+        <link rel="prev" href="../hello_world/">
       
       
-        <link rel="next" href="../internal/">
+        <link rel="next" href="../../reference/population/overview/">
       
       <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.15">
     
     
       
-        <title>Public - MetacommunityDynamics.jl</title>
+        <title>Package design - MetacommunityDynamics.jl</title>
       
     
     
@@ -72,11 +72,6 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
-        
-        <a href="#public-methods" class="md-skip">
-          Skip to content
-        </a>
-      
     </div>
     <div data-md-component="announce">
       
@@ -108,7 +103,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Public
+              Package design
             
           </span>
         </div>
@@ -233,14 +228,16 @@
 
   
   
+    
+  
   
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
       
       
       
-      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
       
       
       
@@ -249,7 +246,7 @@
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
         <label class="md-nav__title" for="__nav_2">
           <span class="md-nav__icon md-icon"></span>
           Getting started
@@ -262,7 +259,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../getting_started/hello_world/" class="md-nav__link">
+      <a href="../hello_world/" class="md-nav__link">
         Hello World
       </a>
     </li>
@@ -274,11 +271,19 @@
               
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="../../getting_started/design/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         Package design
       </a>
+      
     </li>
   
 
@@ -523,16 +528,14 @@
 
   
   
-    
-  
   
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
       
       
       
-      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
       
       
       
@@ -541,7 +544,7 @@
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
         <label class="md-nav__title" for="__nav_4">
           <span class="md-nav__icon md-icon"></span>
           API
@@ -552,21 +555,11 @@
               
   
   
-    
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../lib/public/" class="md-nav__link">
         Public
       </a>
-      
     </li>
   
 
@@ -578,7 +571,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../internal/" class="md-nav__link">
+      <a href="../../lib/internal/" class="md-nav__link">
         Internal
       </a>
     </li>
@@ -609,8 +602,6 @@
   
   
   
-    
-  
   
 </nav>
                   </div>
@@ -628,9 +619,9 @@
   
 
 
-<p><a id='Public-methods'></a></p>
-<p><a id='Public-methods-1'></a></p>
-<h1 id="public-methods">Public methods</h1>
+  <h1>Package design</h1>
+
+<p>What is the type system?</p>
 
 
 
