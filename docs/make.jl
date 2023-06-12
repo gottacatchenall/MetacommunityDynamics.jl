@@ -5,11 +5,11 @@ using DocumenterMarkdown
 using DocumenterCitations
 using MetacommunityDynamics
 
-bibliography = CitationBibliography(joinpath(@__DIR__, "MetacommunityDynamics.bib"), sorting = :nyt)
+bibliography = CitationBibliography(joinpath(@__DIR__, "EcoDynamics.bib"), sorting = :nyt)
 
 makedocs(
     bibliography;
-    sitename = "MetacommunityDynamics",
+    sitename = "EcoDynamics",
     authors = "Michael D. Catchen",
     modules = [MetacommunityDynamics],
     format = Markdown(),
