@@ -1,3 +1,7 @@
+
+# Question: how to best incoporate environment?
+# Should spatial graph keep a matrix? probably easiest way
+
 @kwdef struct SpatialGraph{T} 
     coordinates::Vector{Tuple{T,T}} = [(rand(), rand()) for _ = 1:20]
 end

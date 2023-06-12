@@ -43,14 +43,9 @@ abstract type Dispersal{T<:Measurement} <: Mechanism{T} end
 
 abstract type Drift{T<:Measurement} <: Mechanism{T} end 
 
-struct Competition <: Interactions 
-    
-end
+abstract type Competition <: Interactions end
 
-
-struct Eating <: Interactions
-
-end
+abstract type Trophic <: Interactions end
 
 
 
