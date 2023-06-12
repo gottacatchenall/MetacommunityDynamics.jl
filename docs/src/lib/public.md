@@ -4,5 +4,5 @@
 Modules = [MetacommunityDynamics]
 Private = false
 Public = true
-Order = [:function]
+Order = [:type, :function]
 ```
