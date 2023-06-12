@@ -17,7 +17,7 @@ makedocs(
 
 deploydocs(;
     deps = Deps.pip("mkdocs", "pygments", "python-markdown-math", "mkdocs-material"),
-    repo = "github.com/EcoJulia/MetacommunityDynamics.jl.git",
+    repo = "github.com/gottacatchenall/EcoDynamics.jl.git",
     devbranch = "main",
     make = () -> run(`mkdocs build`),
     target = "site",
