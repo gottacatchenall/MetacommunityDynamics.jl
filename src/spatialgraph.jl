@@ -51,7 +51,7 @@ coordinates(sg::SpatialGraph) = sg.coordinates
 """
     distance_matrix(sg::SpatialGraph; distance = Euclidean())
     
-Returns a matrix of pairwise distances for all nodes in a `SpatialGraph` 
+Returns a matrix of pairwise distances for all nodes in a `SpatialGraph`. The argument passed to `distance` must be of type `Distance` from `Distances.jl`.
 """
 function distance_matrix(sg::SpatialGraph; distance = Euclidean())
     distmat = zeros(numsites(sg), numsites(sg))
