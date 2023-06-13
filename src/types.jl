@@ -7,11 +7,6 @@ abstract type Occupancy <: Measurement end
 abstract type Abundance <: Measurement end 
 abstract type Biomass <: Measurement end 
 
-
-abstract type Scale end 
-
-
-
 struct Population <: Scale
     species::Species
 end
@@ -25,10 +20,7 @@ struct Community <: Scale
     species::SpeciesPool
 end
 
-struct Metacommunity <: Scale
-    spatialgraph::SpatialGraph
-    species::SpeciesPool
-end 
+
 
 # Thompson et al 2020:
 # 
@@ -63,8 +55,6 @@ Must return a function which maps state, parameter (xₜ, θ) pairs to either:
 
 abstract type Mechanism{S <: Scale, M<:Measurement} end
 
-# These are for Abundance/Biomass
-
 abstract type Growth <: Mechanism end
 abstract type Interactions <: Mechanism end
 abstract type Dispersal <: Mechanism end
@@ -84,8 +74,10 @@ abstract type Extinction{S,M} <: Mechanism{S,M} end
 mechanism(::Mechanism{S,M}) where {S,M} = M
 scale(::Mechanism{S,M}) where {S,M} = S
 
-
-struct LotkaVolterraCompetition # these parameters are the same across space if meta
+# Key limitation here: 
+# - if we use this for both local and meta, it means α and K cannot vary across
+#   space. 
+struct LotkaVolterraCompetition 
     α
     K
 end
