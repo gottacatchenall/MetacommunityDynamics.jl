@@ -43,16 +43,13 @@ clv =  CompetitiveLotkaVolterra()
 foo = ∂u(clv)
 
 
-
 # the parameters are baked into u, which helps 
 
 
 bar(u,p,t) = foo(u)
 
 u0 = rand(Uniform(0.5,1), 4, 1)
-
 prob = ODEProblem(bar, u0, (0,100.), (), saveat=0:100);
-
 @time sol = solve(prob);
 
 
