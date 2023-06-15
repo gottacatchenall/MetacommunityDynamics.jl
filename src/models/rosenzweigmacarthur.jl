@@ -20,8 +20,10 @@
 end 
 
 discreteness(::RosenzweigMacArthur) = Continuous 
-
 initial(rm::RosenzweigMacArthur) = [0.2, 0.2]  # note this is only valid for the default params
+
+
+
 
 # Key thing for constructors here is how to handle 2 species vs. > 2 cases.
 #   - In two-species case, parameters all params can be scaler. not for anything
