@@ -6,11 +6,29 @@ struct Problem{T <: SciMLBase.AbstractODEProblem}
     spatialgraph::Union{SpatialGraph, Missing}
 end
 
+is_spatial(p::Problem) = !ismissing(p.spatialgraph)
 model(p::Problem) = p.model
+
+function problem(m::Model; kwargs...)
+    problem(m, Deterministic; kwargs...)
+end
+
+
 function problem(m::Model, ::Type{Deterministic}; tspan=(0,100), u0=nothing)
     prob = discreteness(m) == MetacommunityDynamics.Continuous ? ODEProblem : DiscreteProblem
+    
+    # this should dispatch on whether a spatialgraph was provided
     f = factory(m) 
+
+
     u0 = isnothing(u0) ? initial(m) : u0
+
+    # TODO replace params here with a value loaded via
+    # parameters(m). 
+
+    # This will also enable injection of environment dependent variables here
+    # for the spatial version of this method 
+
     Problem(m, prob(f, u0, tspan, ()) , tspan, u0, Missing())
 end
 function simulate(p::Problem)
@@ -20,11 +38,12 @@ end
 
 
 
+
 function model(m::Model, ::Deterministic, ::SpatialGraph)
         
 end
 
 
-function model(m::Model, ::GaussianDrift, ::SpatialGraph)
+function model(m::Model, g::GaussianDrift, ::SpatialGraph)
 
 end 
