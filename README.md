@@ -1,5 +1,5 @@
+![logo](https://github.com/gottacatchenall/EcoDynamics.jl/assets/17133743/da4d7c01-bae1-487c-bb39-28d19fb6f490)
 
-![withtext](https://github.com/gottacatchenall/EcoDynamics.jl/assets/17133743/611e836f-9b6f-4acb-9668-825279e846a5)
 
 [![](https://img.shields.io/badge/docs-dev-blue.svg)](https://gottacatchenall.github.io/EcoDynamics.jl/dev).)
 
