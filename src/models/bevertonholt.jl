@@ -25,10 +25,17 @@ function ∂u(bm::BevertonHolt, x)
 end 
 
 
-# This could generalize to model_factory(model::Model{S<:Spatialness})
+# This could generalize to factory(model::Model{S<:Spatialness})
 # and adds ∂x if Spatial
-function model_factory(bh::BevertonHolt)
-    (x,_,_) -> ∂u(bh, x)
+
+"""
+    factory(bh::BevertonHolt)
+
+Model factory for the Beverton-Holt model. Returns a function that takes a state
+`u` and returns an anonymous function and returns `du`. 
+"""
+function factory(bh::BevertonHolt)
+    (u,_,_) -> ∂u(bh, u)
 end
 
 
@@ -38,9 +45,10 @@ end
 end
 
 
-
+#=
 bh = BevertonHolt()
 u0 = 7.
 prob = DiscreteProblem(model_factory(bh), u0, (0,100.), (), saveat=0:100);
 @time sol = solve(prob);
 
+=#
