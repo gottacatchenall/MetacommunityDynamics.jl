@@ -6,18 +6,20 @@ model](https://en.wikipedia.org/wiki/Beverton%E2%80%93Holt_model) is a
 discrete-time, deterministic model of population dynamics. It is commonly
 interpreted as a discrete-time version of the logistic model.  
 """
-@kwdef struct BevertonHolt <: Model 
-    R₀ = 1.2
-    K = 50
+@kwdef struct BevertonHolt{F<:Number} <: Model
+    R₀::F = 1.2
+    K::F = 50.
 end 
+initial(bm::BevertonHolt) = 7.  # note this is only valid for the default params
 
+discreteness(::BevertonHolt) = Discrete
 
 """
     ∂u(bm::BevertonHolt, x)
 
 Single time-step for the `BevertonHolt` model. 
 """
-function ∂u(bm::BevertonHolt, x)
+function ∂u(bm::BevertonHolt{T}, x::T) where {T<:Number}
     R₀, K = bm.R₀, bm.K
 
     @fastmath M = K/(R₀-1)
@@ -27,7 +29,6 @@ end
 
 # This could generalize to factory(model::Model{S<:Spatialness})
 # and adds ∂x if Spatial
-
 """
     factory(bh::BevertonHolt)
 
@@ -38,6 +39,16 @@ function factory(bh::BevertonHolt)
     (u,_,_) -> ∂u(bh, u)
 end
 
+function replplot(::BevertonHolt, traj)
+    u = timeseries(traj)
+    ymax = max(u...)
+    p = lineplot(u, 
+        xlabel="time (t)", 
+        ylabel="Abundance", 
+        width=80,
+        ylim=(0,ymax))
+    p
+end
 
 @testitem "Beverton-Holt constructor works" begin
     @test typeof(BevertonHolt()) <: Model
@@ -45,10 +56,12 @@ end
 end
 
 
+# factory(BevertonHolt())(5100, "", "")
+
 #=
 bh = BevertonHolt()
 u0 = 7.
-prob = DiscreteProblem(model_factory(bh), u0, (0,100.), (), saveat=0:100);
+prob = DiscreteProblem(factory(bh), u0, (0,100.), (), saveat=0:100);
 @time sol = solve(prob);
 
 =#

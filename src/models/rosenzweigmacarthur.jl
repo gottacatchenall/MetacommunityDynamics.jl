@@ -1,34 +1,109 @@
+"""
+    struct RosenzweigMacArthur{S,T<:Number} <: Model
 
-@kwdef struct RosenzweigMacArthur{T<:Number} <: Model 
+
+
+"""
+@kwdef struct RosenzweigMacArthur{S,T<:Number} <: Model
     # C = 1, R = 2
-    λ::Vector{T} =  [0.5, 0.0]
-    α::Matrix{T} =  [0.0  5.0;    # α[i,j] = energy flow i eating j
-                     0.0  0.0]
-    η::Matrix{T} =  [0.0  3.0;    # η[i, j] =  handling rate i eating j
-                     0.0  0.0]
-    β::Matrix{T} =  [0.0  0.1;    # β[i, j] = growth in i eating j
-                     0.0  0.0]
+    M::Matrix{S} =  [0 1;
+                     0 0]
+    λ::Vector{T} =  [0.0, 0.5]
+    α::Matrix{T} =  [0.0  5.0;    # α[i,j] = attack rate of i on j
+                     5.0  0.0]
+    η::Matrix{T} =  [0.0  3.0;    # η[i, j] =  handling rate of i on j
+                     3.0  0.0]
+    β::Matrix{T} =  [0.0  0.5;    # β[i, j] = growth in i eating j
+                     0.5  0.0]
     γ::Vector{T} =  [0.1, 0.]           # heterotroph death rate (0 for all autotrophs)
-    K::Vector{T} =  [0.0, 1.0]           # autotroph carrying capacity (0 for heterotrophs)
+    K::Vector{T} =  [0.0, 0.3]           # autotroph carrying capacity (0 for heterotrophs)
 end 
 
-function dx(rm::RosenzweigMacArthur)
-    #λ, α, K = clv.λ, clv.α, clv.K
-    function foo(x)
-    #    du = similar(x)
-    #    for s in axes(x,1)
-    #        @fastmath du[s] = x[s] * λ[s] * (1 - (sum([x[t]*α[s,t] for t in 1:size(x,1)]) / K[s]))
-    #    end
-    #    du
+discreteness(::RosenzweigMacArthur) = Continuous 
+
+initial(rm::RosenzweigMacArthur) = [0.2, 0.2]  # note this is only valid for the default params
+
+# Key thing for constructors here is how to handle 2 species vs. > 2 cases.
+#   - In two-species case, parameters all params can be scaler. not for anything
+#     bigger though
+
+function ∂u(rm::RosenzweigMacArthur, u)
+    M, λ, α, η, β, γ, K = rm.M, rm.λ, rm.α, rm.η, rm.β, rm.γ, rm.K
+
+    I = findall(!iszero, M)
+    du = similar(u)
+    du .= 0
+       
+    for i in I
+        ci,ri = i[1], i[2]
+        C,R = u[ci], u[ri]
+
+        λᵢ, αᵢ, ηᵢ, βᵢ, γᵢ, Kᵢ = λ[ri], α[ci,ri], η[ci,ri], β[ci,ri], γ[ci], K[ri]
     
-    end
-    foo 
+        @fastmath dR = λᵢ*R*(1-(R/Kᵢ)) - (αᵢ*R*C)/(1+αᵢ*ηᵢ*R)
+        @fastmath dC = (βᵢ*C*R*αᵢ)/(1+αᵢ*ηᵢ*R) - γᵢ*C
+        du[ci] += dC
+        du[ri] += dR
+    end 
+
+    du      
 end
 
-print("foo")
+function factory(rm::RosenzweigMacArthur)
+    (u,_,_) -> ∂u(rm, u)
+end
 
- 
-#=using DifferentialEquations
+function replplot(::RosenzweigMacArthur, traj)
+    u = timeseries(traj)
+    ymax = max([extrema(x)[2] for x in timeseries(traj)]...)
+    ts(s) = [mean(u[t][s,:]) for t in 1:length(traj)]
+    p = lineplot( ts(1), 
+        xlabel="time (t)", 
+        ylabel="Biomass", 
+        width=80,
+        ylim=(0,ymax))
+
+    for i in 2:length(u[1])
+        lineplot!(p, ts(i))
+    end 
+    p
+end
+
+
+@testitem "Rosenzweig-MacArthur constructor works" begin
+    @test typeof(RosenzweigMacArthur()) <: Model
+    @test typeof(RosenzweigMacArthur()) <: RosenzweigMacArthur
+end
+
+
+
+
+#=
+
+
+u0 = [0.2,0.2]
+foo= factory(RosenzweigMacArthur())
+foo(u0,nothing,nothing)
+
+
+prob = ODEProblem(foo, u0,  (0,100.), ())
+@time sol = solve(prob, saveat=(0:1:100));
+
+sol.u
+
+
+ts(sol, s) = [sum(sol.u[t][s,:]) for t in 1:length(sol.t)]
+p = lineplot(ts(sol, 1), 
+    xlabel="time (t)", 
+    ylabel="Abundance", 
+    width=80)
+lineplot!(p,ts(sol,2))
+p 
+
+f
+
+
+using DifferentialEquations
 using MetacommunityDynamics
 using Distributions
 
