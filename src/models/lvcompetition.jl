@@ -1,5 +1,5 @@
 
-@kwdef struct CompetitiveLotkaVolterra <: Model 
+@kwdef struct CompetitiveLotkaVolterra <: Model
     λ = [1, 0.72, 1.53, 1.27]
     α = [1.00 1.09 1.52 0. 
          0.   1.00 0.44 1.36
@@ -7,19 +7,40 @@
          1.21 0.51 0.35 1.00]
     K = [1. for i in 1:4]
 end 
+initial(::CompetitiveLotkaVolterra) = rand(Uniform(0.5,1), 4, 1)
+discreteness(::CompetitiveLotkaVolterra) = Continuous 
 
-
-function ∂u(clv::CompetitiveLotkaVolterra)
-    λ, α, K = clv.λ, clv.α, clv.K
-    function foo(x)
-        du = similar(x)
-        for s in axes(x,1)
-            @fastmath du[s] = x[s] * λ[s] * (1 - (sum([x[t]*α[s,t] for t in 1:size(x,1)]) / K[s]))
-        end
-        du
-    end
-    foo 
+factory(clv::CompetitiveLotkaVolterra) = begin
+    (u,_,_) -> ∂u(clv, u)
 end
+
+function ∂u(clv::CompetitiveLotkaVolterra, u)
+    λ, α, K = clv.λ, clv.α, clv.K
+    du = similar(u)
+    for s in axes(u,1)
+        @fastmath du[s] = u[s] * λ[s] * (1 - (sum([u[t]*α[s,t] for t in 1:size(u,1)]) / K[s]))
+    end
+    du
+end
+
+
+function replplot(::CompetitiveLotkaVolterra, traj)
+    u = timeseries(traj)
+    ymax = max([extrema(x)[2] for x in timeseries(traj)]...)
+    ts(s) = [mean(u[t][s,:]) for t in 1:length(traj)]
+    p = lineplot( ts(1), 
+        xlabel="time (t)", 
+        ylabel="Biomass", 
+        width=80,
+        ylim=(0,ymax))
+
+    for i in 2:length(u[1])
+        lineplot!(p, ts(i))
+    end 
+    p
+end
+
+
 
 # This has to be a function that returns
 # a function mapping u -> du as a function of the diffusion matrix 

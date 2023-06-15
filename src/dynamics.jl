@@ -4,6 +4,26 @@ using MetacommunityDynamics
 
 
 
+rm = RosenzweigMacArthur()
+p = problem(rm, Deterministic)
+@time sol = simulate(p)
+
+
+
+
+p = problem(BevertonHolt(1.2,50.), Deterministic)
+@time sol = simulate(p)
+
+sol
+
+
+p = problem(CompetitiveLotkaVolterra(), Deterministic);
+@time sol = simulate(p)
+
+f 
+
+#=
+
 function dynamics(X)
     
     # X is a matrix with species on rows and patches on columns
@@ -91,3 +111,4 @@ for s in 2:4
 end
 
 p
+=#
