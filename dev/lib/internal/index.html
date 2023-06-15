@@ -17,7 +17,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.15">
+      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.16">
     
     
       
@@ -723,31 +723,25 @@
 <div class="highlight"><pre><span></span><code><span class="n">Base</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">sg</span><span class="o">::</span><span class="kt">SpatialGraph</span><span class="p">)</span>
 </code></pre></div>
 <p>Returns the number of nodes in a spatial graph <code>sg</code>.</p>
-<p><a target='_blank' href='https://github.com/gottacatchenall/EcoDynamics.jl/blob/dae0a436a87ea5deb2bbf6964c3c9dbeb3573cdd/src/spatialgraph.jl#L19-L23' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/gottacatchenall/EcoDynamics.jl/blob/f4b6e47f8c71632e6b6c495ad1d07e15918df95c/src/spatialgraph.jl#L19-L23' class='documenter-source'>source</a><br></p>
 <p><a id='MetacommunityDynamics._env_from_layer-Tuple{Any, EnvironmentLayer}' href='#MetacommunityDynamics._env_from_layer-Tuple{Any, EnvironmentLayer}'>#</a>
 <strong><code>MetacommunityDynamics._env_from_layer</code></strong> &mdash; <em>Method</em>.</p>
 <div class="highlight"><pre><span></span><code><span class="n">_env_from_layer</span><span class="p">(</span><span class="n">coords</span><span class="p">,</span><span class="w"> </span><span class="n">layer</span><span class="o">::</span><span class="kt">EnvironmentLayer</span><span class="p">)</span>
 </code></pre></div>
 <p>Returns the values in the layer at the given coordinates, given the bounding-box os the coordinates is the extent of the layer.</p>
-<p><a target='_blank' href='https://github.com/gottacatchenall/EcoDynamics.jl/blob/dae0a436a87ea5deb2bbf6964c3c9dbeb3573cdd/src/spatialgraph.jl#L73-L78' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/gottacatchenall/EcoDynamics.jl/blob/f4b6e47f8c71632e6b6c495ad1d07e15918df95c/src/spatialgraph.jl#L73-L78' class='documenter-source'>source</a><br></p>
 <p><a id='MetacommunityDynamics.distance_matrix-Tuple{SpatialGraph}' href='#MetacommunityDynamics.distance_matrix-Tuple{SpatialGraph}'>#</a>
 <strong><code>MetacommunityDynamics.distance_matrix</code></strong> &mdash; <em>Method</em>.</p>
 <div class="highlight"><pre><span></span><code><span class="n">distance_matrix</span><span class="p">(</span><span class="n">sg</span><span class="o">::</span><span class="kt">SpatialGraph</span><span class="p">;</span><span class="w"> </span><span class="n">distance</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Euclidean</span><span class="p">())</span>
 </code></pre></div>
 <p>Returns a matrix of pairwise distances for all nodes in a <code>SpatialGraph</code>. The argument passed to <code>distance</code> must be of type <code>Distance</code> from <code>Distances.jl</code>.</p>
-<p><a target='_blank' href='https://github.com/gottacatchenall/EcoDynamics.jl/blob/dae0a436a87ea5deb2bbf6964c3c9dbeb3573cdd/src/spatialgraph.jl#L51-L55' class='documenter-source'>source</a><br></p>
-<p><a id='MetacommunityDynamics.factory-Tuple{BevertonHolt}' href='#MetacommunityDynamics.factory-Tuple{BevertonHolt}'>#</a>
-<strong><code>MetacommunityDynamics.factory</code></strong> &mdash; <em>Method</em>.</p>
-<div class="highlight"><pre><span></span><code><span class="n">factory</span><span class="p">(</span><span class="n">bh</span><span class="o">::</span><span class="kt">BevertonHolt</span><span class="p">)</span>
-</code></pre></div>
-<p>Model factory for the Beverton-Holt model. Returns a function that takes a state <code>u</code> and returns an anonymous function and returns <code>du</code>. </p>
-<p><a target='_blank' href='https://github.com/gottacatchenall/EcoDynamics.jl/blob/dae0a436a87ea5deb2bbf6964c3c9dbeb3573cdd/src/models/bevertonholt.jl#L31-L36' class='documenter-source'>source</a><br></p>
-<p><a id='MetacommunityDynamics.∂u-Tuple{BevertonHolt, Any}' href='#MetacommunityDynamics.∂u-Tuple{BevertonHolt, Any}'>#</a>
+<p><a target='_blank' href='https://github.com/gottacatchenall/EcoDynamics.jl/blob/f4b6e47f8c71632e6b6c495ad1d07e15918df95c/src/spatialgraph.jl#L51-L55' class='documenter-source'>source</a><br></p>
+<p>&lt;a id='MetacommunityDynamics.∂u-Union{Tuple{T}, Tuple{BevertonHolt{T}, T}} where T&lt;:Number' href='#MetacommunityDynamics.∂u-Union{Tuple{T}, Tuple{BevertonHolt{T}, T}} where T&lt;:Number'&gt;#</a>
 <strong><code>MetacommunityDynamics.∂u</code></strong> &mdash; <em>Method</em>.</p>
 <div class="highlight"><pre><span></span><code><span class="n">∂u</span><span class="p">(</span><span class="n">bm</span><span class="o">::</span><span class="kt">BevertonHolt</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p">)</span>
 </code></pre></div>
 <p>Single time-step for the <code>BevertonHolt</code> model. </p>
-<p><a target='_blank' href='https://github.com/gottacatchenall/EcoDynamics.jl/blob/dae0a436a87ea5deb2bbf6964c3c9dbeb3573cdd/src/models/bevertonholt.jl#L15-L19' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/gottacatchenall/EcoDynamics.jl/blob/f4b6e47f8c71632e6b6c495ad1d07e15918df95c/src/models/bevertonholt.jl#L17-L21' class='documenter-source'>source</a><br></p>
 
 
 
@@ -788,11 +782,15 @@
     <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.b4d07000.min.js"></script>
+      <script src="../../assets/javascripts/bundle.a51614de.min.js"></script>
       
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_HTML"></script>
+        
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_HTML"></script>
+        
       
-        <script src="../../assets/mathjaxhelper.js"></script>
+        
+          <script src="../../assets/mathjaxhelper.js"></script>
+        
       
     
   </body>
