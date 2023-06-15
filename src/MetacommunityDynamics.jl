@@ -21,8 +21,12 @@ module MetacommunityDynamics
     @kwdef struct GaussianDrift{T} <: Stochasticity
         σ::T = 0.1
     end
+
+    function ∂w(gd::GaussianDrift, x)
+        gd.σ
+    end
     
-    export Stochasticity, Deterministic
+    export Stochasticity, Deterministic, GaussianDrift
 
     abstract type Model end 
     export Model

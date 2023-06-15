@@ -6,7 +6,7 @@
 """
 @kwdef struct RosenzweigMacArthur{S,T<:Number} <: Model
     # C = 1, R = 2
-    M::Matrix{S} =  [0 1;
+    M::Matrix{S} =  [0 1;         # metaweb
                      0 0]
     λ::Vector{T} =  [0.0, 0.5]
     α::Matrix{T} =  [0.0  5.0;    # α[i,j] = attack rate of i on j
@@ -53,6 +53,10 @@ end
 
 function factory(rm::RosenzweigMacArthur)
     (u,_,_) -> ∂u(rm, u)
+end
+
+function factory(rm::RosenzweigMacArthur, s::T) where {T<:Stochasticity}
+    (u,_,_) -> ∂u(rm, u) #, (u,_,_) -> ∂w(s, u)
 end
 
 function replplot(::RosenzweigMacArthur, traj)
