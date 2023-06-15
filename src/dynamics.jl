@@ -90,5 +90,4 @@ for s in 2:4
     lineplot!(p, ts(sol, s))
 end
 
-p1
 p

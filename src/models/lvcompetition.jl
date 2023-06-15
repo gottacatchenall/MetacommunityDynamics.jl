@@ -21,11 +21,14 @@ function ∂u(clv::CompetitiveLotkaVolterra)
     foo 
 end
 
-# This has to return a function that returns
+# This has to be a function that returns
 # a function mapping u -> du as a function of the diffusion matrix 
 # provided
-
 # should diffusion always act after local, so can assume du as input?
+
+# PDEs make things hard because you have to consider infinitesemals across
+# space. In spatial graphs, you don't have to do that.
+
 function ∂x(diffusion_mat)
     ϕ = diffusion_mat
     function foo(du)
@@ -36,7 +39,7 @@ function ∂x(diffusion_mat)
     foo 
 end
 
-
+#=
 
 clv =  CompetitiveLotkaVolterra()
 
@@ -50,6 +53,7 @@ bar(u,p,t) = foo(u)
 
 u0 = rand(Uniform(0.5,1), 4, 1)
 prob = ODEProblem(bar, u0, (0,100.), (), saveat=0:100);
+
 @time sol = solve(prob);
 
 
@@ -61,4 +65,4 @@ p = lineplot(ts(sol, 1),
 for i in 2:4
 lineplot!(p, ts(sol, i))
 end
-p   
+p   =#
