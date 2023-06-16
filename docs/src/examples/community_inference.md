@@ -4,7 +4,11 @@ This use case shows how to build and run a model of community dynamics (the
 Rosenzweig-MacArthur model, specifically).
 
 ```@example 1
+using Turing, DiffEqBayes
+using DifferentialEquations
 using MetacommunityDynamics
+using LinearAlgebra
+using CairoMakie
 ```
 
 The _Rosenzweig-MacArthur_ model is a model of consumer-resource dynamics. 
