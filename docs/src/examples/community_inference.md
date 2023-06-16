@@ -40,6 +40,7 @@ Third we simulate!
 ```@example 1
 traj = simulate(p)
 ```
+
 ```@example 1
 obs = observe(Observer(frequency=1), traj)
 ```
@@ -85,7 +86,6 @@ and we plot plosterior samples with the original data
 f = Figure()
 ax = Axis(f[1,1], xlabel="Time", ylabel="Biomass")
 xlims!(0,100)
-
 for p in eachrow(Array(posterior_samples))
     λ, α, η, β, γ, K =  p
     θ = two_species(RosenzweigMacArthur, λ=λ, α=α, η=η, β=β, γ=γ, K=K)
@@ -95,11 +95,8 @@ for p in eachrow(Array(posterior_samples))
     lines!(ax, sol_p.t, [sol_p.u[i][1] for i in eachindex(sol_p.t)], color=(:lightskyblue1, 0.1))
     lines!(ax, sol_p.t, [sol_p.u[i][2] for i in eachindex(sol_p.t)], color=(:lightcoral, 0.04))
 end
-
 scatter!(ax, 1:size(obs,2), obs[1,:], color=(:dodgerblue))
 scatter!(ax, 1:size(obs,2), obs[2,:], color=(:red, 0.5))
 f
-
-
 ```
 
