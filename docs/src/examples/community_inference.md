@@ -55,7 +55,6 @@ First we define our model for inference.
 
 ```@example
 print("Fitting model...")
-
 @model function fit_rm(data, prob)
     σ ~ InverseGamma(2,3)
     λ ~ TruncatedNormal(0.5,1, 0,1.5)
@@ -72,11 +71,9 @@ print("Fitting model...")
         data[:,i] ~ MvNormal(predicted[i], σ^2 * I)
     end
 end
-
 model = fit_rm(obs, prob.prob)
 chain = sample(model, NUTS(0.65), MCMCSerial(), 300, 1)
 posterior_samples = sample(chain[[:λ, :α, :η, :β, :γ, :K]], 300)
-
 f = Figure()
 ax = Axis(f[1,1], xlabel="Time", ylabel="Biomass")
 xlims!(0,100)
