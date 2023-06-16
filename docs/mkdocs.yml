@@ -40,13 +40,13 @@ nav:
     - Transition from species sorting to neutral dynamics in a metacommunity: examples/neutral_to_niche.md
   - Reference:
     - Population dynamics:
-      - Overview: reference/population/overview.md
+      - Overview: model_index/population/overview.md
     - Metapopulation dynamics:
-      - Overview: reference/metapopulation/overview.md
+      - Overview: model_index/metapopulation/overview.md
     - Community dynamics: 
-      - Overview: reference/community/overview.md
+      - Overview: model_index/community/overview.md
     - Metacommunity dynamics:  
-      - Overview: reference/metacommunity/overview.md
+      - Overview: model_index/metacommunity/overview.md
   - API:
     - Public: lib/public.md
     - Internal: lib/internal.md

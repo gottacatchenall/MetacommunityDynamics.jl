@@ -29,23 +29,23 @@ Let's simulate it ,using only 3 lines of Julia.
 
 First we build the model
 
-```@example 1
+```@example
 rm = RosenzweigMacArthur()
 ```
 
 Then we setup the problem
 
-```@example 1
+```@example
 p = problem(rm, Deterministic)
 ```
 
 Third we simulate!
 
-```@example 1
+```@example
 traj = simulate(p)
 ```
 
-```@example 1
+```@example
 obs = observe(Observer(frequency=1), traj)
 ```
 
@@ -53,7 +53,7 @@ obs = observe(Observer(frequency=1), traj)
 
 First we define our model for inference.
 
-```@example 1
+```@example
 @model function fit_rm(data, prob)
     σ ~ InverseGamma(2,3)
     λ ~ TruncatedNormal(0.5,1, 0,1.5)
@@ -72,19 +72,17 @@ First we define our model for inference.
 end
 ```
 
-Next we fit da model
+Next we fit da model.
 
-
-
-```@example 1
+```@example
 model = fit_rm(obs, prob.prob)
 chain = sample(model, NUTS(0.65), MCMCSerial(), 300, 1)
 posterior_samples = sample(chain[[:λ, :α, :η, :β, :γ, :K]], 300)
 ```
 
-and we plot plosterior samples with the original data
+and we plot plosterior samples with the original data:
 
-```@example 1
+```@example
 f = Figure()
 ax = Axis(f[1,1], xlabel="Time", ylabel="Biomass")
 xlims!(0,100)
