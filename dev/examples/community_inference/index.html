@@ -334,9 +334,40 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Bayesian Inference of community dynamics using Turing.jl
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         Bayesian Inference of community dynamics using Turing.jl
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#inference" class="md-nav__link">
+    Inference
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -701,6 +732,21 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#inference" class="md-nav__link">
+    Inference
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -741,10 +787,10 @@ $$</p>
 <p>Then we setup the problem</p>
 <div class="highlight"><pre><span></span><code><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">problem</span><span class="p">(</span><span class="n">rm</span><span class="p">,</span><span class="w"> </span><span class="n">Deterministic</span><span class="p">)</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code>MetacommunityDynamics.Problem{SciMLBase.ODEProblem{Vector{Float64}, Tuple{Int64, Int64}, false, Tuple{}, SciMLBase.ODEFunction{false, SciMLBase.AutoSpecialize, MetacommunityDynamics.var&quot;#86#87&quot;{RosenzweigMacArthur{Int64, Float64}}, LinearAlgebra.UniformScaling{Bool}, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, typeof(SciMLBase.DEFAULT_OBSERVED), Nothing, Nothing}, Base.Pairs{Symbol, Union{}, Tuple{}, NamedTuple{(), Tuple{}}}, SciMLBase.StandardODEProblem}}(RosenzweigMacArthur{Int64, Float64}([0 1; 0 0], [0.0, 0.5], [0.0 5.0; 5.0 0.0], [0.0 3.0; 3.0 0.0], [0.0 0.5; 0.5 0.0], [0.1, 0.0], [0.0, 0.3]), SciMLBase.ODEProblem{Vector{Float64}, Tuple{Int64, Int64}, false, Tuple{}, SciMLBase.ODEFunction{false, SciMLBase.AutoSpecialize, MetacommunityDynamics.var&quot;#86#87&quot;{RosenzweigMacArthur{Int64, Float64}}, LinearAlgebra.UniformScaling{Bool}, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, typeof(SciMLBase.DEFAULT_OBSERVED), Nothing, Nothing}, Base.Pairs{Symbol, Union{}, Tuple{}, NamedTuple{(), Tuple{}}}, SciMLBase.StandardODEProblem}(SciMLBase.ODEFunction{false, SciMLBase.AutoSpecialize, MetacommunityDynamics.var&quot;#86#87&quot;{RosenzweigMacArthur{Int64, Float64}}, LinearAlgebra.UniformScaling{Bool}, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, typeof(SciMLBase.DEFAULT_OBSERVED), Nothing, Nothing}(MetacommunityDynamics.var&quot;#86#87&quot;{RosenzweigMacArthur{Int64, Float64}}(RosenzweigMacArthur{Int64, Float64}([0 1; 0 0], [0.0, 0.5], [0.0 5.0; 5.0 0.0], [0.0 3.0; 3.0 0.0], [0.0 0.5; 0.5 0.0], [0.1, 0.0], [0.0, 0.3])), LinearAlgebra.UniformScaling{Bool}(true), nothing, nothing, nothing, nothing, nothing, nothing, nothing, nothing, nothing, nothing, nothing, nothing, nothing, SciMLBase.DEFAULT_OBSERVED, nothing, nothing), [0.2, 0.2], (0, 100), (), Base.Pairs{Symbol, Union{}, Tuple{}, NamedTuple{(), Tuple{}}}(), SciMLBase.StandardODEProblem()), (0, 100), [0.2, 0.2], missing)
+<div class="highlight"><pre><span></span><code>MetacommunityDynamics.Problem{SciMLBase.ODEProblem{Vector{Float64}, Tuple{Int64, Int64}, false, Vector{Array{Float64}}, SciMLBase.ODEFunction{false, SciMLBase.AutoSpecialize, MetacommunityDynamics.var&quot;#91#92&quot;{RosenzweigMacArthur{Int64, Float64}}, LinearAlgebra.UniformScaling{Bool}, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, typeof(SciMLBase.DEFAULT_OBSERVED), Nothing, Nothing}, Base.Pairs{Symbol, Union{}, Tuple{}, NamedTuple{(), Tuple{}}}, SciMLBase.StandardODEProblem}}(RosenzweigMacArthur{Int64, Float64}([0 1; 0 0], [0.0, 0.5], [0.0 5.0; 5.0 0.0], [0.0 3.0; 3.0 0.0], [0.0 0.5; 0.5 0.0], [0.1, 0.0], [0.0, 0.3]), SciMLBase.ODEProblem{Vector{Float64}, Tuple{Int64, Int64}, false, Vector{Array{Float64}}, SciMLBase.ODEFunction{false, SciMLBase.AutoSpecialize, MetacommunityDynamics.var&quot;#91#92&quot;{RosenzweigMacArthur{Int64, Float64}}, LinearAlgebra.UniformScaling{Bool}, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, typeof(SciMLBase.DEFAULT_OBSERVED), Nothing, Nothing}, Base.Pairs{Symbol, Union{}, Tuple{}, NamedTuple{(), Tuple{}}}, SciMLBase.StandardODEProblem}(SciMLBase.ODEFunction{false, SciMLBase.AutoSpecialize, MetacommunityDynamics.var&quot;#91#92&quot;{RosenzweigMacArthur{Int64, Float64}}, LinearAlgebra.UniformScaling{Bool}, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, typeof(SciMLBase.DEFAULT_OBSERVED), Nothing, Nothing}(MetacommunityDynamics.var&quot;#91#92&quot;{RosenzweigMacArthur{Int64, Float64}}(RosenzweigMacArthur{Int64, Float64}([0 1; 0 0], [0.0, 0.5], [0.0 5.0; 5.0 0.0], [0.0 3.0; 3.0 0.0], [0.0 0.5; 0.5 0.0], [0.1, 0.0], [0.0, 0.3])), LinearAlgebra.UniformScaling{Bool}(true), nothing, nothing, nothing, nothing, nothing, nothing, nothing, nothing, nothing, nothing, nothing, nothing, nothing, SciMLBase.DEFAULT_OBSERVED, nothing, nothing), [0.2, 0.2], (0, 100), Array{Float64}[[0.0, 0.5], [0.0 5.0; 5.0 0.0], [0.0 3.0; 3.0 0.0], [0.0 0.5; 0.5 0.0], [0.1, 0.0], [0.0, 0.3]], Base.Pairs{Symbol, Union{}, Tuple{}, NamedTuple{(), Tuple{}}}(), SciMLBase.StandardODEProblem()), (0, 100), [0.2, 0.2], missing)
 </code></pre></div>
 <p>Third we simulate!</p>
-<div class="highlight"><pre><span></span><code><span class="nd">@time</span><span class="w"> </span><span class="n">sol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">simulate</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="n">traj</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">simulate</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
 </code></pre></div>
 <div class="highlight"><pre><span></span><code>An trajectory of length 101.
                     ┌────────────────────────────────────────────────────────────────────────────────┐ 
@@ -767,6 +813,60 @@ $$</p>
                     ⠀0⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀110⠀ 
                     ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀time (t)⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
 </code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">obs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">observe</span><span class="p">(</span><span class="n">Observer</span><span class="p">(</span><span class="n">frequency</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span><span class="w"> </span><span class="n">traj</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>2×101 Matrix{Float64}:
+ 0.174275  0.231034  0.23709   0.22423   …  0.181675   0.17801    0.176109
+ 0.221132  0.193649  0.184427  0.160651     0.0546107  0.0272315  0.0356197
+</code></pre></div>
+<p><a id='Inference'></a></p>
+<p><a id='Inference-1'></a></p>
+<h2 id="inference">Inference</h2>
+<p>First we define our model for inference.</p>
+<p>```@example 1
+@model function fit_rm(data, prob)
+    σ ~ InverseGamma(2,3)
+    λ ~ TruncatedNormal(0.5,1, 0,1.5)
+    α ~ Normal(2,3.)
+    η ~ Normal(2,3.)
+    β ~ TruncatedNormal(0.5,1,0,1.5)
+    γ ~ TruncatedNormal(0.5,1,0,1.5)
+    K ~ TruncatedNormal(0.5,1,0,1.5)</p>
+<pre><code>θ = two_species(RosenzweigMacArthur, λ=λ, α=α, η=η, β=β, γ=γ, K=K)
+
+
+# change this to saveat same time as observer
+predicted = solve(prob, Tsit5(); p=θ, saveat=1)
+
+
+for i in eachindex(predicted)
+    data[:,i] ~ MvNormal(predicted[i], σ^2 * I)
+end
+</code></pre>
+<p>end
+<code>Next we fit da model</code>@example 1
+model = fit_rm(obs, prob.prob)
+chain = sample(model, NUTS(0.65), MCMCSerial(), 300, 1)
+posterior_samples = sample(chain[[:λ, :α, :η, :β, :γ, :K]], 300)
+```</p>
+<p>and we plot plosterior samples with the original data</p>
+<p>```@example 1
+f = Figure()
+ax = Axis(f[1,1], xlabel="Time", ylabel="Biomass")
+xlims!(0,100)</p>
+<p>for p in eachrow(Array(posterior_samples))
+    λ, α, η, β, γ, K =  p
+    θ = two_species(RosenzweigMacArthur, λ=λ, α=α, η=η, β=β, γ=γ, K=K)</p>
+<pre><code>sol_p = solve(prob.prob, Tsit5(); p=θ, saveat=1)
+
+lines!(ax, sol_p.t, [sol_p.u[i][1] for i in eachindex(sol_p.t)], color=(:lightskyblue1, 0.1))
+lines!(ax, sol_p.t, [sol_p.u[i][2] for i in eachindex(sol_p.t)], color=(:lightcoral, 0.04))
+</code></pre>
+<p>end</p>
+<p>scatter!(ax, 1:size(obs,2), obs[1,:], color=(:dodgerblue))
+scatter!(ax, 1:size(obs,2), obs[2,:], color=(:red, 0.5))
+f</p>
+<p>```</p>
 
 
 
