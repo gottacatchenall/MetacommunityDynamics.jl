@@ -1,11 +1,12 @@
 """
     struct RosenzweigMacArthur{S,T<:Number} <: Model
 
-    
-    Dynamics given by
 
-    ``\\frac{dR}{dt} = \\lambda R \\bigg(1 - \\frac{R}{K}\\bigg) - \\frac{\\alpha CR}{1 +\\alpha \\eta R}``
-    ``\\frac{dC}{dt} = \\frac{\\alpha CR}{1 + \\alpha \\eta R} - \\gamma   C``
+Dynamics given by
+
+``\\frac{dR}{dt} = \\lambda R \\bigg(1 - \\frac{R}{K}\\bigg) - \\frac{\\alpha CR}{1 +\\alpha \\eta R}``
+
+``\\frac{dC}{dt} = \\frac{\\alpha CR}{1 + \\alpha \\eta R} - \\gamma   C``
 
 """
 @kwdef struct RosenzweigMacArthur{S,T<:Number} <: Model
