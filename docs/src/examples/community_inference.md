@@ -70,6 +70,8 @@ end
 
 Next we fit da model
 
+
+
 ```@example 1
 model = fit_rm(obs, prob.prob)
 chain = sample(model, NUTS(0.65), MCMCSerial(), 300, 1)
