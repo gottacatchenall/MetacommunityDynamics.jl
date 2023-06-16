@@ -54,6 +54,8 @@ obs = observe(Observer(frequency=1), traj)
 First we define our model for inference.
 
 ```@example
+print("Fitting model...")
+
 @model function fit_rm(data, prob)
     σ ~ InverseGamma(2,3)
     λ ~ TruncatedNormal(0.5,1, 0,1.5)
@@ -70,19 +72,11 @@ First we define our model for inference.
         data[:,i] ~ MvNormal(predicted[i], σ^2 * I)
     end
 end
-```
 
-Next we fit da model.
-
-```@example
 model = fit_rm(obs, prob.prob)
 chain = sample(model, NUTS(0.65), MCMCSerial(), 300, 1)
 posterior_samples = sample(chain[[:λ, :α, :η, :β, :γ, :K]], 300)
-```
 
-and we plot plosterior samples with the original data:
-
-```@example
 f = Figure()
 ax = Axis(f[1,1], xlabel="Time", ylabel="Biomass")
 xlims!(0,100)

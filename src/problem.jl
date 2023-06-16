@@ -32,20 +32,19 @@ end
 
 
 function problem(m::Model, gd::GaussianDrift; tspan=(0,100), u0=nothing)
-    prob = discreteness(m) == MetacommunityDynamics.Continuous ? ODEProblem : DiscreteProblem
+    prob = discreteness(m) == MetacommunityDynamics.Continuous ? SDEProblem : DiscreteProblem
 
-    
+
     # this should dispatch on whether a spatialgraph was provided
     f, g = factory(m,gd) 
     u0 = isnothing(u0) ? initial(m) : u0
 
-    # TODO replace params here with a value loaded via
-    # parameters(m). 
+    θ = parameters(m)
 
     # This will also enable injection of environment dependent variables here
     # for the spatial version of this method 
     
-    Problem(m, prob(f, g, u0, tspan, ()) , tspan, u0, Missing())
+    Problem(m, prob(f, g, u0, tspan, θ) , tspan, u0, Missing())
 end
 
 function simulate(p::Problem)

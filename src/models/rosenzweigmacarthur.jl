@@ -53,7 +53,7 @@ function ∂u(rm::RosenzweigMacArthur, u, θ)
     du      
 end
 
-function ∂w(rm::RosenzweigMacArthur, u, θ)
+function ∂w(s::GaussianDrift, u, θa)
 
 end
 
@@ -68,7 +68,7 @@ function factory(rm::RosenzweigMacArthur)
 end
 
 function factory(rm::RosenzweigMacArthur, s::T) where {T<:Stochasticity}
-    (u,θ,_) -> ∂w(rm, u) #, (u,_,_) -> ∂w(s, u)
+    (u,θ,_) -> ∂u(rm, u, θ), (u,_,_) -> ∂w(s, u)
 end
 
 function two_species(::Type{RosenzweigMacArthur}; 
