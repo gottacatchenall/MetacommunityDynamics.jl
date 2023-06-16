@@ -60,11 +60,7 @@ First we define our model for inference.
     K ~ TruncatedNormal(0.5,1,0,1.5)
 
     θ = two_species(RosenzweigMacArthur, λ=λ, α=α, η=η, β=β, γ=γ, K=K)
-    
-    
-    # change this to saveat same time as observer
     predicted = solve(prob, Tsit5(); p=θ, saveat=1)
-
     
     for i in eachindex(predicted)
         data[:,i] ~ MvNormal(predicted[i], σ^2 * I)
