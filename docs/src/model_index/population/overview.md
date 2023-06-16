@@ -3,7 +3,6 @@
 
 ## Beverton-Holt
 
-```@autodocs
-Modules = [MetacommunityDynamics]
-Filter = t -> typeof(t) == BevertonHolt 
+```@doc
+BevertonHolt 
 ```
