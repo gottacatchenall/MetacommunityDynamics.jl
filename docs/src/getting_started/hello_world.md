@@ -3,5 +3,7 @@
 Okay
 
 ```@example 1
+using MetacommunityDynamics
 sg = SpatialGraph()
 ```
+
