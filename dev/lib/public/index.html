@@ -13,7 +13,7 @@
       
       
       
-        <link rel="prev" href="../../reference/metacommunity/overview/">
+        <link rel="prev" href="../../model_index/metacommunity/overview/">
       
       
         <link rel="next" href="../internal/">
@@ -441,7 +441,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/population/overview/" class="md-nav__link">
+      <a href="../../model_index/population/overview/" class="md-nav__link">
         Overview
       </a>
     </li>
@@ -489,7 +489,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/metapopulation/overview/" class="md-nav__link">
+      <a href="../../model_index/metapopulation/overview/" class="md-nav__link">
         Overview
       </a>
     </li>
@@ -537,7 +537,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/community/overview/" class="md-nav__link">
+      <a href="../../model_index/community/overview/" class="md-nav__link">
         Overview
       </a>
     </li>
@@ -585,7 +585,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/metacommunity/overview/" class="md-nav__link">
+      <a href="../../model_index/metacommunity/overview/" class="md-nav__link">
         Overview
       </a>
     </li>
@@ -724,111 +724,120 @@
 <strong><code>MetacommunityDynamics.BevertonHolt</code></strong> &mdash; <em>Type</em>.</p>
 <div class="highlight"><pre><span></span><code><span class="kt">BevertonHolt</span><span class="w"> </span><span class="o">&lt;:</span><span class="w"> </span><span class="kt">Model</span>
 </code></pre></div>
-<p>The <a href="https://en.wikipedia.org/wiki/Beverton%E2%80%93Holt_model">Beverton-Holt model</a> is a discrete-time, deterministic model of population dynamics. It is commonly interpreted as a discrete-time version of the logistic model.  </p>
-<p><a target='_blank' href='https://github.com/gottacatchenall/EcoDynamics.jl/blob/8a50bbb714c00e95a5b6ace9acfc144b76dd66af/src/models/bevertonholt.jl#L1-L8' class='documenter-source'>source</a><br></p>
+<p>The <a href="https://en.wikipedia.org/wiki/Beverton%E2%80%93Holt_model">Beverton-Holt model</a> is a discrete-time, deterministic model of population dynamics. It is commonly interpreted as a discrete-time version of the logistic model.</p>
+<p>It is described by </p>
+<p>$N_{t+1} =\frac{R_0 M}{N_t + M}N_t$</p>
+<p>where $K = (R_0 - 1)M$ is the carrying capacity.</p>
+<p><a target='_blank' href='https://github.com/gottacatchenall/EcoDynamics.jl/blob/e2690005949b23e8f5a48af650b6c3b2f39d4cf8/src/models/bevertonholt.jl#L1-L15' class='documenter-source'>source</a><br></p>
 <p><a id='MetacommunityDynamics.DispersalPotential' href='#MetacommunityDynamics.DispersalPotential'>#</a>
 <strong><code>MetacommunityDynamics.DispersalPotential</code></strong> &mdash; <em>Type</em>.</p>
 <div class="highlight"><pre><span></span><code><span class="n">DispersalPotential</span>
 </code></pre></div>
 <p>A dispersal potential is a matrix that contains the pairwise  probability of dispersal between sites in an <code>AbstractSpace</code>.</p>
 <p>Note this is a doubly-stochastic matrix, meaning all rows  and columns sum to 0.  </p>
-<p><a target='_blank' href='https://github.com/gottacatchenall/EcoDynamics.jl/blob/8a50bbb714c00e95a5b6ace9acfc144b76dd66af/src/dispersal/potential.jl#L1-L10' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/gottacatchenall/EcoDynamics.jl/blob/e2690005949b23e8f5a48af650b6c3b2f39d4cf8/src/dispersal/potential.jl#L1-L10' class='documenter-source'>source</a><br></p>
 <p><a id='MetacommunityDynamics.EnvironmentLayer' href='#MetacommunityDynamics.EnvironmentLayer'>#</a>
 <strong><code>MetacommunityDynamics.EnvironmentLayer</code></strong> &mdash; <em>Type</em>.</p>
 <div class="highlight"><pre><span></span><code><span class="kt">EnvironmentLayer</span><span class="p">{</span><span class="kt">T</span><span class="p">}</span>
 </code></pre></div>
 <p>An <code>EnvironmentalLayer</code> stores a raster representation of a single environmental variable inside a matrix.</p>
-<p><a target='_blank' href='https://github.com/gottacatchenall/EcoDynamics.jl/blob/8a50bbb714c00e95a5b6ace9acfc144b76dd66af/src/environment.jl#L2-L7' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/gottacatchenall/EcoDynamics.jl/blob/e2690005949b23e8f5a48af650b6c3b2f39d4cf8/src/environment.jl#L2-L7' class='documenter-source'>source</a><br></p>
 <p><a id='MetacommunityDynamics.EnvironmentLayer-Tuple{}' href='#MetacommunityDynamics.EnvironmentLayer-Tuple{}'>#</a>
 <strong><code>MetacommunityDynamics.EnvironmentLayer</code></strong> &mdash; <em>Method</em>.</p>
 <div class="highlight"><pre><span></span><code><span class="n">EnvironmentLayer</span><span class="p">(;</span><span class="w"> </span><span class="n">generator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MidpointDisplacement</span><span class="p">(</span><span class="mf">0.7</span><span class="p">),</span><span class="w"> </span><span class="n">sz</span><span class="o">=</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span><span class="mi">50</span><span class="p">))</span>
 </code></pre></div>
 <p>Builds an <code>EnvironmentalLayer</code> with a <code>NeutralLandscapes</code> generator</p>
-<p><a target='_blank' href='https://github.com/gottacatchenall/EcoDynamics.jl/blob/8a50bbb714c00e95a5b6ace9acfc144b76dd66af/src/environment.jl#L12-L16' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/gottacatchenall/EcoDynamics.jl/blob/e2690005949b23e8f5a48af650b6c3b2f39d4cf8/src/environment.jl#L12-L16' class='documenter-source'>source</a><br></p>
 <p><a id='MetacommunityDynamics.RosenzweigMacArthur' href='#MetacommunityDynamics.RosenzweigMacArthur'>#</a>
 <strong><code>MetacommunityDynamics.RosenzweigMacArthur</code></strong> &mdash; <em>Type</em>.</p>
 <div class="highlight"><pre><span></span><code><span class="k">struct</span> <span class="kt">RosenzweigMacArthur</span><span class="p">{</span><span class="kt">S</span><span class="p">,</span><span class="kt">T</span><span class="o">&lt;:</span><span class="kt">Number</span><span class="p">}</span><span class="w"> </span><span class="o">&lt;:</span><span class="w"> </span><span class="kt">Model</span>
+
+
+<span class="n">Dynamics</span><span class="w"> </span><span class="n">given</span><span class="w"> </span><span class="n">by</span>
+
+<span class="sb">``</span><span class="o">\</span><span class="kt">frac</span><span class="p">{</span><span class="kt">dR</span><span class="p">}{</span><span class="kt">dt</span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">\</span><span class="n">lambda</span><span class="w"> </span><span class="n">R</span><span class="w"> </span><span class="o">\</span><span class="n">bigg</span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">\</span><span class="kt">frac</span><span class="p">{</span><span class="kt">R</span><span class="p">}{</span><span class="kt">K</span><span class="p">}</span><span class="o">\</span><span class="n">bigg</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">\</span><span class="kt">frac</span><span class="p">{</span><span class="o">\</span><span class="kt">alpha</span><span class="w"> </span><span class="kt">CR</span><span class="p">}{</span><span class="mi">1</span><span class="w"> </span><span class="o">+\</span><span class="kt">alpha</span><span class="w"> </span><span class="o">\</span><span class="kt">eta</span><span class="w"> </span><span class="kt">R</span><span class="p">}</span><span class="sb">``</span>
+<span class="sb">``</span><span class="o">\</span><span class="kt">frac</span><span class="p">{</span><span class="kt">dC</span><span class="p">}{</span><span class="kt">dt</span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">\</span><span class="kt">frac</span><span class="p">{</span><span class="o">\</span><span class="kt">alpha</span><span class="w"> </span><span class="kt">CR</span><span class="p">}{</span><span class="mi">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="o">\</span><span class="kt">alpha</span><span class="w"> </span><span class="o">\</span><span class="kt">eta</span><span class="w"> </span><span class="kt">R</span><span class="p">}</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">\</span><span class="n">gamma</span><span class="w">   </span><span class="sa">C</span><span class="sb">``</span>
 </code></pre></div>
-<p><a target='_blank' href='https://github.com/gottacatchenall/EcoDynamics.jl/blob/8a50bbb714c00e95a5b6ace9acfc144b76dd66af/src/models/rosenzweigmacarthur.jl#L1-L6' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/gottacatchenall/EcoDynamics.jl/blob/e2690005949b23e8f5a48af650b6c3b2f39d4cf8/src/models/rosenzweigmacarthur.jl#L1-L10' class='documenter-source'>source</a><br></p>
 <p><a id='MetacommunityDynamics.SpatialGraph' href='#MetacommunityDynamics.SpatialGraph'>#</a>
 <strong><code>MetacommunityDynamics.SpatialGraph</code></strong> &mdash; <em>Type</em>.</p>
 <div class="highlight"><pre><span></span><code><span class="kt">SpatialGraph</span><span class="p">{</span><span class="kt">T</span><span class="w"> </span><span class="o">&lt;:</span><span class="w"> </span><span class="kt">Number</span><span class="p">}</span>
 </code></pre></div>
 <p>A <code>SpatialGraph</code> consists of a set of nodes with coordinates and associated environmental variables for each node.</p>
 <p>Specific information about the edges in a <code>SpatialGraph</code> (which represent movement between nodes) is not stored here, as they tend to rely on species-specific parameters. As such, that are computed by combining a <code>SpatialGraph</code> with a  <code>DispersalKernel</code> to create a <code>DispersalPotential</code>.  </p>
-<p><a target='_blank' href='https://github.com/gottacatchenall/EcoDynamics.jl/blob/8a50bbb714c00e95a5b6ace9acfc144b76dd66af/src/spatialgraph.jl#L2-L12' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/gottacatchenall/EcoDynamics.jl/blob/e2690005949b23e8f5a48af650b6c3b2f39d4cf8/src/spatialgraph.jl#L2-L12' class='documenter-source'>source</a><br></p>
 <p>&lt;a id='MetacommunityDynamics.SpatialGraph-Tuple{E} where E&lt;:EnvironmentLayer' href='#MetacommunityDynamics.SpatialGraph-Tuple{E} where E&lt;:EnvironmentLayer'&gt;#</a>
 <strong><code>MetacommunityDynamics.SpatialGraph</code></strong> &mdash; <em>Method</em>.</p>
 <div class="highlight"><pre><span></span><code><span class="n">SpatialGraph</span><span class="p">(</span><span class="n">layer</span><span class="o">::</span><span class="kt">E</span><span class="p">;</span><span class="w"> </span><span class="n">coords</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[(</span><span class="n">rand</span><span class="p">(),</span><span class="w"> </span><span class="n">rand</span><span class="p">())</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="o">:</span><span class="mi">20</span><span class="p">])</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="kt">E</span><span class="o">&lt;:</span><span class="kt">EnvironmentLayer</span>
 </code></pre></div>
 <p>Builds a <code>SpatialGraph</code> where the environmental variable is built from a single EnvironmentLayer, and optionally the set of coordinates can be passed as a keyword argument.</p>
-<p><a target='_blank' href='https://github.com/gottacatchenall/EcoDynamics.jl/blob/8a50bbb714c00e95a5b6ace9acfc144b76dd66af/src/spatialgraph.jl#L95-L101' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/gottacatchenall/EcoDynamics.jl/blob/e2690005949b23e8f5a48af650b6c3b2f39d4cf8/src/spatialgraph.jl#L95-L101' class='documenter-source'>source</a><br></p>
 <p><a id='MetacommunityDynamics.SpatialGraph-Tuple{Integer}' href='#MetacommunityDynamics.SpatialGraph-Tuple{Integer}'>#</a>
 <strong><code>MetacommunityDynamics.SpatialGraph</code></strong> &mdash; <em>Method</em>.</p>
 <div class="highlight"><pre><span></span><code><span class="n">SpatialGraph</span><span class="p">(</span><span class="n">n</span><span class="o">::</span><span class="kt">Integer</span><span class="p">)</span>
 </code></pre></div>
 <p>Builds a spatial graph with <code>n</code> nodes in it.</p>
-<p><a target='_blank' href='https://github.com/gottacatchenall/EcoDynamics.jl/blob/8a50bbb714c00e95a5b6ace9acfc144b76dd66af/src/spatialgraph.jl#L126-L130' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/gottacatchenall/EcoDynamics.jl/blob/e2690005949b23e8f5a48af650b6c3b2f39d4cf8/src/spatialgraph.jl#L126-L130' class='documenter-source'>source</a><br></p>
 <p><a id='MetacommunityDynamics.SpatialGraph-Tuple{Matrix}' href='#MetacommunityDynamics.SpatialGraph-Tuple{Matrix}'>#</a>
 <strong><code>MetacommunityDynamics.SpatialGraph</code></strong> &mdash; <em>Method</em>.</p>
 <div class="highlight"><pre><span></span><code><span class="n">SpatialGraph</span><span class="p">(</span><span class="n">n</span><span class="o">::</span><span class="kt">Integer</span><span class="p">)</span>
 </code></pre></div>
 <p>Builds a spatial graph for a given environment matrix. The environmental matrix should be a matrix where each column is the vector of environmental variables for each node.</p>
-<p><a target='_blank' href='https://github.com/gottacatchenall/EcoDynamics.jl/blob/8a50bbb714c00e95a5b6ace9acfc144b76dd66af/src/spatialgraph.jl#L136-L141' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/gottacatchenall/EcoDynamics.jl/blob/e2690005949b23e8f5a48af650b6c3b2f39d4cf8/src/spatialgraph.jl#L136-L141' class='documenter-source'>source</a><br></p>
 <p><a id='MetacommunityDynamics.SpatialGraph-Tuple{}' href='#MetacommunityDynamics.SpatialGraph-Tuple{}'>#</a>
 <strong><code>MetacommunityDynamics.SpatialGraph</code></strong> &mdash; <em>Method</em>.</p>
 <div class="highlight"><pre><span></span><code><span class="n">SpatialGraph</span><span class="p">(;</span><span class="w"> </span><span class="n">coords</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">nothing</span><span class="p">,</span><span class="w"> </span><span class="n">env</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">nothing</span><span class="p">)</span>
 </code></pre></div>
 <p>Builds a <code>SpatialGraph</code>, where both the coordinates and the environmental variables can be passed as keyword arguments. The environmental matrix should be a matrix where each column is the vector of environmental variables for each node.</p>
-<p><a target='_blank' href='https://github.com/gottacatchenall/EcoDynamics.jl/blob/8a50bbb714c00e95a5b6ace9acfc144b76dd66af/src/spatialgraph.jl#L106-L112' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/gottacatchenall/EcoDynamics.jl/blob/e2690005949b23e8f5a48af650b6c3b2f39d4cf8/src/spatialgraph.jl#L106-L112' class='documenter-source'>source</a><br></p>
 <p>&lt;a id='MetacommunityDynamics.SpatialGraph-Union{Tuple{Vector{E}}, Tuple{E}} where E&lt;:EnvironmentLayer' href='#MetacommunityDynamics.SpatialGraph-Union{Tuple{Vector{E}}, Tuple{E}} where E&lt;:EnvironmentLayer'&gt;#</a>
 <strong><code>MetacommunityDynamics.SpatialGraph</code></strong> &mdash; <em>Method</em>.</p>
 <div class="highlight"><pre><span></span><code><span class="n">SpatialGraph</span><span class="p">(</span><span class="n">layers</span><span class="o">::</span><span class="kt">Vector</span><span class="p">{</span><span class="kt">E</span><span class="p">};</span><span class="w"> </span><span class="n">coords</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[(</span><span class="n">rand</span><span class="p">(),</span><span class="w"> </span><span class="n">rand</span><span class="p">())</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="o">:</span><span class="mi">20</span><span class="p">])</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="kt">E</span><span class="o">&lt;:</span><span class="kt">EnvironmentLayer</span>
 </code></pre></div>
 <p>Builds a spatial graph with environmental variables passed as a vector of EnvironmentLayers, and optionally coordinates passed as a keyword argument. </p>
-<p><a target='_blank' href='https://github.com/gottacatchenall/EcoDynamics.jl/blob/8a50bbb714c00e95a5b6ace9acfc144b76dd66af/src/spatialgraph.jl#L85-L90' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/gottacatchenall/EcoDynamics.jl/blob/e2690005949b23e8f5a48af650b6c3b2f39d4cf8/src/spatialgraph.jl#L85-L90' class='documenter-source'>source</a><br></p>
 <p>&lt;a id='MetacommunityDynamics.SpatialGraph-Union{Tuple{Vector{T}}, Tuple{T}} where T&lt;:Tuple' href='#MetacommunityDynamics.SpatialGraph-Union{Tuple{Vector{T}}, Tuple{T}} where T&lt;:Tuple'&gt;#</a>
 <strong><code>MetacommunityDynamics.SpatialGraph</code></strong> &mdash; <em>Method</em>.</p>
 <div class="highlight"><pre><span></span><code><span class="n">SpatialGraph</span><span class="p">(</span><span class="n">coords</span><span class="o">::</span><span class="kt">Vector</span><span class="p">{</span><span class="kt">T</span><span class="p">};</span><span class="w"> </span><span class="n">num_envdims</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="kt">T</span><span class="o">&lt;:</span><span class="kt">Tuple</span>
 </code></pre></div>
 <p>Constructs a <code>SpatialGraph</code> from a set of coordinates <code>coords</code>, which is a vector of (x,y) pairs. Builds a random environment matrix, with the optional keyword argument <code>num_envdims</code> controlling the dimensionality of the envrionmental variables at each node. </p>
-<p><a target='_blank' href='https://github.com/gottacatchenall/EcoDynamics.jl/blob/8a50bbb714c00e95a5b6ace9acfc144b76dd66af/src/spatialgraph.jl#L146-L153' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/gottacatchenall/EcoDynamics.jl/blob/e2690005949b23e8f5a48af650b6c3b2f39d4cf8/src/spatialgraph.jl#L146-L153' class='documenter-source'>source</a><br></p>
 <p><a id='MetacommunityDynamics.SpeciesPool' href='#MetacommunityDynamics.SpeciesPool'>#</a>
 <strong><code>MetacommunityDynamics.SpeciesPool</code></strong> &mdash; <em>Type</em>.</p>
 <div class="highlight"><pre><span></span><code><span class="kt">SpeciesPool</span><span class="p">{</span><span class="kt">T</span><span class="o">&lt;:</span><span class="kt">Number</span><span class="p">}</span>
 </code></pre></div>
 <p>A <code>SpeciesPool</code> consists of a set of species and their corresponding traits. </p>
-<p><a target='_blank' href='https://github.com/gottacatchenall/EcoDynamics.jl/blob/8a50bbb714c00e95a5b6ace9acfc144b76dd66af/src/species.jl#L2-L6' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/gottacatchenall/EcoDynamics.jl/blob/e2690005949b23e8f5a48af650b6c3b2f39d4cf8/src/species.jl#L2-L6' class='documenter-source'>source</a><br></p>
 <p><a id='MetacommunityDynamics.Trajectory' href='#MetacommunityDynamics.Trajectory'>#</a>
 <strong><code>MetacommunityDynamics.Trajectory</code></strong> &mdash; <em>Type</em>.</p>
 <div class="highlight"><pre><span></span><code><span class="kt">Trajectory</span><span class="p">{</span><span class="kt">S</span><span class="o">&lt;:</span><span class="kt">SciMLBase</span><span class="o">.</span><span class="kt">AbstractTimeseriesSolution</span><span class="p">}</span>
 </code></pre></div>
 <p>A trajectory is a single output for a <code>Problem</code>.  </p>
-<p><a target='_blank' href='https://github.com/gottacatchenall/EcoDynamics.jl/blob/8a50bbb714c00e95a5b6ace9acfc144b76dd66af/src/trajectory.jl#L2-L6' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/gottacatchenall/EcoDynamics.jl/blob/e2690005949b23e8f5a48af650b6c3b2f39d4cf8/src/trajectory.jl#L2-L6' class='documenter-source'>source</a><br></p>
 <p><a id='MetacommunityDynamics.envdims-Tuple{SpatialGraph}' href='#MetacommunityDynamics.envdims-Tuple{SpatialGraph}'>#</a>
 <strong><code>MetacommunityDynamics.envdims</code></strong> &mdash; <em>Method</em>.</p>
 <div class="highlight"><pre><span></span><code><span class="n">envdims</span><span class="p">(</span><span class="n">sg</span><span class="o">::</span><span class="kt">SpatialGraph</span><span class="p">)</span>
 </code></pre></div>
 <p>Returns the dimensionality of the environmental variable associated with each node in a <code>SpatialGraph</code> sg.</p>
-<p><a target='_blank' href='https://github.com/gottacatchenall/EcoDynamics.jl/blob/8a50bbb714c00e95a5b6ace9acfc144b76dd66af/src/spatialgraph.jl#L27-L32' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/gottacatchenall/EcoDynamics.jl/blob/e2690005949b23e8f5a48af650b6c3b2f39d4cf8/src/spatialgraph.jl#L27-L32' class='documenter-source'>source</a><br></p>
 <p><a id='MetacommunityDynamics.environment-Tuple{SpatialGraph}' href='#MetacommunityDynamics.environment-Tuple{SpatialGraph}'>#</a>
 <strong><code>MetacommunityDynamics.environment</code></strong> &mdash; <em>Method</em>.</p>
 <div class="highlight"><pre><span></span><code><span class="n">environment</span><span class="p">(</span><span class="n">sg</span><span class="o">::</span><span class="kt">SpatialGraph</span><span class="p">)</span>
 </code></pre></div>
 <p>Returns the matrix of environmental variables of a <code>SpatialGraph</code> <code>sg</code></p>
-<p><a target='_blank' href='https://github.com/gottacatchenall/EcoDynamics.jl/blob/8a50bbb714c00e95a5b6ace9acfc144b76dd66af/src/spatialgraph.jl#L42-L46' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/gottacatchenall/EcoDynamics.jl/blob/e2690005949b23e8f5a48af650b6c3b2f39d4cf8/src/spatialgraph.jl#L42-L46' class='documenter-source'>source</a><br></p>
 <p><a id='MetacommunityDynamics.factory-Tuple{BevertonHolt}' href='#MetacommunityDynamics.factory-Tuple{BevertonHolt}'>#</a>
 <strong><code>MetacommunityDynamics.factory</code></strong> &mdash; <em>Method</em>.</p>
 <div class="highlight"><pre><span></span><code><span class="n">factory</span><span class="p">(</span><span class="n">bh</span><span class="o">::</span><span class="kt">BevertonHolt</span><span class="p">)</span>
 </code></pre></div>
 <p>Model factory for the Beverton-Holt model. Returns a function that takes a state <code>u</code> and returns an anonymous function and returns <code>du</code>. </p>
-<p><a target='_blank' href='https://github.com/gottacatchenall/EcoDynamics.jl/blob/8a50bbb714c00e95a5b6ace9acfc144b76dd66af/src/models/bevertonholt.jl#L32-L37' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/gottacatchenall/EcoDynamics.jl/blob/e2690005949b23e8f5a48af650b6c3b2f39d4cf8/src/models/bevertonholt.jl#L39-L44' class='documenter-source'>source</a><br></p>
 <p><a id='MetacommunityDynamics.numsites-Tuple{SpatialGraph}' href='#MetacommunityDynamics.numsites-Tuple{SpatialGraph}'>#</a>
 <strong><code>MetacommunityDynamics.numsites</code></strong> &mdash; <em>Method</em>.</p>
 <div class="highlight"><pre><span></span><code><span class="n">numsites</span><span class="p">(</span><span class="n">sg</span><span class="o">::</span><span class="kt">SpatialGraph</span><span class="p">)</span>
 </code></pre></div>
 <p>Returns the number of nodes in a <code>SpatialGraph</code> <code>sg</code>. </p>
-<p><a target='_blank' href='https://github.com/gottacatchenall/EcoDynamics.jl/blob/8a50bbb714c00e95a5b6ace9acfc144b76dd66af/src/spatialgraph.jl#L35-L39' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/gottacatchenall/EcoDynamics.jl/blob/e2690005949b23e8f5a48af650b6c3b2f39d4cf8/src/spatialgraph.jl#L35-L39' class='documenter-source'>source</a><br></p>
 
 
 
