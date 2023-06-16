@@ -12,15 +12,15 @@
     # C = 1, R = 2
     M::Matrix{S} =  [0 1;         # metaweb, not a parameter of inference
                      0 0]
-    λ::Vector{T} =  [0.0, 0.5]
+    λ::Vector{T} =  [0.0, 0.5]    # λ[i] max instaneous growth rate of i
     α::Matrix{T} =  [0.0  5.0;    # α[i,j] = attack rate of i on j
                      5.0  0.0]
     η::Matrix{T} =  [0.0  3.0;    # η[i, j] =  handling rate of i on j
                      3.0  0.0]
     β::Matrix{T} =  [0.0  0.5;    # β[i, j] = growth in i eating j
                      0.5  0.0]
-    γ::Vector{T} =  [0.1, 0.]           # heterotroph death rate (0 for all autotrophs)
-    K::Vector{T} =  [0.0, 0.3]           # autotroph carrying capacity (0 for heterotrophs)
+    γ::Vector{T} =  [0.1, 0.]     # heterotroph death rate (0 for all autotrophs)
+    K::Vector{T} =  [0.0, 0.3]    # autotroph carrying capacity (0 for heterotrophs)
 end 
 
 discreteness(::RosenzweigMacArthur) = Continuous 
