@@ -6,7 +6,7 @@
 """
 @kwdef struct RosenzweigMacArthur{S,T<:Number} <: Model
     # C = 1, R = 2
-    M::Matrix{S} =  [0 1;         # metaweb
+    M::Matrix{S} =  [0 1;         # metaweb, not a parameter of inference
                      0 0]
     λ::Vector{T} =  [0.0, 0.5]
     α::Matrix{T} =  [0.0  5.0;    # α[i,j] = attack rate of i on j
@@ -20,17 +20,15 @@
 end 
 
 discreteness(::RosenzweigMacArthur) = Continuous 
-initial(rm::RosenzweigMacArthur) = [0.2, 0.2]  # note this is only valid for the default params
-
-
-
+initial(::RosenzweigMacArthur) = [0.2, 0.2]  # note this is only valid for the default params
 
 # Key thing for constructors here is how to handle 2 species vs. > 2 cases.
 #   - In two-species case, parameters all params can be scaler. not for anything
 #     bigger though
 
-function ∂u(rm::RosenzweigMacArthur, u)
-    M, λ, α, η, β, γ, K = rm.M, rm.λ, rm.α, rm.η, rm.β, rm.γ, rm.K
+function ∂u(rm::RosenzweigMacArthur, u, θ)
+    M = rm.M
+    λ, α, η, β, γ, K = θ
 
     I = findall(!iszero, M)
     du = similar(u)
@@ -50,14 +48,41 @@ function ∂u(rm::RosenzweigMacArthur, u)
 
     du      
 end
+function parameters(rm::RosenzweigMacArthur)
+    # everything but M is a paremeter
+    fns = fieldnames(RosenzweigMacArthur)[2:end]
+    [getfield(rm, f) for f in fns]
+end
 
 function factory(rm::RosenzweigMacArthur)
-    (u,_,_) -> ∂u(rm, u)
+    (u,θ,_) -> ∂u(rm, u, θ)
 end
 
 function factory(rm::RosenzweigMacArthur, s::T) where {T<:Stochasticity}
-    (u,_,_) -> ∂u(rm, u) #, (u,_,_) -> ∂w(s, u)
+    (u,θ,_) -> ∂u(rm, u) #, (u,_,_) -> ∂w(s, u)
 end
+
+function two_species(::Type{RosenzweigMacArthur}; 
+    λ = 0.5, 
+    α = 5.0 ,
+    η = 3.0,
+    β = 0.5,
+    γ = 0.1,
+    K = 0.3)
+
+    (    
+        λ = [0., λ],
+        α =  [0.0  α;  
+            0.0  0.0],
+        η =  [0.0  η;    
+            0.0 0.0],
+        β =  [0.0  β;   
+            0.0  0.0],
+        γ =  [γ, 0.],         
+        K =  [0.0, K]
+    )   
+end
+
 
 function replplot(::RosenzweigMacArthur, traj)
     u = timeseries(traj)

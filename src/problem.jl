@@ -20,16 +20,14 @@ function problem(m::Model, ::Type{Deterministic}; tspan=(0,100), u0=nothing)
     # this should dispatch on whether a spatialgraph was provided
     f = factory(m) 
 
-
     u0 = isnothing(u0) ? initial(m) : u0
 
-    # TODO replace params here with a value loaded via
-    # parameters(m). 
+    θ = parameters(m)
 
     # This will also enable injection of environment dependent variables here
     # for the spatial version of this method 
 
-    Problem(m, prob(f, u0, tspan, ()) , tspan, u0, Missing())
+    Problem(m, prob(f, u0, tspan, θ) , tspan, u0, Missing())
 end
 
 

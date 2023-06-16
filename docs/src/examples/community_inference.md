@@ -38,6 +38,68 @@ p = problem(rm, Deterministic)
 Third we simulate!
 
 ```@example 1
-@time sol = simulate(p)
+traj = simulate(p)
+```
+```@example 1
+obs = observe(Observer(frequency=1), traj)
+```
+
+## Inference
+
+First we define our model for inference.
+
+```@example 1
+@model function fit_rm(data, prob)
+    σ ~ InverseGamma(2,3)
+    λ ~ TruncatedNormal(0.5,1, 0,1.5)
+    α ~ Normal(2,3.)
+    η ~ Normal(2,3.)
+    β ~ TruncatedNormal(0.5,1,0,1.5)
+    γ ~ TruncatedNormal(0.5,1,0,1.5)
+    K ~ TruncatedNormal(0.5,1,0,1.5)
+
+    θ = two_species(RosenzweigMacArthur, λ=λ, α=α, η=η, β=β, γ=γ, K=K)
+    
+    
+    # change this to saveat same time as observer
+    predicted = solve(prob, Tsit5(); p=θ, saveat=1)
+
+    
+    for i in eachindex(predicted)
+        data[:,i] ~ MvNormal(predicted[i], σ^2 * I)
+    end
+end
+```
+
+Next we fit da model
+
+```@example 1
+model = fit_rm(obs, prob.prob)
+chain = sample(model, NUTS(0.65), MCMCSerial(), 300, 1)
+posterior_samples = sample(chain[[:λ, :α, :η, :β, :γ, :K]], 300)
+```
+
+and we plot plosterior samples with the original data
+
+```@example 1
+f = Figure()
+ax = Axis(f[1,1], xlabel="Time", ylabel="Biomass")
+xlims!(0,100)
+
+for p in eachrow(Array(posterior_samples))
+    λ, α, η, β, γ, K =  p
+    θ = two_species(RosenzweigMacArthur, λ=λ, α=α, η=η, β=β, γ=γ, K=K)
+
+    sol_p = solve(prob.prob, Tsit5(); p=θ, saveat=1)
+
+    lines!(ax, sol_p.t, [sol_p.u[i][1] for i in eachindex(sol_p.t)], color=(:lightskyblue1, 0.1))
+    lines!(ax, sol_p.t, [sol_p.u[i][2] for i in eachindex(sol_p.t)], color=(:lightcoral, 0.04))
+end
+
+scatter!(ax, 1:size(obs,2), obs[1,:], color=(:dodgerblue))
+scatter!(ax, 1:size(obs,2), obs[2,:], color=(:red, 0.5))
+f
+
 
 ```
+

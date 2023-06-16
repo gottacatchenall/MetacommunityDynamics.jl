@@ -18,6 +18,7 @@ module MetacommunityDynamics
     abstract type Stochasticity end 
     abstract type Deterministic end 
     
+
     @kwdef struct GaussianDrift{T} <: Stochasticity
         σ::T = 0.1
     end
@@ -31,6 +32,11 @@ module MetacommunityDynamics
     abstract type Model end 
     export Model
     
+
+
+    export parameters
+
+
     include("environment.jl")
     include("spatialgraph.jl")
 
@@ -42,6 +48,9 @@ module MetacommunityDynamics
     export Trajectory
     export problem, model, solution, timeseries
 
+
+    include("observer.jl")
+    export Observer, observe
 
     include(joinpath("dispersal", "kernel.jl"))
     include(joinpath("dispersal", "potential.jl"))
@@ -67,6 +76,8 @@ module MetacommunityDynamics
     export Ricker
     export CompetitiveLotkaVolterra
     export RosenzweigMacArthur 
+
+    export two_species
 
     export factory
     export discreteness

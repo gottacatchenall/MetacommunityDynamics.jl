@@ -6,6 +6,8 @@ using MetacommunityDynamics
 
 rm = RosenzweigMacArthur()
 p = problem(rm, Deterministic)
+
+
 @time sol = simulate(p)
 
 
@@ -17,7 +19,7 @@ p = problem(BevertonHolt(1.2,50.), Deterministic)
 sol
 
 
-p = problem(CompetitiveLotkaVolterra(), Deterministic);
+p = problem(CompetitiveLotkaVolterra(), Deterministic)
 @time sol = simulate(p)
 
 f 
