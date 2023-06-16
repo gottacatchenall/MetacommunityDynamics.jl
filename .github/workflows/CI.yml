@@ -13,7 +13,6 @@ jobs:
           - '1.9'
         julia-arch:
           - x64
-          - x86
         os:
           - ubuntu-latest
     steps:
