@@ -32,12 +32,9 @@ end
 
 
 function problem(m::Model, gd::GaussianDrift; tspan=(0,100), u0=nothing)
-    
-
     prob = discreteness(m) == MetacommunityDynamics.Continuous ? ODEProblem : DiscreteProblem
+
     
-
-
     # this should dispatch on whether a spatialgraph was provided
     f, g = factory(m,gd) 
     u0 = isnothing(u0) ? initial(m) : u0

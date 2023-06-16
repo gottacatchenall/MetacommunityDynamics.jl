@@ -2,6 +2,6 @@
 
 Okay
 
-```{julia}
+```@example 1
 sg = SpatialGraph()
 ```
