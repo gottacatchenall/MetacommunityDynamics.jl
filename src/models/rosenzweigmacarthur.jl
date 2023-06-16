@@ -4,8 +4,8 @@
     
     Dynamics given by
 
-    ``\frac{dR}{dt} = \lambda R \bigg(1 - \frac{R}{K}\bigg) - \frac{\alpha CR}{1 +\alpha \eta R}``
-    ``\frac{dC}{dt} = \frac{\alpha CR}{1 + \alpha \eta R} - \gamma   C``
+    ``\\frac{dR}{dt} = \\lambda R \\bigg(1 - \\frac{R}{K}\\bigg) - \\frac{\\alpha CR}{1 +\\alpha \\eta R}``
+    ``\\frac{dC}{dt} = \\frac{\\alpha CR}{1 + \\alpha \\eta R} - \\gamma   C``
 
 """
 @kwdef struct RosenzweigMacArthur{S,T<:Number} <: Model
@@ -52,6 +52,11 @@ function ∂u(rm::RosenzweigMacArthur, u, θ)
 
     du      
 end
+
+function ∂w(rm::RosenzweigMacArthur, u, θ)
+
+end
+
 function parameters(rm::RosenzweigMacArthur)
     # everything but M is a paremeter
     fns = fieldnames(RosenzweigMacArthur)[2:end]
@@ -63,7 +68,7 @@ function factory(rm::RosenzweigMacArthur)
 end
 
 function factory(rm::RosenzweigMacArthur, s::T) where {T<:Stochasticity}
-    (u,θ,_) -> ∂u(rm, u) #, (u,_,_) -> ∂w(s, u)
+    (u,θ,_) -> ∂w(rm, u) #, (u,_,_) -> ∂w(s, u)
 end
 
 function two_species(::Type{RosenzweigMacArthur}; 
