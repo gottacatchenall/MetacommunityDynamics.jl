@@ -23,6 +23,10 @@ function ∂u(clv::CompetitiveLotkaVolterra, u)
     du
 end
 
+function parameters(clv::CompetitiveLotkaVolterra)
+    fns = fieldnames(CompetitiveLotkaVolterra)
+    [getfield(clv, f) for f in fns]
+end
 
 function replplot(::CompetitiveLotkaVolterra, traj)
     u = timeseries(traj)

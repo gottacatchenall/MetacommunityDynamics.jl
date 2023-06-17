@@ -29,23 +29,23 @@ Let's simulate it ,using only 3 lines of Julia.
 
 First we build the model
 
-```@example
+```@example 1
 rm = RosenzweigMacArthur()
 ```
 
 Then we setup the problem
 
-```@example
-p = problem(rm, Deterministic)
+```@example 1
+prob = problem(rm, Deterministic)
 ```
 
 Third we simulate!
 
-```@example
-traj = simulate(p)
+```@example 1
+traj = simulate(prob)
 ```
 
-```@example
+```@example 1
 obs = observe(Observer(frequency=1), traj)
 ```
 
@@ -53,7 +53,7 @@ obs = observe(Observer(frequency=1), traj)
 
 First we define our model for inference.
 
-```@example
+```@example 1
 print("Fitting model...")
 @model function fit_rm(data, prob)
     σ ~ InverseGamma(2,3)

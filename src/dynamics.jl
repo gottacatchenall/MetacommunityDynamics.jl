@@ -6,14 +6,14 @@ using MetacommunityDynamics
 
 rm = RosenzweigMacArthur()
 p = problem(rm, Deterministic)
+@time sol = simulate(p)
 
-
+lm = LogisticModel(λ=0.1)
+p = problem(lm)
 @time sol = simulate(p)
 
 
-
-
-p = problem(BevertonHolt(1.2,50.), Deterministic)
+p = problem(BevertonHolt(R₀=1.2, K=50.), Deterministic)
 @time sol = simulate(p)
 
 sol
@@ -22,7 +22,6 @@ sol
 p = problem(CompetitiveLotkaVolterra(), Deterministic)
 @time sol = simulate(p)
 
-f 
 
 #=
 

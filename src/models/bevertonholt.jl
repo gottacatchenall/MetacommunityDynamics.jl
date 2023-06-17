@@ -34,6 +34,11 @@ function ∂u(bm::BevertonHolt{T}, x::T) where {T<:Number}
 end 
 
 
+function parameters(bh::BevertonHolt{T}) where T
+    fns = fieldnames(BevertonHolt)
+    [getfield(bh, f) for f in fns]
+end
+
 # This could generalize to factory(model::Model{S<:Spatialness})
 # and adds ∂x if Spatial
 """
