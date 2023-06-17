@@ -11,17 +11,23 @@ initial(::CompetitiveLotkaVolterra) = rand(Uniform(0.5,1), 4, 1)
 discreteness(::CompetitiveLotkaVolterra) = Continuous 
 
 factory(clv::CompetitiveLotkaVolterra) = begin
-    (u,_,_) -> ∂u(clv, u)
+    (u,θ,_) -> ∂u(clv, u, θ)
 end
 
-function ∂u(clv::CompetitiveLotkaVolterra, u)
-    λ, α, K = clv.λ, clv.α, clv.K
+function ∂u(clv::CompetitiveLotkaVolterra, u, θ)
+    λ, α, K = θ
     du = similar(u)
     for s in axes(u,1)
         @fastmath du[s] = u[s] * λ[s] * (1 - (sum([u[t]*α[s,t] for t in 1:size(u,1)]) / K[s]))
     end
     du
 end
+
+
+function factory(clv::CompetitiveLotkaVolterra, s::T) where {T<:Stochasticity}
+    (u,θ,_) -> ∂u(clv, u, θ), (u,_,_) -> ∂w(s, u)
+end
+
 
 function parameters(clv::CompetitiveLotkaVolterra)
     fns = fieldnames(CompetitiveLotkaVolterra)

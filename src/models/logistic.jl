@@ -17,7 +17,7 @@ function factory(lm::LogisticModel)
     (u,θ,_) -> ∂u(lm, u, θ)
 end
 
-function MetacommunityDynamics.factory(lm::LogisticModel, s::T) where {T<:Stochasticity}
+function factory(lm::LogisticModel, s::T) where {T<:Stochasticity}
     (u,θ,_) -> ∂u(lm, u, θ), (u,_,_) -> ∂w(s, u)
 end
 

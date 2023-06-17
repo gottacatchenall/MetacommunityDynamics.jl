@@ -3,15 +3,20 @@ using Distributions
 using MetacommunityDynamics
 
 
+gd = GaussianDrift(0.01)
 
 rm = RosenzweigMacArthur()
 p = problem(rm, Deterministic)
 @time sol = simulate(p)
 
-lm = LogisticModel(λ=0.1)
-gd = GaussianDrift(2.5)
 
-p = problem(lm, gd)
+p = problem(RosenzweigMacArthur(), gd)
+@time sol = simulate(p)
+
+
+lm = LogisticModel(λ=0.1)
+
+p = problem(lm, GaussianDrift(3.))
 @time sol = simulate(p)
 
 p = problem(BevertonHolt(R₀=1.2, K=50.), Deterministic)
@@ -25,11 +30,11 @@ p = problem(CompetitiveLotkaVolterra(), Deterministic)
 
 
 
-p = problem(CompetitiveLotkaVolterra(), gd)
+p = problem(CompetitiveLotkaVolterra(), GaussianDrift(0.03))
 @time sol = simulate(p)
 
 
-
+fo
 
 #=
 
