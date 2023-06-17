@@ -8,6 +8,8 @@ Dynamics given by
 
 ``\\frac{dC}{dt} = \\frac{\\alpha CR}{1 + \\alpha \\eta R} - \\gamma   C``
 
+
+
 """
 @kwdef struct RosenzweigMacArthur{S,T<:Number} <: Model
     # C = 1, R = 2
@@ -55,7 +57,7 @@ function ∂u(rm::RosenzweigMacArthur, u, θ)
 end
 
 function ∂w(s::GaussianDrift, u, θ)
-
+    
 end
 
 function parameters(rm::RosenzweigMacArthur)

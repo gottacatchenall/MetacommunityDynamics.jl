@@ -9,9 +9,10 @@ p = problem(rm, Deterministic)
 @time sol = simulate(p)
 
 lm = LogisticModel(λ=0.1)
-p = problem(lm)
-@time sol = simulate(p)
+gd = GaussianDrift(2.5)
 
+p = problem(lm, gd)
+@time sol = simulate(p)
 
 p = problem(BevertonHolt(R₀=1.2, K=50.), Deterministic)
 @time sol = simulate(p)
@@ -21,6 +22,13 @@ sol
 
 p = problem(CompetitiveLotkaVolterra(), Deterministic)
 @time sol = simulate(p)
+
+
+
+p = problem(CompetitiveLotkaVolterra(), gd)
+@time sol = simulate(p)
+
+
 
 
 #=

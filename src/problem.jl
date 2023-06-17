@@ -30,8 +30,7 @@ function problem(m::Model, ::Type{Deterministic}; tspan=(0,100), u0=nothing)
     Problem(m, prob(f, u0, tspan, θ) , tspan, u0, Missing())
 end
 
-
-function problem(m::Model, gd::GaussianDrift; tspan=(0,100), u0=nothing)
+function problem(m::T, gd::GaussianDrift; tspan=(0,100), u0=nothing) where T<:Model
     prob = discreteness(m) == MetacommunityDynamics.Continuous ? SDEProblem : DiscreteProblem
 
     # this should dispatch on whether a spatialgraph was provided
