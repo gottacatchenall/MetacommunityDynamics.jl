@@ -54,7 +54,7 @@ function ∂u(rm::RosenzweigMacArthur, u, θ)
     du      
 end
 
-function ∂w(s::GaussianDrift, u, θa)
+function ∂w(s::GaussianDrift, u, θ)
 
 end
 
@@ -79,7 +79,6 @@ function two_species(::Type{RosenzweigMacArthur};
     β = 0.5,
     γ = 0.1,
     K = 0.3)
-
     (    
         λ = [0., λ],
         α =  [0.0  α;  
