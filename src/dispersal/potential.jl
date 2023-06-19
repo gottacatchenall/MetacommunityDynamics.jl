@@ -12,10 +12,10 @@ struct DispersalPotential{T}
     matrix::Matrix{T}
 end
 
-function DispersalPotential(kernel::DispersalKernel, sg::SpatialGraph) 
+function DispersalPotential(kernel::DispersalKernel, sg::SpatialGraph{T}) where T 
     ns = numsites(sg)
     kernmat = kernel_matrix(sg, kernel)
-    mat = zeros(Float32, size(kernmat))
+    mat = zeros(T, size(kernmat))
 
     for i = 1:ns, j = 1:ns
         if (sum(kernmat[i, :]) > 0)

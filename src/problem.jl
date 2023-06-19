@@ -13,7 +13,6 @@ function problem(m::Model; kwargs...)
     problem(m, Deterministic; kwargs...)
 end
 
-
 function problem(m::Model, ::Type{Deterministic}; tspan=(0,100), u0=nothing)
     prob = discreteness(m) == MetacommunityDynamics.Continuous ? ODEProblem : DiscreteProblem
     
@@ -29,6 +28,41 @@ function problem(m::Model, ::Type{Deterministic}; tspan=(0,100), u0=nothing)
 
     Problem(m, prob(f, u0, tspan, θ) , tspan, u0, Missing())
 end
+
+function problem(m::SpatialModel,::Type{Deterministic}; tspan=(0,100), u0=nothing)
+    s = numsites(m.spatialgraph)
+
+    u0 = isnothing(u0) ? hcat([initial(m.model) for _ in 1:s]...) : hcat([u0 for _ in 1:s]...)
+
+    paramindex = findfirst(x->x==growthratename(m.model),paramnames(m.model))
+    θ = parameters(m.model)
+
+    function f(du, u, p, t)
+
+        # instead of this, we should just have a separate du_dt for spatial 
+
+
+        for i in 1:s
+            plocal = copy(p)
+            plocal[1] = p[paramindex][:,i]
+            du[:,i] = ∂u(m.model, u[:,i], plocal)
+        end
+
+        if typeof(m.diffusion) == Diffusion
+            for s in 1:numspecies(m.speciespool)
+                @fastmath du[s,:] += m.diffusion * u[s,:]
+            end
+        else
+            for s in 1:numspecies(m.speciespool)
+                @fastmath du[s,:] += m.diffusion[s] * u[s,:]
+            end
+        end
+
+    end 
+
+    Problem(m.model, ODEProblem(f, u0, tspan, θ) , tspan, u0, m.spatialgraph)
+end 
+
 
 function problem(m::T, gd::GaussianDrift; tspan=(0,100), u0=nothing) where T<:Model
     prob = discreteness(m) == MetacommunityDynamics.Continuous ? SDEProblem : DiscreteProblem

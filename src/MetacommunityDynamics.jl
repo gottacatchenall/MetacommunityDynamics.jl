@@ -12,7 +12,6 @@ module MetacommunityDynamics
     abstract type Discreteness end 
     abstract type Discrete <: Discreteness end 
     abstract type Continuous <: Discreteness end 
-    export Discreteness, Discrete, Continuous
 
 
     abstract type Stochasticity end 
@@ -35,35 +34,26 @@ module MetacommunityDynamics
     end
     
     
-    export Stochasticity, Deterministic, GaussianDrift
 
     abstract type Model end 
-    export Model
-    
-
-
-    export parameters
-
 
     include("environment.jl")
     include("spatialgraph.jl")
 
-    include("problem.jl")
-    export simulate 
 
-    include("trajectory.jl")
-    
-    export Trajectory
-    export problem, model, solution, timeseries
+    include("species.jl")
+    include("niche.jl")
 
-
-    include("observer.jl")
-    export Observer, observe
 
     include(joinpath("dispersal", "kernel.jl"))
     include(joinpath("dispersal", "potential.jl"))
+    include(joinpath("dispersal", "diffusion.jl"))
+    include(joinpath("dispersal", "spatialmodel.jl"))
 
-    include("species.jl")
+    include("problem.jl")
+    include("trajectory.jl")
+    include("observer.jl")
+
 
     include(joinpath("models", "ricker.jl"))
     include(joinpath("models", "bevertonholt.jl"))
@@ -73,6 +63,16 @@ module MetacommunityDynamics
     include(joinpath("models", "lvcompetition.jl"))
     include(joinpath("models", "rosenzweigmacarthur.jl"))
 
+    export Diffusion, SpatialModel
+    
+    export Discreteness, Discrete, Continuous
+    export Model
+    export Stochasticity, Deterministic, GaussianDrift
+
+    export parameters
+    export paramdict
+
+    export spatialize
 
     export SpatialGraph
     export DispersalKernel
@@ -88,12 +88,26 @@ module MetacommunityDynamics
     export RosenzweigMacArthur 
     export LogisticModel
 
+    export GaussianNiche, Niche
+
     export two_species
+    export growthrate, growthratename
 
     export factory
     export discreteness
     export initial
     export replplot 
+
+    export numspecies
+    export traitdims
+    export traitnames
+
+    export Observer, observe
+    export simulate 
+
+    
+    export Trajectory
+    export problem, model, solution, timeseries
 
 
 

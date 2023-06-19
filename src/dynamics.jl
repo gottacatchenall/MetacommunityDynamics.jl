@@ -1,6 +1,7 @@
 using DifferentialEquations
 using Distributions
 using MetacommunityDynamics
+using CairoMakie
 
 
 gd = GaussianDrift(0.01)
@@ -10,7 +11,7 @@ p = problem(rm, Deterministic)
 @time sol = simulate(p)
 
 
-p = problem(RosenzweigMacArthur(), gd)
+p = problem(RosenzweigMacArthur(), gd);
 @time sol = simulate(p)
 
 
@@ -34,8 +35,41 @@ p = problem(CompetitiveLotkaVolterra(), GaussianDrift(0.03))
 @time sol = simulate(p)
 
 
-fo
+rm = RosenzweigMacArthur()
+sg = SpatialGraph(EnvironmentLayer())
 
+t = Dict(
+    :μ => [0.0, 0.5],
+    :σ => [0.0, 0.5],
+)
+sp = SpeciesPool(traits=t)
+niche = GaussianNiche()
+
+ϕ = DispersalPotential(DispersalKernel(max_distance=0.5), sg)
+D = Diffusion(0.01, ϕ)
+
+spatialrm = spatialize(rm, sg,  sp, niche, D)
+
+prob = problem(spatialrm, Deterministic)
+
+traj = simulate(prob)
+
+ts = traj.sol.u
+
+f = Figure()
+ax = Axis(f[1,1])
+
+for loc in 1:20
+    for sp in 1:2
+        y = [ts[t][sp,loc] for t in 1:length(ts)]
+        lines!(ax, 1:length(y), y, color = sp == 1 ? (:dodgerblue, 0.5) : (:red, 0.5))
+    end 
+end 
+
+
+current_figure()
+
+foo
 #=
 
 function dynamics(X)
