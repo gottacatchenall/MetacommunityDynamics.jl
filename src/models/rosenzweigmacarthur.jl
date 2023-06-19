@@ -15,7 +15,7 @@ Dynamics given by
     # C = 1, R = 2
     M::Matrix{S} =  [0 1;         # metaweb, not a parameter of inference
                      0 0]
-    λ::Vector{T} =  [0.0, 0.5]    # λ[i] max instaneous growth rate of i
+    λ::Array{T} =  [0.0, 0.5]    # λ[i] max instaneous growth rate of i
     α::Matrix{T} =  [0.0  5.0;    # α[i,j] = attack rate of i on j
                      5.0  0.0]
     η::Matrix{T} =  [0.0  3.0;    # η[i, j] =  handling rate of i on j
@@ -29,14 +29,23 @@ end
 discreteness(::RosenzweigMacArthur) = Continuous 
 initial(::RosenzweigMacArthur) = [0.2, 0.2]  # note this is only valid for the default params
 
-# Key thing for constructors here is how to handle 2 species vs. > 2 cases.
-#   - In two-species case, parameters all params can be scaler. not for anything
-#     bigger though
+growthratename(::RosenzweigMacArthur) = :λ
+growthrate(rm::RosenzweigMacArthur) = getfield(rm,growthratename(rm))
+
+numspecies(rm::RosenzweigMacArthur) = length(rm.K)
+
+function du_dt(C,R,λ,α,η,β,γ,K)
+    @fastmath dR = λ*R*(1-(R/K)) - (α*R*C)/(1+α*η*R)
+    @fastmath dC = (β*C*R*α)/(1+α*η*R) - γ*C
+    dC,dR
+end
+
+
+
 
 function ∂u(rm::RosenzweigMacArthur, u, θ)
     M = rm.M
     λ, α, η, β, γ, K = θ
-
     I = findall(!iszero, M)
     du = similar(u)
     du .= 0
@@ -44,20 +53,34 @@ function ∂u(rm::RosenzweigMacArthur, u, θ)
     for i in I
         ci,ri = i[1], i[2]
         C,R = u[ci], u[ri]
-
         λᵢ, αᵢ, ηᵢ, βᵢ, γᵢ, Kᵢ = λ[ri], α[ci,ri], η[ci,ri], β[ci,ri], γ[ci], K[ri]
-    
-        @fastmath dR = λᵢ*R*(1-(R/Kᵢ)) - (αᵢ*R*C)/(1+αᵢ*ηᵢ*R)
-        @fastmath dC = (βᵢ*C*R*αᵢ)/(1+αᵢ*ηᵢ*R) - γᵢ*C
+        dC, dR = du_dt(C,R, λᵢ, αᵢ, ηᵢ, βᵢ, γᵢ, Kᵢ)
         du[ci] += dC
         du[ri] += dR
     end 
-
     du      
 end
 
-function ∂w(s::GaussianDrift, u, θ)
-    
+function ∂x(rm::RosenzweigMacArthur, u, θ)
+    # There are a few options here which are likely best handled via dispatch at
+    # a higher level.
+
+    D = θ
+
+    # Is D common across species (so should be ::Diffusion) or not,
+    # in which case D should be ::Vector{Diffusion} of same length as
+    # dims of `u`
+    # du .+= (D * u')'
+end
+
+
+function paramdict(rm::RosenzweigMacArthur)
+    fns = fieldnames(RosenzweigMacArthur)[2:end]
+    Dict([f=>getfield(rm, f) for f in fns]...)
+end
+
+function paramnames(::RosenzweigMacArthur)
+    fieldnames(RosenzweigMacArthur)[2:end]
 end
 
 function parameters(rm::RosenzweigMacArthur)
@@ -70,8 +93,12 @@ function factory(rm::RosenzweigMacArthur)
     (u,θ,_) -> ∂u(rm, u, θ)
 end
 
-function factory(rm::RosenzweigMacArthur, s::T) where {T<:Stochasticity}
-    (u,θ,_) -> ∂u(rm, u, θ), (u,_,_) -> ∂w(s, u)
+function factory(rm::RosenzweigMacArthur, stoch::T) where {T<:Stochasticity}
+    (u,θ,_) -> ∂u(rm, u, θ), (u,_,_) -> ∂w(stoch, u)
+end
+
+function factory(rm::RosenzweigMacArthur, sg::T) where {T<:SpatialGraph}
+    (u,θ,_) -> ∂u(rm, u, θ), (u,θ,_) -> ∂x(rm, sg, u, θ)
 end
 
 function two_species(::Type{RosenzweigMacArthur}; 
