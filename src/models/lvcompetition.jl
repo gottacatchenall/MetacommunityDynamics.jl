@@ -10,6 +10,11 @@ end
 initial(::CompetitiveLotkaVolterra) = rand(Uniform(0.5,1), 4, 1)
 discreteness(::CompetitiveLotkaVolterra) = Continuous 
 
+growthratename(::CompetitiveLotkaVolterra) = :λ
+growthrate(clv::CompetitiveLotkaVolterra) = getfield(clv,growthratename(clv))
+
+numspecies(clv::CompetitiveLotkaVolterra) = size(clv.α, 1)
+
 factory(clv::CompetitiveLotkaVolterra) = begin
     (u,θ,_) -> ∂u(clv, u, θ)
 end
@@ -23,12 +28,27 @@ function ∂u(clv::CompetitiveLotkaVolterra, u, θ)
     du
 end
 
-function parameters(clv::CompetitiveLotkaVolterra)
-    fns = fieldnames(CompetitiveLotkaVolterra)
-    [getfield(clv, f) for f in fns]
+function ∂u_spatial(clv::CompetitiveLotkaVolterra, u, θ)
+    λ, α, K = θ
+
+    du = similar(u)
+    du .= 0
+    n_species = numspecies(clv)
+    n_sites = size(u,2)
+    for site in 1:n_sites
+        for sp in 1:n_species
+            @fastmath du[sp, site] = u[sp, site] * λ[sp,site] * (1 - (sum([u[sp,site]*α[sp,t] for t in 1:n_species]) / K[sp]))
+        end 
+    end
+    du 
 end
 
-function replplot(::CompetitiveLotkaVolterra, traj)
+
+function paramnames(::CompetitiveLotkaVolterra)
+    fieldnames(CompetitiveLotkaVolterra)
+end
+
+function replplot(::CompetitiveLotkaVolterra, traj::Trajectory{P,S,T}) where {P,S<:Local,T}
     u = timeseries(traj)
     ymax = max([extrema(x)[2] for x in timeseries(traj)]...)
     ts(s) = [mean(u[t][s,:]) for t in 1:length(traj)]
@@ -40,6 +60,28 @@ function replplot(::CompetitiveLotkaVolterra, traj)
 
     for i in 2:length(u[1])
         lineplot!(p, ts(i))
+    end 
+    p
+end
+
+
+
+function MetacommunityDynamics.replplot(::CompetitiveLotkaVolterra, traj::Trajectory{P,S,T}) where {P,S<:Spatial,T}
+    u = Array(traj.sol)    
+    n_species, n_locations, n_timesteps = size(u)
+    ymax = max(u...)
+    
+    p = lineplot(u[1,1,:], 
+        xlabel="time (t)", 
+        ylabel="Biomass", 
+        width=80,
+        ylim=(0,ymax))
+         
+    cols = n_species < 7 ? [:blue, :red, :green, :red, :purple, :red] : fill(:dodgerblue, n_species)
+    for s in eachslice(u, dims=(2))
+        for sp in 1:n_species
+            lineplot!(p, s[sp,:], color=cols[sp])
+        end
     end 
     p
 end

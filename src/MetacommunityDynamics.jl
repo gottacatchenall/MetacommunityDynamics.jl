@@ -15,7 +15,8 @@ module MetacommunityDynamics
 
 
     abstract type Stochasticity end 
-    abstract type Deterministic end 
+    abstract type Stochastic <: Stochasticity end 
+    abstract type Deterministic <: Stochasticity end 
     
     abstract type Spatialness end 
     abstract type Local <: Spatialness end 
@@ -37,9 +38,19 @@ module MetacommunityDynamics
         σ .= gd.σ
     end
     
-    
+
 
     abstract type Model end 
+    function paramdict(m::Model)
+        fns = paramnames(m)
+        Dict{Symbol, Array}([f=>getfield(m, f) for f in fns]...)
+    end
+    function parameters(m::Model)
+        # everything but M is a paremeter
+        fns = paramnames(m)
+        [getfield(m, f) for f in fns]
+    end
+    
 
     include("environment.jl")
     include("spatialgraph.jl")

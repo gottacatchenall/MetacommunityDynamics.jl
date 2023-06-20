@@ -1,4 +1,4 @@
-struct Problem{T,S<:Spatialness}
+struct Problem{T,S<:Spatialness,R<:Stochasticity,D<:Discreteness}
     model::Model
     prob::T
     tspan
@@ -21,17 +21,17 @@ function problem(m::Model, ::Type{Deterministic}; tspan=(0,100), u0=nothing)
     u0 = isnothing(u0) ? initial(m) : u0
     θ = parameters(m)
     pr = prob(f, u0, tspan, θ) 
-    Problem{typeof(pr),Local}(m, pr, tspan, u0, Missing())
+    Problem{typeof(pr),Local,Deterministic,discreteness(m) }(m, pr, tspan, u0, Missing())
 end
 
-function problem(m::SpatialModel,::Type{Deterministic}; tspan=(0,100), u0=nothing)
+function problem(m::SpatialModel,::Type{Deterministic}; tspan=(0,100), u0=nothing, )
     f = factory(m.model, m.diffusion)
 
     s = numsites(m.spatialgraph)
     u0 = isnothing(u0) ? hcat([initial(m.model) for _ in 1:s]...) : hcat([u0 for _ in 1:s]...)
     θ = parameters(m.model)
     pr = ODEProblem(f, u0, tspan, θ)
-    Problem{typeof(pr),Spatial}(m.model, pr, tspan, u0, m.spatialgraph)
+    Problem{typeof(pr),Spatial,Deterministic,discreteness(m.model) }(m.model, pr, tspan, u0, m.spatialgraph)
 end 
 
 function problem(m::SpatialModel, gd::GaussianDrift; tspan=(0,100), u0=nothing)
@@ -41,7 +41,7 @@ function problem(m::SpatialModel, gd::GaussianDrift; tspan=(0,100), u0=nothing)
     u0 = isnothing(u0) ? hcat([initial(m.model) for _ in 1:s]...) : hcat([u0 for _ in 1:s]...)
     θ = parameters(m.model)
     pr = SDEProblem(f, g, u0, tspan, θ) 
-    Problem{typeof(pr),Spatial}(m.model, pr, tspan, u0, m.spatialgraph)
+    Problem{typeof(pr),Spatial,Stochastic,discreteness(m.model) }(m.model, pr, tspan, u0, m.spatialgraph)
 end 
 
 
@@ -57,7 +57,7 @@ function problem(m::T, gd::GaussianDrift; tspan=(0,100), u0=nothing) where T<:Mo
     # This will also enable injection of environment dependent variables here
     # for the spatial version of this method 
     pr = prob(f, g, u0, tspan, θ) 
-    Problem{typeof(pr),Local}(m, pr, tspan, u0, Missing())
+    Problem{typeof(pr),Local,Stochastic,discreteness(m)}(m, pr, tspan, u0, Missing())
 end
 
 
