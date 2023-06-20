@@ -38,6 +38,7 @@ p = problem(CompetitiveLotkaVolterra(), GaussianDrift(0.005))
 # spatial 
 
 rm = RosenzweigMacArthur()
+
 sg = SpatialGraph(EnvironmentLayer());
 t = Dict(
     :μ => [0.0, 0.5],
@@ -53,18 +54,85 @@ spatialrm = spatialize(rm, sg,  sp, niche, D)
 
 prob = problem(spatialrm, Deterministic)
 
-traj = simulate(prob)
-
-
-
 prob = problem(spatialrm, GaussianDrift(0.01))
-
 @time traj = simulate(prob)
 
 
 
-traj.
 
+lm = LogisticModel()
+sg = SpatialGraph(EnvironmentLayer())
+t = Dict(
+    :μ => [0.5],
+    :σ => [0.5],
+)
+sp = SpeciesPool(traits=t)
+
+niche = GaussianNiche()
+
+ϕ = DispersalPotential(DispersalKernel(max_distance=0.4), sg)
+D = Diffusion(0.01, ϕ)
+
+spatiallm = spatialize(lm, sg,  sp, niche, D)
+prob = problem(spatiallm, Deterministic)
+traj = simulate(prob)
+
+
+prob = problem(spatiallm, GaussianDrift(3.))
+@time traj = simulate(prob)
+
+
+
+
+clv = CompetitiveLotkaVolterra()
+sg = SpatialGraph(EnvironmentLayer(), coords=[(rand(), rand()) for i in 1:5]);
+t = Dict(
+    :μ => [0.2, 0.4, 0.6, 0.8],
+    :σ => [0.3, 0.3, 0.3, 0.3],
+)
+sp = SpeciesPool(traits=t)
+niche = GaussianNiche()
+
+ϕ = DispersalPotential(DispersalKernel(max_distance=0.4), sg)
+D = Diffusion(0.01, ϕ)
+
+spatialclv = spatialize(clv, sg,  sp, niche, D)
+
+prob = problem(spatialclv, Deterministic)
+@time traj = simulate(prob)
+
+
+
+prob = problem(spatialclv, GaussianDrift(0.05))
+@time traj = simulate(prob)
+
+
+
+
+
+
+
+
+
+
+
+a = Array(traj.sol)
+
+f = Figure()
+ax = Axis(f[1,1])
+ylims!(ax, 0,1)
+cs = [:red, :green,:blue,:orange]
+
+for u in eachslice(a,dims=2)
+    ns = size(u,1)
+    for i in 1:ns
+        scatterlines!(ax, u[i,:], color=(cs[i], 0.1))
+    end
+end
+
+f
+
+foo
 foo
 #=
 

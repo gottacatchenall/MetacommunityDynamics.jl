@@ -58,6 +58,19 @@ function ∂u(rm::RosenzweigMacArthur, u, θ)
     du      
 end
 
+function paramnames(::RosenzweigMacArthur)
+    fieldnames(RosenzweigMacArthur)[2:end]
+end
+
+
+
+
+# ====================================================
+#
+#   Spatial
+#
+# =====================================================
+
 function ∂u_spatial(rm::RosenzweigMacArthur, u, θ)
     M = rm.M
     λ, α, η, β, γ, K = θ
@@ -80,23 +93,6 @@ function ∂u_spatial(rm::RosenzweigMacArthur, u, θ)
     end
     du 
 end
-
-
-function paramdict(rm::RosenzweigMacArthur)
-    fns = fieldnames(RosenzweigMacArthur)[2:end]
-    Dict([f=>getfield(rm, f) for f in fns]...)
-end
-
-function paramnames(::RosenzweigMacArthur)
-    fieldnames(RosenzweigMacArthur)[2:end]
-end
-
-function parameters(rm::RosenzweigMacArthur)
-    # everything but M is a paremeter
-    fns = fieldnames(RosenzweigMacArthur)[2:end]
-    [getfield(rm, f) for f in fns]
-end
-
 
 function two_species(::Type{RosenzweigMacArthur}; 
     λ = 0.5, 
