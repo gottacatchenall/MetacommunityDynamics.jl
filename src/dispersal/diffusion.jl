@@ -10,13 +10,19 @@ function _diffusion_mat(ϕ::DispersalPotential, m::T) where T<:Number
     [i[1] == i[2] ? 1-m : ϕ[i[1],i[2]] * m for i in idx]
 end
 
-function diffusion(u, d::Diffusion)
-    du = similar(u)
-    du .= 0
+function diffusion!(u, d::Diffusion)
     for (i,r) in enumerate(eachrow(u))
-        du[i,:] .= d.matrix * r
+        u[i,:] .= d.matrix * r
     end
-
-    du = Matrix((d.matrix * u')')
+    u
 end 
+
+
+function diffusion!(u, d::Vector{Diffusion})
+    for (i,r) in enumerate(eachrow(u))
+        u[i,:] .= d[i].matrix * r
+    end
+    u
+end 
+
 

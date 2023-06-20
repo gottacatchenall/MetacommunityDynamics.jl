@@ -1,4 +1,4 @@
-struct Problem{T <: SciMLBase.AbstractDEProblem}
+struct Problem{T <: SciMLBase.AbstractDEProblem,S<:Spatialness}
     model::Model
     prob::T
     tspan
@@ -14,49 +14,33 @@ function problem(m::Model; kwargs...)
 end
 
 function problem(m::Model, ::Type{Deterministic}; tspan=(0,100), u0=nothing)
-    prob = discreteness(m) == MetacommunityDynamics.Continuous ? ODEProblem : DiscreteProblem
+    prob::SciMLBase.AbstractDEProblem = discreteness(m) == MetacommunityDynamics.Continuous ? ODEProblem : DiscreteProblem
     
     # this should dispatch on whether a spatialgraph was provided
     f = factory(m) 
     u0 = isnothing(u0) ? initial(m) : u0
     θ = parameters(m)
-    Problem(m, prob(f, u0, tspan, θ) , tspan, u0, Missing())
+    Problem{typeof(prob),Local}(m, prob(f, u0, tspan, θ) , tspan, u0, Missing())
 end
 
 function problem(m::SpatialModel,::Type{Deterministic}; tspan=(0,100), u0=nothing)
-
     f = factory(m.model, m.diffusion)
 
     s = numsites(m.spatialgraph)
     u0 = isnothing(u0) ? hcat([initial(m.model) for _ in 1:s]...) : hcat([u0 for _ in 1:s]...)
     θ = parameters(m.model)
 
-    Problem(m.model, ODEProblem(f, u0, tspan, θ) , tspan, u0, m.spatialgraph)
+    Problem{ODEProblem,Spatial}(m.model, ODEProblem(f, u0, tspan, θ) , tspan, u0, m.spatialgraph)
+end 
 
-    #=
-    function f(du, u, p, t)
+function problem(m::SpatialModel, gd::GaussianDrift; tspan=(0,100), u0=nothing)
+    f,g = factory(m.model, m.diffusion, gd)
 
-        # instead of this, we should just have a separate du_dt for spatial 
+    s = numsites(m.spatialgraph)
+    u0 = isnothing(u0) ? hcat([initial(m.model) for _ in 1:s]...) : hcat([u0 for _ in 1:s]...)
+    θ = parameters(m.model)
 
-        for i in 1:s
-            plocal = copy(p)
-            plocal[1] = p[paramindex][:,i]
-            du[:,i] = ∂u(m.model, u[:,i], plocal)
-        end
-
-        if typeof(m.diffusion) == Diffusion
-            for s in 1:numspecies(m.speciespool)
-                @fastmath du[s,:] += m.diffusion * u[s,:]
-            end
-        else
-            for s in 1:numspecies(m.speciespool)
-                @fastmath du[s,:] += m.diffusion[s] * u[s,:]
-            end
-        end
-
-    end 
-
-    Problem(m.model, ODEProblem(f, u0, tspan, θ) , tspan, u0, m.spatialgraph)=#
+    Problem{SDEProblem,Spatial}(m.model, SDEProblem(f, g, u0, tspan, θ) , tspan, u0, m.spatialgraph)
 end 
 
 
@@ -72,12 +56,8 @@ function problem(m::T, gd::GaussianDrift; tspan=(0,100), u0=nothing) where T<:Mo
     # This will also enable injection of environment dependent variables here
     # for the spatial version of this method 
     
-    Problem(m, prob(f, g, u0, tspan, θ) , tspan, u0, Missing())
+    Problem{typeof(prob),Local}(m, prob(f, g, u0, tspan, θ) , tspan, u0, Missing())
 end
 
-function simulate(p::Problem)
-    sol = solve(p.prob, saveat=(p.tspan[1]:1:p.tspan[2]))
-    Trajectory(p, sol)
-end
 
 

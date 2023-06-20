@@ -34,6 +34,8 @@ p = problem(CompetitiveLotkaVolterra(), Deterministic)
 p = problem(CompetitiveLotkaVolterra(), GaussianDrift(0.03))
 @time sol = simulate(p)
 
+#----------------------------------------------------------
+# spatial 
 
 rm = RosenzweigMacArthur()
 sg = SpatialGraph(EnvironmentLayer());
@@ -53,22 +55,15 @@ prob = problem(spatialrm, Deterministic)
 
 traj = simulate(prob)
 
-ts = traj.sol.u
-
-f = Figure()
-ax = Axis(f[1,1])
-
-for loc in 1:5
-    for sp in 1:2
-        y = [ts[t][sp,loc] for t in 1:length(ts)]
-        lines!(ax, 1:length(y), y, color = sp == 1 ? (:dodgerblue, 0.5) : (:red, 0.5))
-    end 
-end 
 
 
-current_figure()
+prob = problem(spatialrm, GaussianDrift(0.01))
+
+@time traj = simulate(prob)
 
 foo
+
+
 #=
 
 function dynamics(X)
