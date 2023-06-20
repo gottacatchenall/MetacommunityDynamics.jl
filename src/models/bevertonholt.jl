@@ -26,29 +26,16 @@ discreteness(::BevertonHolt) = Discrete
 
 Single time-step for the `BevertonHolt` model. 
 """
-function ∂u(bm::BevertonHolt{T}, x::T) where {T<:Number}
-    R₀, K = bm.R₀, bm.K
+function ∂u(bm::BevertonHolt{T}, x::T, θ) where {T<:Number}
+    R₀, K = θ
 
     @fastmath M = K/(R₀-1)
     @fastmath R₀ * x / (1 + (x/M))
 end 
 
-
 function parameters(bh::BevertonHolt{T}) where T
     fns = fieldnames(BevertonHolt)
     [getfield(bh, f) for f in fns]
-end
-
-# This could generalize to factory(model::Model{S<:Spatialness})
-# and adds ∂x if Spatial
-"""
-    factory(bh::BevertonHolt)
-
-Model factory for the Beverton-Holt model. Returns a function that takes a state
-`u` and returns an anonymous function and returns `du`. 
-"""
-function factory(bh::BevertonHolt)
-    (u,_,_) -> ∂u(bh, u)
 end
 
 function replplot(::BevertonHolt, traj)
@@ -66,14 +53,3 @@ end
     @test typeof(BevertonHolt()) <: Model
     @test typeof(BevertonHolt()) <: BevertonHolt
 end
-
-
-# factory(BevertonHolt())(5100, "", "")
-
-#=
-bh = BevertonHolt()
-u0 = 7.
-prob = DiscreteProblem(factory(bh), u0, (0,100.), (), saveat=0:100);
-@time sol = solve(prob);
-
-=#

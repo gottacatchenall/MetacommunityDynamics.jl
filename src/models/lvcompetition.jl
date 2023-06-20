@@ -23,12 +23,6 @@ function ∂u(clv::CompetitiveLotkaVolterra, u, θ)
     du
 end
 
-
-function factory(clv::CompetitiveLotkaVolterra, s::T) where {T<:Stochasticity}
-    (u,θ,_) -> ∂u(clv, u, θ), (u,_,_) -> ∂w(s, u)
-end
-
-
 function parameters(clv::CompetitiveLotkaVolterra)
     fns = fieldnames(CompetitiveLotkaVolterra)
     [getfield(clv, f) for f in fns]
