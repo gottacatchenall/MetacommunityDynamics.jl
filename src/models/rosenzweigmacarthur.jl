@@ -105,19 +105,13 @@ function factory(rm::RosenzweigMacArthur, stoch::T) where {T<:Stochasticity}
     (u,θ,_) -> ∂u(rm, u, θ), (u,_,_) -> ∂w(stoch, u)
 end
 
-function factory(rm::RosenzweigMacArthur, d::T) where {T<:Diffusion}
-    (u,θ,_) -> begin 
-        for (i,r) in enumerate(eachrow(u))
-            u[i,:] .= d.matrix * r
-        end
-        du = ∂u_spatial(rm, u, θ)         
-    end 
+function factory(rm::RosenzweigMacArthur, d::T) where {T<:Union{Diffusion,Vector{Diffusion}}}
+    (u,θ,_) -> ∂u_spatial(rm, diffusion!(u,d), θ)         
+end
+function factory(rm::RosenzweigMacArthur, d::T, stoch::S) where {T<:Union{Diffusion,Vector{Diffusion}}, S<:Stochasticity}
+    (u,θ,_) -> ∂u_spatial(rm, diffusion!(u,d), θ), (u,_,_) -> ∂w(stoch, u)     
 end
 
-function factory(rm::RosenzweigMacArthur, d::T) where {T<:Vector{Diffusion}}
-    # it is smarter to precompute diffusion mat and give that to the anon function
-
-end
 
 function two_species(::Type{RosenzweigMacArthur}; 
     λ = 0.5, 
@@ -140,7 +134,7 @@ function two_species(::Type{RosenzweigMacArthur};
 end
 
 
-function replplot(::RosenzweigMacArthur, traj)
+function replplot(::RosenzweigMacArthur, traj::Trajectory{P,S,T}) where {P,S<:Local,T}
     u = timeseries(traj)
     ymax = max([extrema(x)[2] for x in timeseries(traj)]...)
     ts(s) = [mean(u[t][s,:]) for t in 1:length(traj)]
@@ -155,6 +149,28 @@ function replplot(::RosenzweigMacArthur, traj)
     end 
     p
 end
+
+function replplot(::RosenzweigMacArthur, traj::Trajectory{P,S,T}) where {P,S<:Spatial,T}
+    u = Array(traj.sol)    
+    n_species, n_locations, n_timesteps = size(u)
+    ymax = max(u...)
+
+    
+    p = lineplot(u[1,1,:], 
+        xlabel="time (t)", 
+        ylabel="Biomass", 
+        width=80,
+        ylim=(0,ymax))
+         
+    cols = n_species < 7 ? [:blue, :red, :green, :orange, :pink, :red] : fill(:dodgerblue, n_species)
+    for s in eachslice(u, dims=(2))
+        for sp in 1:n_species
+            lineplot!(p, s[sp,:], color=cols[sp])
+        end
+    end 
+    p
+end
+
 
 
 @testitem "Rosenzweig-MacArthur constructor works" begin

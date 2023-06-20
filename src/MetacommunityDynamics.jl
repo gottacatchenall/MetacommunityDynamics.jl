@@ -17,6 +17,10 @@ module MetacommunityDynamics
     abstract type Stochasticity end 
     abstract type Deterministic end 
     
+    abstract type Spatialness end 
+    abstract type Local <: Spatialness end 
+    abstract type Spatial <: Spatialness end 
+
 
     @kwdef struct GaussianDrift{T} <: Stochasticity
         σ::T = 0.1
@@ -64,9 +68,11 @@ module MetacommunityDynamics
     include(joinpath("models", "rosenzweigmacarthur.jl"))
 
     export Diffusion, SpatialModel
+    export diffusion!
     
-    export Discreteness, Discrete, Continuous
     export Model
+    export Spatialness, Local, Spatial
+    export Discreteness, Discrete, Continuous
     export Stochasticity, Deterministic, GaussianDrift
 
     export parameters
