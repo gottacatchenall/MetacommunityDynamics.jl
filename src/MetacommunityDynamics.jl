@@ -57,7 +57,8 @@ module MetacommunityDynamics
     include("problem.jl")
     include("trajectory.jl")
     include("observer.jl")
-
+    
+    include("factory.jl")
 
     include(joinpath("models", "ricker.jl"))
     include(joinpath("models", "bevertonholt.jl"))
@@ -69,6 +70,8 @@ module MetacommunityDynamics
 
     export Diffusion, SpatialModel
     export diffusion!
+
+    export factory
     
     export Model
     export Spatialness, Local, Spatial

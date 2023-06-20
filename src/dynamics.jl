@@ -31,7 +31,7 @@ p = problem(CompetitiveLotkaVolterra(), Deterministic)
 
 
 
-p = problem(CompetitiveLotkaVolterra(), GaussianDrift(0.03))
+p = problem(CompetitiveLotkaVolterra(), GaussianDrift(0.005))
 @time sol = simulate(p)
 
 #----------------------------------------------------------
@@ -61,9 +61,11 @@ prob = problem(spatialrm, GaussianDrift(0.01))
 
 @time traj = simulate(prob)
 
+
+
+traj.
+
 foo
-
-
 #=
 
 function dynamics(X)

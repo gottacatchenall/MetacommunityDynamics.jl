@@ -12,16 +12,6 @@ function ∂u(lm::LogisticModel, u, θ)
     return @fastmath λ*u*(1-(u/K)^α)
 end
 
-
-function factory(lm::LogisticModel)
-    (u,θ,_) -> ∂u(lm, u, θ)
-end
-
-function factory(lm::LogisticModel, s::T) where {T<:Stochasticity}
-    (u,θ,_) -> ∂u(lm, u, θ), (u,_,_) -> ∂w(s, u)
-end
-
-
 function parameters(lm::LogisticModel)
     # everything is a paremeter
     fns = fieldnames(LogisticModel)

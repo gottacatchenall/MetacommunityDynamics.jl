@@ -97,21 +97,6 @@ function parameters(rm::RosenzweigMacArthur)
     [getfield(rm, f) for f in fns]
 end
 
-function factory(rm::RosenzweigMacArthur)
-    (u,θ,_) -> ∂u(rm, u, θ)
-end
-
-function factory(rm::RosenzweigMacArthur, stoch::T) where {T<:Stochasticity}
-    (u,θ,_) -> ∂u(rm, u, θ), (u,_,_) -> ∂w(stoch, u)
-end
-
-function factory(rm::RosenzweigMacArthur, d::T) where {T<:Union{Diffusion,Vector{Diffusion}}}
-    (u,θ,_) -> ∂u_spatial(rm, diffusion!(u,d), θ)         
-end
-function factory(rm::RosenzweigMacArthur, d::T, stoch::S) where {T<:Union{Diffusion,Vector{Diffusion}}, S<:Stochasticity}
-    (u,θ,_) -> ∂u_spatial(rm, diffusion!(u,d), θ), (u,_,_) -> ∂w(stoch, u)     
-end
-
 
 function two_species(::Type{RosenzweigMacArthur}; 
     λ = 0.5, 
