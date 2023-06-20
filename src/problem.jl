@@ -18,29 +18,25 @@ function problem(m::Model, ::Type{Deterministic}; tspan=(0,100), u0=nothing)
     
     # this should dispatch on whether a spatialgraph was provided
     f = factory(m) 
-
     u0 = isnothing(u0) ? initial(m) : u0
-
     θ = parameters(m)
-
-    # This will also enable injection of environment dependent variables here
-    # for the spatial version of this method 
-
     Problem(m, prob(f, u0, tspan, θ) , tspan, u0, Missing())
 end
 
 function problem(m::SpatialModel,::Type{Deterministic}; tspan=(0,100), u0=nothing)
+
+    f = factory(m.model, m.diffusion)
+
     s = numsites(m.spatialgraph)
-
     u0 = isnothing(u0) ? hcat([initial(m.model) for _ in 1:s]...) : hcat([u0 for _ in 1:s]...)
-
-    paramindex = findfirst(x->x==growthratename(m.model),paramnames(m.model))
     θ = parameters(m.model)
 
+    Problem(m.model, ODEProblem(f, u0, tspan, θ) , tspan, u0, m.spatialgraph)
+
+    #=
     function f(du, u, p, t)
 
         # instead of this, we should just have a separate du_dt for spatial 
-
 
         for i in 1:s
             plocal = copy(p)
@@ -60,7 +56,7 @@ function problem(m::SpatialModel,::Type{Deterministic}; tspan=(0,100), u0=nothin
 
     end 
 
-    Problem(m.model, ODEProblem(f, u0, tspan, θ) , tspan, u0, m.spatialgraph)
+    Problem(m.model, ODEProblem(f, u0, tspan, θ) , tspan, u0, m.spatialgraph)=#
 end 
 
 
