@@ -15,7 +15,7 @@ p = problem(RosenzweigMacArthur(), gd);
 @time sol = simulate(p)
 
 
-lm = LogisticModel(λ=0.1)
+lm = LogisticModel(λ=[0.1])
 
 p = problem(lm, GaussianDrift(3.))
 @time sol = simulate(p)
@@ -88,7 +88,7 @@ clv = CompetitiveLotkaVolterra()
 sg = SpatialGraph(EnvironmentLayer(), coords=[(rand(), rand()) for i in 1:5]);
 t = Dict(
     :μ => [0.2, 0.4, 0.6, 0.8],
-    :σ => [0.3, 0.3, 0.3, 0.3],
+    :σ => [0.1, 0.1, 0.1, 0.1],
 )
 sp = SpeciesPool(traits=t)
 niche = GaussianNiche()
