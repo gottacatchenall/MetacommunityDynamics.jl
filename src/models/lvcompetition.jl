@@ -37,7 +37,7 @@ function ∂u_spatial(clv::CompetitiveLotkaVolterra, u, θ)
     n_sites = size(u,2)
     for site in 1:n_sites
         for sp in 1:n_species
-            @fastmath du[sp, site] = u[sp, site] * λ[sp,site] * (1 - (sum([u[sp,site]*α[sp,t] for t in 1:n_species]) / K[sp]))
+            @fastmath du[sp, site] = u[sp, site] * λ[sp,site] * (1 - (sum([u[t,site]*α[sp,t] for t in 1:n_species]) / K[sp]))
         end 
     end
     du 
