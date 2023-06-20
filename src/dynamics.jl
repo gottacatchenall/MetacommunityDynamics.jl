@@ -36,8 +36,7 @@ p = problem(CompetitiveLotkaVolterra(), GaussianDrift(0.03))
 
 
 rm = RosenzweigMacArthur()
-sg = SpatialGraph(EnvironmentLayer())
-
+sg = SpatialGraph(EnvironmentLayer());
 t = Dict(
     :μ => [0.0, 0.5],
     :σ => [0.0, 0.5],
@@ -45,8 +44,8 @@ t = Dict(
 sp = SpeciesPool(traits=t)
 niche = GaussianNiche()
 
-ϕ = DispersalPotential(DispersalKernel(max_distance=0.5), sg)
-D = Diffusion(0.01, ϕ)
+ϕ = DispersalPotential(DispersalKernel(max_distance=0.4), sg)
+D = Diffusion(0.001, ϕ)
 
 spatialrm = spatialize(rm, sg,  sp, niche, D)
 
@@ -59,7 +58,7 @@ ts = traj.sol.u
 f = Figure()
 ax = Axis(f[1,1])
 
-for loc in 1:20
+for loc in 1:5
     for sp in 1:2
         y = [ts[t][sp,loc] for t in 1:length(ts)]
         lines!(ax, 1:length(y), y, color = sp == 1 ? (:dodgerblue, 0.5) : (:red, 0.5))

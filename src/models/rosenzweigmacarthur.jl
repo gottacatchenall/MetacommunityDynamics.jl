@@ -40,9 +40,6 @@ function du_dt(C,R,λ,α,η,β,γ,K)
     dC,dR
 end
 
-
-
-
 function ∂u(rm::RosenzweigMacArthur, u, θ)
     M = rm.M
     λ, α, η, β, γ, K = θ
@@ -61,16 +58,27 @@ function ∂u(rm::RosenzweigMacArthur, u, θ)
     du      
 end
 
-function ∂x(rm::RosenzweigMacArthur, u, θ)
-    # There are a few options here which are likely best handled via dispatch at
-    # a higher level.
+function ∂u_spatial(rm::RosenzweigMacArthur, u, θ)
+    M = rm.M
+    λ, α, η, β, γ, K = θ
+    I = findall(!iszero, M)
+    du = similar(u)
+    du .= 0
 
-    D = θ
-
-    # Is D common across species (so should be ::Diffusion) or not,
-    # in which case D should be ::Vector{Diffusion} of same length as
-    # dims of `u`
-    # du .+= (D * u')'
+    n_sites = size(u,2)
+    for site in 1:n_sites
+        for i in I
+            ci,ri = i[1], i[2]
+            C,R = u[ci,site], u[ri,site]
+            if C > 0 && R > 0
+                λᵢ, αᵢ, ηᵢ, βᵢ, γᵢ, Kᵢ = λ[ri,site], α[ci,ri], η[ci,ri], β[ci,ri], γ[ci], K[ri]
+                dC, dR = du_dt(C,R, λᵢ, αᵢ, ηᵢ, βᵢ, γᵢ, Kᵢ)
+                du[ci,site] += dC
+                du[ri,site] += dR
+            end 
+        end 
+    end
+    du 
 end
 
 
@@ -97,8 +105,18 @@ function factory(rm::RosenzweigMacArthur, stoch::T) where {T<:Stochasticity}
     (u,θ,_) -> ∂u(rm, u, θ), (u,_,_) -> ∂w(stoch, u)
 end
 
-function factory(rm::RosenzweigMacArthur, sg::T) where {T<:SpatialGraph}
-    (u,θ,_) -> ∂u(rm, u, θ), (u,θ,_) -> ∂x(rm, sg, u, θ)
+function factory(rm::RosenzweigMacArthur, d::T) where {T<:Diffusion}
+    (u,θ,_) -> begin 
+        for (i,r) in enumerate(eachrow(u))
+            u[i,:] .= d.matrix * r
+        end
+        du = ∂u_spatial(rm, u, θ)         
+    end 
+end
+
+function factory(rm::RosenzweigMacArthur, d::T) where {T<:Vector{Diffusion}}
+    # it is smarter to precompute diffusion mat and give that to the anon function
+
 end
 
 function two_species(::Type{RosenzweigMacArthur}; 
