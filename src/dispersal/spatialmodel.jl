@@ -24,11 +24,6 @@ function spatialize(model::Model, sg::SpatialGraph, sp::SpeciesPool, niche::Nich
     gr = growthrate(model)
     env = environment(sg)    
 
-    # for now, we can skip the list of traits part because we know there is only
-    # one growth rate per model.
-    # We might want to extend this to enabling environmental to affect arbitrary
-    # traits at some point, but it requires some thoughts about structure 
-
     Iautotroph = findall(x-> x > 0, gr)
     adjusted_growth = zeros(numspecies(model), numsites(sg))
 
