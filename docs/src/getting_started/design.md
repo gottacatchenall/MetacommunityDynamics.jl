@@ -1,2 +1,142 @@
 
-What is the type system?
+# The design of `EcoDynamics.jl` 
+
+This document is for advanced users interested in contributing new models or
+building complicated custom models in `EcoDynamics.jl`.
+
+## The type system
+
+While EcoDynamics enables simulation of dynamics in a single place (_locally_),
+it's main goal is to enable reaction-diffusion models on spatial graphs.
+Similarly, although EcoDynamics is perfectly adaquete for simulating the
+dynamics of single-species systems, the core design goals are motivated by an
+interest in simulating communities on spatial graphs, where environmental
+variation across each patch/node in the graph influences the dynamics at that
+node/patch, with a particular emphasis on understanding how different levels of
+neutral, niche, and  dispersal processes drive regime shifts in resulting
+species compositions across space. 
+
+What are the essential things you need to build a simulation model that meets
+this criteria?
+
+The first thing is that we need a way to represent different types of
+_models_. 
+
+Second a _spatial graph_, consisting of a set of nodes/patches connected by
+dispersal, that also can represent environmental information associated with each patch.
+
+Third, a _species pool_ with _traits_, which are an arbitrary set of named
+values that correspond to each species in the species pool.
+
+Finally, the _niche_, where the combination of the local (named!) environmental
+conditions at a patch and other species present shifts the parameters of the
+dynamics at that patch.
+
+Note that all are interconnected:
+- the model's parameters must match species pool size  (1 -> 3)
+- the spatial graph must provide environmental data for the niche (2 -> 4)
+- the species pool must provide traits for the niche (3->4)
+- the niche must provide parameters for the spatial version of the model based
+  on the species pool and (spatial graph w/ environment) ((2,4)->1)
+- both the species and environment must provide named parameters to the niche (2,3)->4
+
+and sadly this graph has cycles
+
+```mermaid
+graph TD;
+    1 --> 3;
+    3 --> 4;
+    4 --> 1;
+    2 --> 1;
+    2 --> 4;
+``` 
+
+which makes designing a type system for this problem quite annoying, as I've learned.
+
+### Models
+
+The first element of the type system is distinguishing different properties of
+different `Model`s. In EcoDynamics.jl, `Model` is the abstract type under which
+all concrete model definitions are subtyped. Specifically, `Model` is defined as
+a _parameteric_ abstract type where stores information about the important
+meta-properties about models. 
+
+`abstract type Model{SC<:Scale,M<:Measurement,SP<:Spatialness,D<:Discreteness} end` 
+
+Specifically there are four different important properties which `Model` stores
+(in Julia development, this design pattern is called using 'traits', although we
+refrain from using that terminology in this documentation to avoid confusion
+with `Trait`s as the type of information that describes properties about
+species).
+
+These four properties are `Scale`, `Measurement`, `Spatialness`, and
+`Discreteness`. Each of these are defined as abstract types, and the different
+values they can take on are defined as abstract types that are subtypes of the
+category they correspond to.
+
+1. `Scale` refers to the organizational scale a model is _originally_ designed,
+with the options being `Population`, `Community`, `Metapopulation`, and
+`Metacommunity`. Note that a model being at the `Population` and `Community`
+scale doesn't preclude it from being turned into reaction-diffusion models on
+spatial graphs, however `Metapopulation` and `Metacommunity` models are such
+that they have no corresponding local version (think Hanksi's metapopulation
+model).  
+
+2. `Measurement` refers to the type of information that is changing over time in
+   a given model. There options here are (1) `Occupancy`, which indicates binary
+   presence/absence state, (2) `Abundance`, where each state is a non-negative
+   integer representing the count of individuals and (3) `Biomass`, where each
+   state is a non-negative real number indicating some relative measure of
+   biomass.  
+
+3. `Discreteness` refers to whether a model is defined in `Continuous` or
+   `Discrete` time.
+
+4. `Spatialness` refers to whether a constructed model is only occuring at a
+   single location (`Local`), or whether the model is constructed across a
+   spatial graph (`Spatial`). This type-parameter is distinct because it can
+   change. The method `spatialize` transforms a `Local` model into spatial
+   models. 
+
+ 
+### Parameters
+
+Each field of a `Model` is a `Parameter`.  
+
+
+
+### Spatial graphs 
+
+
+### Traits
+
+
+### Niches
+
+- Provide a defautl niche function for each model, but enable it to be written
+  custom. This enables environment-contigent interaction strengths, etc. 
+- Generally, the default niche will map modify the growth rates in a model by a
+  single dimnesional environmental variable, e.g. adjusting $R_0$ in the SIR model  
+
+## Dispatch patterns
+
+- What is the lifespan of building and running a model?
+- Maybe there is a figure for the paper here, flowchart of what is the next
+  method you run based on what you are trying to do?
+
+
+## QA Methods for Included Models
+
+One main design goal of `EcoDynamics.jl` is to ensure it is as easy as possible
+to write customs models. "Easy", in this sense, means both involving writing the
+fewest lines of code possible, and not requiring a deep understanding of Julia
+or its type system. 
+
+This means that the instructions on how to add custom models (see TBD docs
+section) doesn't include some of the extra methods added to included models to
+avoid possible mistakes. E.g.:
+- Warnings about parameter values that are extreme or nonsensical (providing an
+  intrinsic growth rate to a predator in a LV model, say)
+- Warnings about whether a niche function leads toward "crucial" parameters
+  going to 0/unreasonable values at most sites depending on the range of
+  environmnetal variables provided in the SpatialGraph

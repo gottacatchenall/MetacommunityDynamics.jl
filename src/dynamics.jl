@@ -2,15 +2,16 @@ using DifferentialEquations
 using Distributions
 using MetacommunityDynamics
 using CairoMakie
+using NeutralLandscapes
+using ProgressMeter
 
 
-gd = GaussianDrift(0.01)
-
-rm = RosenzweigMacArthur()
-p = problem(rm, Deterministic)
+rosen = RosenzweigMacArthur()
+p = problem(rosen)
 @time sol = simulate(p)
 
 
+gd = GaussianDrift(0.01) 
 p = problem(RosenzweigMacArthur(), gd);
 @time sol = simulate(p)
 
@@ -20,13 +21,13 @@ lm = LogisticModel(λ=[0.1])
 p = problem(lm, GaussianDrift(3.))
 @time sol = simulate(p)
 
-p = problem(BevertonHolt(R₀=1.2, K=50.), Deterministic)
+p = problem(BevertonHolt(R₀=1.2, K=50.))
 @time sol = simulate(p)
 
 sol
 
 
-p = problem(CompetitiveLotkaVolterra(), Deterministic)
+p = problem(CompetitiveLotkaVolterra())
 @time sol = simulate(p)
 
 
@@ -48,13 +49,19 @@ sp = SpeciesPool(traits=t)
 niche = GaussianNiche()
 
 ϕ = DispersalPotential(DispersalKernel(max_distance=0.4), sg)
-D = Diffusion(0.001, ϕ)
+D = Diffusion(0.1, ϕ)
 
 spatialrm = spatialize(rm, sg,  sp, niche, D)
 
-prob = problem(spatialrm, Deterministic)
+prob = problem(spatialrm, Deterministic, tspan=(0,500))
 
-prob = problem(spatialrm, GaussianDrift(0.01))
+
+# possible case studies:
+#   - metapopulatoin synchrony across max distance threshold
+#   - number of persisting RM communities in a spatial graph across different demo stochasticities
+
+
+prob = problem(spatialrm, GaussianDrift(0.02))
 @time traj = simulate(prob)
 
 
@@ -85,26 +92,46 @@ prob = problem(spatiallm, GaussianDrift(3.))
 
 
 clv = CompetitiveLotkaVolterra()
-sg = SpatialGraph(EnvironmentLayer(), coords=[(rand(), rand()) for i in 1:5]);
-t = Dict(
-    :μ => [0.2, 0.4, 0.6, 0.8],
-    :σ => [0.1, 0.1, 0.1, 0.1],
-)
-sp = SpeciesPool(traits=t)
+el = EnvironmentLayer(generator=PlanarGradient())
+
+
+σ = 0.1
 niche = GaussianNiche()
 
 ϕ = DispersalPotential(DispersalKernel(max_distance=0.4), sg)
 D = Diffusion(0.01, ϕ)
 
-spatialclv = spatialize(clv, sg,  sp, niche, D)
 
 prob = problem(spatialclv, Deterministic)
 @time traj = simulate(prob)
 
+# measure alpha div vs. σ
+
+_tfactory(σ) = Dict(
+    :μ => [0.2, 0.4, 0.6, 0.8],
+    :σ => fill(σ,4),
+)
 
 
-prob = problem(spatialclv, GaussianDrift(0.05))
-@time traj = simulate(prob)
+σs = 0.01:0.01:0.5
+
+
+nreps = 64
+
+trajset = []
+
+@showprogress for σ in σs
+    trajs = []
+    sp = SpeciesPool(traits=_tfactory(σ))
+    for i in 1:nreps
+        sg = SpatialGraph(el)
+        spatialclv = spatialize(clv, sg,  sp, niche, D)    
+        prob = problem(spatialclv)
+        traj = simulate(prob)
+        push!(trajs, traj)
+    end 
+    push!(trajset, trajs)
+end 
 
 
 
@@ -116,21 +143,49 @@ prob = problem(spatialclv, GaussianDrift(0.05))
 
 
 
-a = Array(traj.sol)
+a = Array(trajs[end].sol)
 
 f = Figure()
 ax = Axis(f[1,1])
-ylims!(ax, 0,1)
-cs = [:red, :green,:blue,:orange]
+cs = [:dodgerblue, :mediumpurple4, :forestgreen, :gray50]
 
-for u in eachslice(a,dims=2)
-    ns = size(u,1)
-    for i in 1:ns
-        scatterlines!(ax, u[i,:], color=(cs[i], 0.1))
+a
+
+nt = size(a,3)
+entropy(x) = -sum([xi * log(xi) for xi in x])
+
+ent = []
+
+last_steps = 50
+
+for trajs in trajset
+    thisset = []
+    for t in trajs
+        a = Array(t.sol)
+        a[findall(x->x<0,a)] .= 0
+
+        thistraj = []
+        for site in 1:size(a,2)
+            push!(thistraj, mean(entropy.([a[:,site,t] for t in nt-last_steps:nt])))
+        end
+        push!(thisset, mean(thistraj))
     end
+    push!(ent, thisset)
+end 
+
+f = Figure()
+ax = Axis(f[1,1])
+
+for (i, σ) in enumerate(σs)
+    scatter!(ax, [σ], Float32[mean(ent[i])])
 end
 
+ent
 f
+
+
+f
+
 
 foo
 foo

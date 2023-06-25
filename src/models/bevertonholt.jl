@@ -13,7 +13,7 @@ It is described by
 where ``K = (R\\_0 - 1)M`` is the carrying capacity.
 
 """
-@kwdef struct BevertonHolt{F<:Number} <: Model
+struct BevertonHolt{S,F<:Number} <: Model{Population,Biomass,S,Discrete}
     R₀::F = 1.2
     K::F = 50.
 end 
@@ -26,8 +26,8 @@ discreteness(::BevertonHolt) = Discrete
 
 Single time-step for the `BevertonHolt` model. 
 """
-function ∂u(bm::BevertonHolt{T}, x::T, θ) where {T<:Number}
-    R₀, K = θ
+function ∂u(bm::BevertonHolt{T}, x::T) where {T<:Number}
+    R₀, K =  bm.R₀, bm.K
 
     @fastmath M = K/(R₀-1)
     @fastmath R₀ * x / (1 + (x/M))

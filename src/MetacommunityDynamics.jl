@@ -9,48 +9,14 @@ module MetacommunityDynamics
 
     using TestItems
     
-    abstract type Discreteness end 
-    abstract type Discrete <: Discreteness end 
-    abstract type Continuous <: Discreteness end 
-
-
-    abstract type Stochasticity end 
-    abstract type Stochastic <: Stochasticity end 
-    abstract type Deterministic <: Stochasticity end 
-    
-    abstract type Spatialness end 
-    abstract type Local <: Spatialness end 
-    abstract type Spatial <: Spatialness end 
-
-
-    @kwdef struct GaussianDrift{T} <: Stochasticity
-        σ::T = 0.1
-    end
-
-    function ∂w(gd::GaussianDrift, x::T) where T<:Real
-        gd.σ
-    end
-    function ∂w(gd::GaussianDrift, x::Vector{T}) where T<:Real
-        [gd.σ for _ in 1:length(x)]
-    end
-    function ∂w(gd::GaussianDrift, x::Matrix{T}) where T<:Real
-        σ = similar(x)
-        σ .= gd.σ
-    end
+    include("types.jl")
+    include("model.jl")
+    include("drift.jl")
     
 
+    parameters(m::Model) = [getfield(m, f) for f in paramnames(m)]
+    discreteness(m::Model{M,S,D}) where {M,S,D<:Discreteness} = D
 
-    abstract type Model end 
-    function paramdict(m::Model)
-        fns = paramnames(m)
-        Dict{Symbol, Array}([f=>getfield(m, f) for f in fns]...)
-    end
-    function parameters(m::Model)
-        # everything but M is a paremeter
-        fns = paramnames(m)
-        [getfield(m, f) for f in fns]
-    end
-    
 
     include("environment.jl")
     include("spatialgraph.jl")
@@ -63,7 +29,6 @@ module MetacommunityDynamics
     include(joinpath("dispersal", "kernel.jl"))
     include(joinpath("dispersal", "potential.jl"))
     include(joinpath("dispersal", "diffusion.jl"))
-    include(joinpath("dispersal", "spatialmodel.jl"))
 
     include("problem.jl")
     include("trajectory.jl")
@@ -85,12 +50,17 @@ module MetacommunityDynamics
     export factory
     
     export Model
+    export Scale, Population, Metapopulation, Community, Metacommunity
     export Spatialness, Local, Spatial
     export Discreteness, Discrete, Continuous
-    export Stochasticity, Deterministic, GaussianDrift
+    export Measurement, Biomass, Abundance, Occupancy
+    export Stochasticity, Deterministic, Stochastic
+    
+    export GaussianDrift
+
+    export discreteness, spatialness, measurement, stochasticity
 
     export parameters
-    export paramdict
 
     export spatialize
 
