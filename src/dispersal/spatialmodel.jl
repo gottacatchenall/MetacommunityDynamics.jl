@@ -1,4 +1,4 @@
-struct SpatialModel{M<:Model,D<:Union{Diffusion,Vector{Diffusion}}} <: Model
+struct SpatialModel{M,D<:Union{Diffusion,Vector{Diffusion}}} <: Model{Measurement,Spatial,Discreteness}
     model::M
     spatialgraph::SpatialGraph
     speciespool::SpeciesPool

@@ -11,28 +11,28 @@ Dynamics given by
 
 
 """
-@kwdef struct RosenzweigMacArthur{S,T<:Number} <: Model
-    # C = 1, R = 2
-    M::Matrix{S} =  [0 1;         # metaweb, not a parameter of inference
-                     0 0]
-    λ::Array{T} =  [0.0, 0.5]    # λ[i] max instaneous growth rate of i
-    α::Matrix{T} =  [0.0  5.0;    # α[i,j] = attack rate of i on j
-                     5.0  0.0]
-    η::Matrix{T} =  [0.0  3.0;    # η[i, j] =  handling rate of i on j
-                     3.0  0.0]
-    β::Matrix{T} =  [0.0  0.5;    # β[i, j] = growth in i eating j
-                     0.5  0.0]
-    γ::Vector{T} =  [0.1, 0.]     # heterotroph death rate (0 for all autotrophs)
-    K::Vector{T} =  [0.0, 0.3]    # autotroph carrying capacity (0 for heterotrophs)
+struct RosenzweigMacArthur{S<:Spatialness,T<:Number} <: Model{Community,Biomass,S,Continuous}
+    metaweb::Matrix{Bool} # metaweb, not a parameter of inference
+    λ::Array{T}           # λ[i] max instaneous growth rate of i
+    α::Matrix{T}          # α[i,j] = attack rate of i on j
+    η::Matrix{T}          # η[i, j] =  handling rate of i on j
+    β::Matrix{T}          # β[i, j] = growth in i eating j
+    γ::Vector{T}          # heterotroph death rate (0 for all autotrophs)
+    K::Vector{T}          # autotroph carrying capacity (0 for heterotrophs)
 end 
 
-discreteness(::RosenzweigMacArthur) = Continuous 
+# No longer necessary with this as parameter to model type
+# discreteness(::RosenzweigMacArthur) = Continuous 
+
 initial(::RosenzweigMacArthur) = [0.2, 0.2]  # note this is only valid for the default params
 
-growthratename(::RosenzweigMacArthur) = :λ
-growthrate(rm::RosenzweigMacArthur) = getfield(rm,growthratename(rm))
-
 numspecies(rm::RosenzweigMacArthur) = length(rm.K)
+
+# To be replaced with niche function for mapping named env vars to func that
+# adjusts params
+# growthratename(::RosenzweigMacArthur) = :λ
+# growthrate(rm::RosenzweigMacArthur) = getfield(rm,growthratename(rm))
+
 
 function du_dt(C,R,λ,α,η,β,γ,K)
     @fastmath dR = λ*R*(1-(R/K)) - (α*R*C)/(1+α*η*R)
@@ -40,13 +40,13 @@ function du_dt(C,R,λ,α,η,β,γ,K)
     dC,dR
 end
 
-function ∂u(rm::RosenzweigMacArthur, u, θ)
-    M = rm.M
-    λ, α, η, β, γ, K = θ
+function ∂u(rm::RosenzweigMacArthur{Local, T}, u) where T
+    M, λ, α, η, β, γ, K = rm.metaweb, rm.λ, rm.α, rm.η, rm.β, rm.γ, rm.K
     I = findall(!iszero, M)
     du = similar(u)
     du .= 0
-       
+    
+    # for each interacting species
     for i in I
         ci,ri = i[1], i[2]
         C,R = u[ci], u[ri]
@@ -58,12 +58,31 @@ function ∂u(rm::RosenzweigMacArthur, u, θ)
     du      
 end
 
-function paramnames(::RosenzweigMacArthur)
-    fieldnames(RosenzweigMacArthur)[2:end]
+
+# Overengineered for DiffEqBayes integration, just use params stored in model struct
+#function paramnames(::RosenzweigMacArthur)
+#    fieldnames(RosenzweigMacArthur)[2:end]
+# end
+
+# ====================================================
+#
+#   Constructors
+#
+# =====================================================
+
+function RosenzweigMacArthur()
+    metaweb = [0 1; 0 0]
+    λ =  [0.0, 0.5]   
+    α =  [0.0  5.0;    
+          5.0  0.0]
+    η =  [0.0  3.0;   
+          3.0  0.0]
+    β =  [0.0  0.5; 
+          0.5  0.0]
+    γ =  [0.1, 0.]  
+    K =  [0.0, 0.3] 
+    RosenzweigMacArthur{Local,Float64}(metaweb, λ, α, η, β, γ, K)
 end
-
-
-
 
 # ====================================================
 #
@@ -115,7 +134,7 @@ function two_species(::Type{RosenzweigMacArthur};
 end
 
 
-function replplot(::RosenzweigMacArthur, traj::Trajectory{P,S,T}) where {P,S<:Local,T}
+function replplot(::RosenzweigMacArthur{Local,T}, traj::Trajectory) where T
     u = timeseries(traj)
     ymax = max([extrema(x)[2] for x in timeseries(traj)]...)
     ts(s) = [mean(u[t][s,:]) for t in 1:length(traj)]
@@ -131,7 +150,7 @@ function replplot(::RosenzweigMacArthur, traj::Trajectory{P,S,T}) where {P,S<:Lo
     p
 end
 
-function replplot(::RosenzweigMacArthur, traj::Trajectory{P,S,T}) where {P,S<:Spatial,T}
+function replplot(::RosenzweigMacArthur{Spatial,T}, traj::Trajectory) where T
     u = Array(traj.sol)    
     n_species, n_locations, n_timesteps = size(u)
     ymax = max(u...)

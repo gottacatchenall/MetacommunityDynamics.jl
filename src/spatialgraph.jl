@@ -10,7 +10,7 @@ movement between nodes) is not stored here, as they tend to rely on
 species-specific parameters. As such, that are computed by combining a
 `SpatialGraph` with a  `DispersalKernel` to create a `DispersalPotential`.  
 """
-struct SpatialGraph{T <: Number} 
+struct SpatialGraph{T <: Number} <: Spatialness
     coordinates::Vector{Tuple{T,T}} 
     environment::Matrix{T} 
 end

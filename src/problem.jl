@@ -1,64 +1,72 @@
-struct Problem{T,S<:Spatialness,R<:Stochasticity,D<:Discreteness}
+struct Problem{T,R<:Stochasticity}
     model::Model
     prob::T
     tspan
     initial_condition
-    spatialgraph::Union{SpatialGraph, Missing}
 end
 
-is_spatial(p::Problem) = !ismissing(p.spatialgraph)
+discreteness(p::Problem) = discreteness(model(p))
+spatialness(p::Problem) = spatialness(model(p))
+measurement(p::Problem) = measurement(model(p))
+stochasticity(::Problem{T,R}) where {T,R} = R
+
 model(p::Problem) = p.model
 
-function problem(m::Model; kwargs...)
-    problem(m, Deterministic; kwargs...)
-end
 
-function problem(m::Model, ::Type{Deterministic}; tspan=(0,100), u0=nothing)
-    prob = discreteness(m) == MetacommunityDynamics.Continuous ? ODEProblem : DiscreteProblem
+
+
+# lot's of redudant code here, there are def way to shorten number of lines here
+
+function problem(m::Model{SC,M,Local,D}; tspan=(0,100), u0=nothing) where {SC,M,D}
+    prob = D == Continuous ? ODEProblem : DiscreteProblem
     
-    # this should dispatch on whether a spatialgraph was provided
     f = factory(m) 
     u0 = isnothing(u0) ? initial(m) : u0
-    θ = parameters(m)
+    θ = ()
     pr = prob(f, u0, tspan, θ) 
-    Problem{typeof(pr),Local,Deterministic,discreteness(m) }(m, pr, tspan, u0, Missing())
+    Problem{typeof(pr),Deterministic}(m, pr, tspan, u0)
 end
 
-function problem(m::SpatialModel,::Type{Deterministic}; tspan=(0,100), u0=nothing, )
-    f = factory(m.model, m.diffusion)
+function problem(m::Model{SC,M,Local,D}, gd::GaussianDrift; tspan=(0,100), u0=nothing) where {SC,M,D}
+    prob = D == Continuous ? SDEProblem : DiscreteProblem
 
-    s = numsites(m.spatialgraph)
-    u0 = isnothing(u0) ? hcat([initial(m.model) for _ in 1:s]...) : hcat([u0 for _ in 1:s]...)
-    θ = parameters(m.model)
-    pr = ODEProblem(f, u0, tspan, θ)
-    Problem{typeof(pr),Spatial,Deterministic,discreteness(m.model) }(m.model, pr, tspan, u0, m.spatialgraph)
-end 
-
-function problem(m::SpatialModel, gd::GaussianDrift; tspan=(0,100), u0=nothing)
-    f,g = factory(m.model, m.diffusion, gd)
-
-    s = numsites(m.spatialgraph)
-    u0 = isnothing(u0) ? hcat([initial(m.model) for _ in 1:s]...) : hcat([u0 for _ in 1:s]...)
-    θ = parameters(m.model)
-    pr = SDEProblem(f, g, u0, tspan, θ) 
-    Problem{typeof(pr),Spatial,Stochastic,discreteness(m.model) }(m.model, pr, tspan, u0, m.spatialgraph)
-end 
-
-
-function problem(m::T, gd::GaussianDrift; tspan=(0,100), u0=nothing) where T<:Model
-    prob = discreteness(m) == MetacommunityDynamics.Continuous ? SDEProblem : DiscreteProblem
-
-    # this should dispatch on whether a spatialgraph was provided
-    f, g = factory(m,gd) 
+    f, g = factory(m, gd) 
     u0 = isnothing(u0) ? initial(m) : u0
+    θ = ()
 
-    θ = parameters(m)
-
-    # This will also enable injection of environment dependent variables here
-    # for the spatial version of this method 
     pr = prob(f, g, u0, tspan, θ) 
-    Problem{typeof(pr),Local,Stochastic,discreteness(m)}(m, pr, tspan, u0, Missing())
+    Problem{typeof(pr),Stochastic}(m, pr, tspan, u0)
 end
+
+function problem(model::Model{SC,M,S,D}, diffusion::Diffusion; tspan=(0,100), u0=nothing) where {SC,M,S,D}
+    S != Spatial && throw("Can't combine Diffusion with a Local model.")
+
+    f = factory(model, diffusion)
+
+    prob = D == Continuous ? ODEProblem : DiscreteProblem
+
+    s = numsites(m.spatialgraph)
+    u0 = isnothing(u0) ? hcat([initial(model) for _ in 1:s]...) : hcat([u0 for _ in 1:s]...)
+    θ = ()
+
+    pr = prob(f, u0, tspan, θ)
+
+    Problem{typeof(pr),Stochastic}(model, pr, tspan, u0)
+end 
+
+function problem(model::Model{SC,M,S,D}, diffusion::Diffusion, gd::GaussianDrift; tspan=(0,100), u0=nothing) where {SC,M,S,D}
+    S != Spatial && throw("Can't combine Diffusion with a Local model.")
+  
+    prob = D == Continuous ? SDEProblem : DiscreteProblem
+
+    f,g = factory(model, diffusion, gd)
+
+    u0 = isnothing(u0) ? hcat([initial(model) for _ in 1:s]...) : hcat([u0 for _ in 1:s]...)
+    θ = ()
+
+    pr = prob(f, g, u0, tspan, θ) 
+    Problem{typeof(pr),Stochastic}(model, pr, tspan, u0)
+end 
 
 
 

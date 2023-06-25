@@ -1,4 +1,4 @@
-@kwdef struct LogisticModel{T<:Number} <: Model
+@kwdef struct LogisticModel{S,T<:Number} <: Model{Population,Biomass,S,Continuous}
     λ::Array{T} = [1.2]
     K::Array{T} = [50.]
     α::Array{T} = [1.]
@@ -16,16 +16,15 @@ growthratename(::LogisticModel) = :λ
 growthrate(lm::LogisticModel) = getfield(lm,growthratename(lm))
 
 
-function ∂u(lm::LogisticModel, u, θ)
-    λs, Ks, αs = θ
+function ∂u(lm::LogisticModel, u)
+    λs, Ks, αs = lm.λ, lm.K, lm.α
     λ, K, α = λs[1], Ks[1], αs[1] 
     return @fastmath λ*u*(1-(u/K)^α)
 end
 
-function ∂u_spatial(lm::LogisticModel, u, θ)
-    λs, Ks, αs = θ
+function ∂u_spatial(lm::LogisticModel, u)
+    λs, Ks, αs = lm.λ, lm.K, lm.α
     K, α = Ks[1], αs[1] 
-    
     du = similar(u)
     du .= 0
 
@@ -37,7 +36,7 @@ function ∂u_spatial(lm::LogisticModel, u, θ)
 end
 
 
-function replplot(lm::LogisticModel, traj::Trajectory{P,S,T}) where {P,S<:Local,T}
+function replplot(::LogisticModel{Local,T}, traj::Trajectory) where T
     u = timeseries(traj)
     ymax = max(u...)
     p = lineplot(u, 
@@ -50,7 +49,7 @@ end
 
 
 
-function MetacommunityDynamics.replplot(lm::LogisticModel, traj::Trajectory{P,S,T}) where {P,S<:Spatial,T}
+function MetacommunityDynamics.replplot(::LogisticModel{Spatial,T}, traj::Trajectory) where T
     u = vcat(Array(traj.sol.u)...)
     ymax = max(u...)
     p = lineplot(u[:,1], 

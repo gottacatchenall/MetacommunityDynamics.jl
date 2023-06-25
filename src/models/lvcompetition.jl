@@ -1,5 +1,5 @@
 
-@kwdef struct CompetitiveLotkaVolterra <: Model
+@kwdef struct CompetitiveLotkaVolterra{S} <: Model{Community,Biomass,S,Continuous}
     λ = [1, 0.72, 1.53, 1.27]
     α = [1.00 1.09 1.52 0. 
          0.   1.00 0.44 1.36
@@ -19,8 +19,9 @@ factory(clv::CompetitiveLotkaVolterra) = begin
     (u,θ,_) -> ∂u(clv, u, θ)
 end
 
-function ∂u(clv::CompetitiveLotkaVolterra, u, θ)
-    λ, α, K = θ
+function ∂u(clv::CompetitiveLotkaVolterra, u)
+    λ, α, K = clv.λ, clv.α, clv.K
+
     du = similar(u)
     for s in axes(u,1)
         @fastmath du[s] = u[s] * λ[s] * (1 - (sum([u[t]*α[s,t] for t in 1:size(u,1)]) / K[s]))
@@ -28,8 +29,8 @@ function ∂u(clv::CompetitiveLotkaVolterra, u, θ)
     du
 end
 
-function ∂u_spatial(clv::CompetitiveLotkaVolterra, u, θ)
-    λ, α, K = θ
+function ∂u_spatial(clv::CompetitiveLotkaVolterra, u)
+    λ, α, K = clv.λ, clv.α, clv.K
 
     du = similar(u)
     du .= 0
@@ -37,7 +38,11 @@ function ∂u_spatial(clv::CompetitiveLotkaVolterra, u, θ)
     n_sites = size(u,2)
     for site in 1:n_sites
         for sp in 1:n_species
-            @fastmath du[sp, site] = u[sp, site] * λ[sp,site] * (1 - (sum([u[t,site]*α[sp,t] for t in 1:n_species]) / K[sp]))
+            if u[sp,site] > 0 
+                @fastmath du[sp, site] = u[sp, site] * λ[sp,site] * (1 - (sum([u[t,site]*α[sp,t] for t in 1:n_species]) / K[sp]))
+            else
+                u[sp,site] = 0
+            end
         end 
     end
     du 
@@ -48,7 +53,7 @@ function paramnames(::CompetitiveLotkaVolterra)
     fieldnames(CompetitiveLotkaVolterra)
 end
 
-function replplot(::CompetitiveLotkaVolterra, traj::Trajectory{P,S,T}) where {P,S<:Local,T}
+function replplot(::CompetitiveLotkaVolterra{Local}, traj::Trajectory) 
     u = timeseries(traj)
     ymax = max([extrema(x)[2] for x in timeseries(traj)]...)
     ts(s) = [mean(u[t][s,:]) for t in 1:length(traj)]
@@ -66,7 +71,7 @@ end
 
 
 
-function MetacommunityDynamics.replplot(::CompetitiveLotkaVolterra, traj::Trajectory{P,S,T}) where {P,S<:Spatial,T}
+function replplot(::CompetitiveLotkaVolterra{Spatial}, traj::Trajectory) 
     u = Array(traj.sol)    
     n_species, n_locations, n_timesteps = size(u)
     ymax = max(u...)
@@ -77,7 +82,7 @@ function MetacommunityDynamics.replplot(::CompetitiveLotkaVolterra, traj::Trajec
         width=80,
         ylim=(0,ymax))
          
-    cols = n_species < 7 ? [:blue, :red, :green, :red, :purple, :red] : fill(:dodgerblue, n_species)
+    cols = n_species < 7 ? [:blue, :red, :green, :red, :purple, :red] : fill(:blue, n_species)
     for s in eachslice(u, dims=(2))
         for sp in 1:n_species
             lineplot!(p, s[sp,:], color=cols[sp])
