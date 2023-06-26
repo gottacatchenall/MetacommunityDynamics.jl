@@ -36,6 +36,22 @@ function ∂u_spatial(lm::LogisticModel, u)
 end
 
 
+
+# ====================================================
+#
+#   Constructors
+#
+# =====================================================
+
+function LogisticModel()
+    λ = [1.2]
+    K = [50.]
+    α  = [1.]
+    LogisticModel{Local,Float64}(λ, K, α)
+end
+
+
+
 function replplot(::LogisticModel{Local,T}, traj::Trajectory) where T
     u = timeseries(traj)
     ymax = max(u...)
