@@ -19,7 +19,7 @@
         <link rel="next" href="../../examples/community_inference/">
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.16">
+      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.17">
     
     
       
@@ -71,6 +71,11 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
+      
+        
+        <a href="#the-design-of-ecodynamicsjl" class="md-skip">
+          Skip to content
+        </a>
       
     </div>
     <div data-md-component="announce">
@@ -277,10 +282,98 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Package design
+          <span class="md-nav__icon md-icon"></span>
+        </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
         Package design
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-type-system" class="md-nav__link">
+    The type system
+  </a>
+  
+    <nav class="md-nav" aria-label="The type system">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#models" class="md-nav__link">
+    Models
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parameters" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#spatial-graphs" class="md-nav__link">
+    Spatial graphs
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#traits" class="md-nav__link">
+    Traits
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#niches" class="md-nav__link">
+    Niches
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dispatch-patterns" class="md-nav__link">
+    Dispatch patterns
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#qa-methods-for-included-models" class="md-nav__link">
+    QA Methods for Included Models
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -691,6 +784,78 @@
   
   
   
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-type-system" class="md-nav__link">
+    The type system
+  </a>
+  
+    <nav class="md-nav" aria-label="The type system">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#models" class="md-nav__link">
+    Models
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parameters" class="md-nav__link">
+    Parameters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#spatial-graphs" class="md-nav__link">
+    Spatial graphs
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#traits" class="md-nav__link">
+    Traits
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#niches" class="md-nav__link">
+    Niches
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dispatch-patterns" class="md-nav__link">
+    Dispatch patterns
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#qa-methods-for-included-models" class="md-nav__link">
+    QA Methods for Included Models
+  </a>
+  
+</li>
+      
+    </ul>
   
 </nav>
                   </div>
@@ -708,9 +873,85 @@
   
 
 
-  <h1>Package design</h1>
-
-<p>What is the type system?</p>
+<p><a id='The-design-of-EcoDynamics.jl'></a></p>
+<p><a id='The-design-of-EcoDynamics.jl-1'></a></p>
+<h1 id="the-design-of-ecodynamicsjl">The design of <code>EcoDynamics.jl</code></h1>
+<p>This document is for advanced users interested in contributing new models or building complicated custom models in <code>EcoDynamics.jl</code>.</p>
+<p><a id='The-type-system'></a></p>
+<p><a id='The-type-system-1'></a></p>
+<h2 id="the-type-system">The type system</h2>
+<p>While EcoDynamics enables simulation of dynamics in a single place (<em>locally</em>), it's main goal is to enable reaction-diffusion models on spatial graphs. Similarly, although EcoDynamics is perfectly adaquete for simulating the dynamics of single-species systems, the core design goals are motivated by an interest in simulating communities on spatial graphs, where environmental variation across each patch/node in the graph influences the dynamics at that node/patch, with a particular emphasis on understanding how different levels of neutral, niche, and  dispersal processes drive regime shifts in resulting species compositions across space. </p>
+<p>What are the essential things you need to build a simulation model that meets this criteria?</p>
+<p>The first thing is that we need a way to represent different types of <em>models</em>. </p>
+<p>Second a <em>spatial graph</em>, consisting of a set of nodes/patches connected by dispersal, that also can represent environmental information associated with each patch.</p>
+<p>Third, a <em>species pool</em> with <em>traits</em>, which are an arbitrary set of named values that correspond to each species in the species pool.</p>
+<p>Finally, the <em>niche</em>, where the combination of the local (named!) environmental conditions at a patch and other species present shifts the parameters of the dynamics at that patch.</p>
+<p>Note that all are interconnected:</p>
+<ul>
+<li>the model's parameters must match species pool size  (1 -&gt; 3)</li>
+<li>the spatial graph must provide environmental data for the niche (2 -&gt; 4)</li>
+<li>the species pool must provide traits for the niche (3-&gt;4)</li>
+<li>the niche must provide parameters for the spatial version of the model based on the species pool and (spatial graph w/ environment) ((2,4)-&gt;1)</li>
+<li>both the species and environment must provide named parameters to the niche (2,3)-&gt;4</li>
+</ul>
+<p>and sadly this graph has cycles</p>
+<div class="highlight"><pre><span></span><code>graph TD;
+    1 --&gt; 3;
+    3 --&gt; 4;
+    4 --&gt; 1;
+    2 --&gt; 1;
+    2 --&gt; 4;
+</code></pre></div>
+<p>which makes designing a type system for this problem quite annoying, as I've learned.</p>
+<p><a id='Models'></a></p>
+<p><a id='Models-1'></a></p>
+<h3 id="models">Models</h3>
+<p>The first element of the type system is distinguishing different properties of different <code>Model</code>s. In EcoDynamics.jl, <code>Model</code> is the abstract type under which all concrete model definitions are subtyped. Specifically, <code>Model</code> is defined as a <em>parameteric</em> abstract type where stores information about the important meta-properties about models. </p>
+<p><code>abstract type Model{SC&lt;:Scale,M&lt;:Measurement,SP&lt;:Spatialness,D&lt;:Discreteness} end</code> </p>
+<p>Specifically there are four different important properties which <code>Model</code> stores (in Julia development, this design pattern is called using 'traits', although we refrain from using that terminology in this documentation to avoid confusion with <code>Trait</code>s as the type of information that describes properties about species).</p>
+<p>These four properties are <code>Scale</code>, <code>Measurement</code>, <code>Spatialness</code>, and <code>Discreteness</code>. Each of these are defined as abstract types, and the different values they can take on are defined as abstract types that are subtypes of the category they correspond to.</p>
+<ol>
+<li><code>Scale</code> refers to the organizational scale a model is <em>originally</em> designed,</li>
+</ol>
+<p>with the options being <code>Population</code>, <code>Community</code>, <code>Metapopulation</code>, and <code>Metacommunity</code>. Note that a model being at the <code>Population</code> and <code>Community</code> scale doesn't preclude it from being turned into reaction-diffusion models on spatial graphs, however <code>Metapopulation</code> and <code>Metacommunity</code> models are such that they have no corresponding local version (think Hanksi's metapopulation model).  </p>
+<ol>
+<li><code>Measurement</code> refers to the type of information that is changing over time in a given model. There options here are (1) <code>Occupancy</code>, which indicates binary presence/absence state, (2) <code>Abundance</code>, where each state is a non-negative integer representing the count of individuals and (3) <code>Biomass</code>, where each state is a non-negative real number indicating some relative measure of biomass.</li>
+<li><code>Discreteness</code> refers to whether a model is defined in <code>Continuous</code> or <code>Discrete</code> time.</li>
+<li><code>Spatialness</code> refers to whether a constructed model is only occuring at a single location (<code>Local</code>), or whether the model is constructed across a spatial graph (<code>Spatial</code>). This type-parameter is distinct because it can change. The method <code>spatialize</code> transforms a <code>Local</code> model into spatial models.</li>
+</ol>
+<p><a id='Parameters'></a></p>
+<p><a id='Parameters-1'></a></p>
+<h3 id="parameters">Parameters</h3>
+<p>Each field of a <code>Model</code> is a <code>Parameter</code>.  </p>
+<p><a id='Spatial-graphs'></a></p>
+<p><a id='Spatial-graphs-1'></a></p>
+<h3 id="spatial-graphs">Spatial graphs</h3>
+<p><a id='Traits'></a></p>
+<p><a id='Traits-1'></a></p>
+<h3 id="traits">Traits</h3>
+<p><a id='Niches'></a></p>
+<p><a id='Niches-1'></a></p>
+<h3 id="niches">Niches</h3>
+<ul>
+<li>Provide a defautl niche function for each model, but enable it to be written custom. This enables environment-contigent interaction strengths, etc.</li>
+<li>Generally, the default niche will map modify the growth rates in a model by a single dimnesional environmental variable, e.g. adjusting $R_0$ in the SIR model</li>
+</ul>
+<p><a id='Dispatch-patterns'></a></p>
+<p><a id='Dispatch-patterns-1'></a></p>
+<h2 id="dispatch-patterns">Dispatch patterns</h2>
+<ul>
+<li>What is the lifespan of building and running a model?</li>
+<li>Maybe there is a figure for the paper here, flowchart of what is the next method you run based on what you are trying to do?</li>
+</ul>
+<p><a id='QA-Methods-for-Included-Models'></a></p>
+<p><a id='QA-Methods-for-Included-Models-1'></a></p>
+<h2 id="qa-methods-for-included-models">QA Methods for Included Models</h2>
+<p>One main design goal of <code>EcoDynamics.jl</code> is to ensure it is as easy as possible to write customs models. "Easy", in this sense, means both involving writing the fewest lines of code possible, and not requiring a deep understanding of Julia or its type system. </p>
+<p>This means that the instructions on how to add custom models (see TBD docs section) doesn't include some of the extra methods added to included models to avoid possible mistakes. E.g.:</p>
+<ul>
+<li>Warnings about parameter values that are extreme or nonsensical (providing an intrinsic growth rate to a predator in a LV model, say)</li>
+<li>Warnings about whether a niche function leads toward "crucial" parameters going to 0/unreasonable values at most sites depending on the range of environmnetal variables provided in the SpatialGraph</li>
+</ul>
 
 
 
@@ -751,7 +992,7 @@
     <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.a51614de.min.js"></script>
+      <script src="../../assets/javascripts/bundle.b425cdc4.min.js"></script>
       
         
           <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_HTML"></script>
