@@ -1,16 +1,20 @@
-function factory(m::Model)
-    (u,_,_) -> ∂u(m, u)
+function factory(m::Model{SC,M,Local,D}) where {SC,M,D}
+    (u,θ,_) -> ∂u(m, u, θ)
 end
 
 function factory(m::Model, stoch::T) where {T<:Stochasticity}
-    (u,_,_) -> ∂u(m, u), (u,_,_) -> ∂w(stoch, u)
+    (u,θ,_) -> ∂u(m, u, θ), (u,_,_) -> ∂w(stoch, u)
 end
 
-function factory(m::Model, d::T) where {T<:Union{Diffusion,Vector{Diffusion}}}
-    (u,_,_) -> ∂u_spatial(m, diffusion!(u,d))         
+function factory(m::Model{SC,M,Spatial,D}, d::T) where {T<:Union{Diffusion,Vector{Diffusion}},SC,M,D}
+    # 
+
+
+    (u,θ,_) -> ∂u_spatial(m, diffusion!(u,d), θ)         
 end
-function factory(m::Model, d::T, stoch::S) where {T<:Union{Diffusion,Vector{Diffusion}}, S<:Stochasticity}
-    (u,_,_) -> ∂u_spatial(m, diffusion!(u,d)), (u,_,_) -> ∂w(stoch, u)     
+
+function factory(m::Model{SC,M,Spatial,D}, d::T, stoch::S) where {T<:Union{Diffusion,Vector{Diffusion}}, S<:Stochasticity,SC,M,D}
+    (u,θ,_) -> ∂u_spatial(m, diffusion!(u,d), θ), (u,_,_) -> ∂w(stoch, u)     
 end
 
 

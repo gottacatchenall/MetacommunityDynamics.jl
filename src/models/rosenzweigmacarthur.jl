@@ -8,17 +8,15 @@ Dynamics given by
 
 ``\\frac{dC}{dt} = \\beta \\frac{\\alpha CR}{1 + \\alpha \\eta R} - \\gamma   C``
 
-
-
 """
-struct RosenzweigMacArthur{S<:Spatialness,T<:Number} <: Model{Community,Biomass,S,Continuous}
-    metaweb::Matrix{Bool} # metaweb, not a parameter of inference
-    λ::Array{T}           # λ[i] max instaneous growth rate of i
-    α::Matrix{T}          # α[i,j] = attack rate of i on j
-    η::Matrix{T}          # η[i, j] =  handling rate of i on j
-    β::Matrix{T}          # β[i, j] = growth in i eating j
-    γ::Vector{T}          # heterotroph death rate (0 for all autotrophs)
-    K::Vector{T}          # autotroph carrying capacity (0 for heterotrophs)
+struct RosenzweigMacArthur{S<:Spatialness} <: Model{Community,Biomass,S,Continuous}
+    metaweb::Parameter        # metaweb, not a parameter of inference
+    λ::Parameter       # λ[i] max instaneous growth rate of i
+    α::Parameter              # α[i,j] = attack rate of i on j
+    η::Parameter              # η[i, j] =  handling rate of i on j
+    β::Parameter              # β[i, j] = growth in i eating j
+    γ::Parameter       # heterotroph death rate (0 for all autotrophs)
+    K::Parameter       # autotroph carrying capacity (0 for heterotrophs)
 end 
 
 # No longer necessary with this as parameter to model type
@@ -28,11 +26,6 @@ initial(::RosenzweigMacArthur) = [0.2, 0.2]  # note this is only valid for the d
 
 numspecies(rm::RosenzweigMacArthur) = length(rm.K)
 
-# To be replaced with niche function for mapping named env vars to func that
-# adjusts params
-# growthratename(::RosenzweigMacArthur) = :λ
-# growthrate(rm::RosenzweigMacArthur) = getfield(rm,growthratename(rm))
-
 
 function du_dt(C,R,λ,α,η,β,γ,K)
     @fastmath dR = λ*R*(1-(R/K)) - (α*R*C)/(1+α*η*R)
@@ -40,13 +33,12 @@ function du_dt(C,R,λ,α,η,β,γ,K)
     dC,dR
 end
 
-function ∂u(rm::RosenzweigMacArthur{Local, T}, u) where T
-    M, λ, α, η, β, γ, K = rm.metaweb, rm.λ, rm.α, rm.η, rm.β, rm.γ, rm.K
+function ∂u(rm::RosenzweigMacArthur{Local}, u, θ)
+    M, λ, α, η, β, γ, K = θ
+
     I = findall(!iszero, M)
     du = similar(u)
     du .= 0
-    
-    # for each interacting species
     for i in I
         ci,ri = i[1], i[2]
         C,R = u[ci], u[ri]
@@ -59,34 +51,39 @@ function ∂u(rm::RosenzweigMacArthur{Local, T}, u) where T
 end
 
 
-# Overengineered for DiffEqBayes integration, just use params stored in model struct
-#function paramnames(::RosenzweigMacArthur)
-#    fieldnames(RosenzweigMacArthur)[2:end]
-# end
-
 # ====================================================
 #
 #   Constructors
 #
 # =====================================================
 
-function RosenzweigMacArthur()
-    metaweb = [0 1; 0 0]
-    λ =  [0.0, 0.5]   
+function RosenzweigMacArthur(;
+    metaweb = [0 1; 0 0],
+    λ =  [0.0, 0.5],   
     α =  [0.0  5.0;    
-          5.0  0.0]
+          5.0  0.0],
     η =  [0.0  3.0;   
-          3.0  0.0]
+          3.0  0.0],
     β =  [0.0  0.5; 
-          0.5  0.0]
-    γ =  [0.1, 0.]  
-    K =  [0.0, 0.3] 
-    RosenzweigMacArthur{Local,Float64}(metaweb, λ, α, η, β, γ, K)
+          0.5  0.0],
+    γ =  [0.1, 0.],  
+    K =  [0.0, 0.3]
+)
+    RosenzweigMacArthur{Local}(
+        Parameter(metaweb), 
+        Parameter(λ), 
+        Parameter(α), 
+        Parameter(η), 
+        Parameter(β), 
+        Parameter(γ), 
+        Parameter(K)
+    )
 end
 
 # ====================================================
 #
-#   Spatial
+#   Spatial, soon we will delete this and have generic method for any spatial
+#   model that cycles over locations and runs the local version of this model
 #
 # =====================================================
 
@@ -134,7 +131,7 @@ function two_species(::Type{RosenzweigMacArthur};
 end
 
 
-function replplot(::RosenzweigMacArthur{Local,T}, traj::Trajectory) where T
+function replplot(::RosenzweigMacArthur{Local}, traj::Trajectory) 
     u = timeseries(traj)
     ymax = max([extrema(x)[2] for x in timeseries(traj)]...)
     ts(s) = [mean(u[t][s,:]) for t in 1:length(traj)]
@@ -150,7 +147,7 @@ function replplot(::RosenzweigMacArthur{Local,T}, traj::Trajectory) where T
     p
 end
 
-function replplot(::RosenzweigMacArthur{Spatial,T}, traj::Trajectory) where T
+function replplot(::RosenzweigMacArthur{Spatial}, traj::Trajectory) 
     u = Array(traj.sol)    
     n_species, n_locations, n_timesteps = size(u)
     ymax = max(u...)

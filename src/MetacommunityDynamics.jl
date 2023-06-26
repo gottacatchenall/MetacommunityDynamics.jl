@@ -13,10 +13,7 @@ module MetacommunityDynamics
     include("model.jl")
     include("drift.jl")
     
-
-    parameters(m::Model) = [getfield(m, f) for f in paramnames(m)]
-    discreteness(m::Model{M,S,D}) where {M,S,D<:Discreteness} = D
-
+    include("parameters.jl")
 
     include("environment.jl")
     include("spatialgraph.jl")
@@ -56,6 +53,8 @@ module MetacommunityDynamics
     export Measurement, Biomass, Abundance, Occupancy
     export Stochasticity, Deterministic, Stochastic
     
+    export Parameter
+
     export GaussianDrift
 
     export discreteness, spatialness, measurement, stochasticity

@@ -12,17 +12,15 @@ stochasticity(::Problem{T,R}) where {T,R} = R
 
 model(p::Problem) = p.model
 
-
-
-
-# lot's of redudant code here, there are def way to shorten number of lines here
+# lot's of redundant code here, there are def way to shorten number of lines here
 
 function problem(m::Model{SC,M,Local,D}; tspan=(0,100), u0=nothing) where {SC,M,D}
     prob = D == Continuous ? ODEProblem : DiscreteProblem
     
     f = factory(m) 
     u0 = isnothing(u0) ? initial(m) : u0
-    θ = ()
+    θ = parameters(m)
+
     pr = prob(f, u0, tspan, θ) 
     Problem{typeof(pr),Deterministic}(m, pr, tspan, u0)
 end
@@ -32,7 +30,7 @@ function problem(m::Model{SC,M,Local,D}, gd::GaussianDrift; tspan=(0,100), u0=no
 
     f, g = factory(m, gd) 
     u0 = isnothing(u0) ? initial(m) : u0
-    θ = ()
+    θ = parameters(m)
 
     pr = prob(f, g, u0, tspan, θ) 
     Problem{typeof(pr),Stochastic}(m, pr, tspan, u0)
@@ -47,7 +45,7 @@ function problem(model::Model{SC,M,S,D}, diffusion::Diffusion; tspan=(0,100), u0
 
     s = numsites(m.spatialgraph)
     u0 = isnothing(u0) ? hcat([initial(model) for _ in 1:s]...) : hcat([u0 for _ in 1:s]...)
-    θ = ()
+    θ = parameters(m)
 
     pr = prob(f, u0, tspan, θ)
 
@@ -62,7 +60,7 @@ function problem(model::Model{SC,M,S,D}, diffusion::Diffusion, gd::GaussianDrift
     f,g = factory(model, diffusion, gd)
 
     u0 = isnothing(u0) ? hcat([initial(model) for _ in 1:s]...) : hcat([u0 for _ in 1:s]...)
-    θ = ()
+    θ = parameters(m)
 
     pr = prob(f, g, u0, tspan, θ) 
     Problem{typeof(pr),Stochastic}(model, pr, tspan, u0)

@@ -1,33 +1,26 @@
 
-struct CompetitiveLotkaVolterra{S,T} <: Model{Community,Biomass,S,Continuous}
-    λ::Vector{T}
-    α::Matrix{T} 
-    K::Vector{T}
+struct CompetitiveLotkaVolterra{S} <: Model{Community,Biomass,S,Continuous}
+    λ::Parameter
+    α::Parameter
+    K::Parameter
 end 
+
 initial(::CompetitiveLotkaVolterra) = rand(Uniform(0.5,1), 4, 1)
-discreteness(::CompetitiveLotkaVolterra) = Continuous 
-
-growthratename(::CompetitiveLotkaVolterra) = :λ
-growthrate(clv::CompetitiveLotkaVolterra) = getfield(clv,growthratename(clv))
-
 numspecies(clv::CompetitiveLotkaVolterra) = size(clv.α, 1)
 
-factory(clv::CompetitiveLotkaVolterra) = begin
-    (u,θ,_) -> ∂u(clv, u, θ)
-end
 
-function ∂u(clv::CompetitiveLotkaVolterra, u)
-    λ, α, K = clv.λ, clv.α, clv.K
+function ∂u(clv::CompetitiveLotkaVolterra, u, θ)
+    λ, α, K = θ
 
     du = similar(u)
     for s in axes(u,1)
-        @fastmath du[s] = u[s] * λ[s] * (1 - (sum([u[t]*α[s,t] for t in 1:size(u,1)]) / K[s]))
+        @fastmath du[s] = u[s] * λ[s] * (1 - (sum([u[t]*α[s,t] for t in axes(u,1)]) / K[s]))
     end
     du
 end
 
-function ∂u_spatial(clv::CompetitiveLotkaVolterra, u)
-    λ, α, K = clv.λ, clv.α, clv.K
+function ∂u_spatial(clv::CompetitiveLotkaVolterra, u, θ)
+    λ, α, K = θ
 
     du = similar(u)
     du .= 0
@@ -52,14 +45,18 @@ end
 #
 # =====================================================
 
-function CompetitiveLotkaVolterra()
-    λ = [1, 0.72, 1.53, 1.27]
+function CompetitiveLotkaVolterra(;
+    λ = [1, 0.72, 1.53, 1.27],
     α = [1.00 1.09 1.52 0. 
          0.   1.00 0.44 1.36
          2.33 0.   1.00 0.47
-         1.21 0.51 0.35 1.00]
-    K = [1. for i in 1:4]
-    CompetitiveLotkaVolterra{Local,Float64}(λ, α, K)
+         1.21 0.51 0.35 1.00],
+    K = [1. for i in 1:4])
+
+    CompetitiveLotkaVolterra{Local}(
+        Parameter(λ), 
+        Parameter(α), 
+        Parameter(K))
 end
 
 function replplot(::CompetitiveLotkaVolterra{Local}, traj::Trajectory) 
