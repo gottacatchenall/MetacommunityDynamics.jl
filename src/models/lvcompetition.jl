@@ -1,11 +1,8 @@
 
-@kwdef struct CompetitiveLotkaVolterra{S} <: Model{Community,Biomass,S,Continuous}
-    λ = [1, 0.72, 1.53, 1.27]
-    α = [1.00 1.09 1.52 0. 
-         0.   1.00 0.44 1.36
-         2.33 0.   1.00 0.47
-         1.21 0.51 0.35 1.00]
-    K = [1. for i in 1:4]
+struct CompetitiveLotkaVolterra{S,T} <: Model{Community,Biomass,S,Continuous}
+    λ::Vector{T}
+    α::Matrix{T} 
+    K::Vector{T}
 end 
 initial(::CompetitiveLotkaVolterra) = rand(Uniform(0.5,1), 4, 1)
 discreteness(::CompetitiveLotkaVolterra) = Continuous 
@@ -49,8 +46,20 @@ function ∂u_spatial(clv::CompetitiveLotkaVolterra, u)
 end
 
 
-function paramnames(::CompetitiveLotkaVolterra)
-    fieldnames(CompetitiveLotkaVolterra)
+# ====================================================
+#
+#   Constructors
+#
+# =====================================================
+
+function CompetitiveLotkaVolterra()
+    λ = [1, 0.72, 1.53, 1.27]
+    α = [1.00 1.09 1.52 0. 
+         0.   1.00 0.44 1.36
+         2.33 0.   1.00 0.47
+         1.21 0.51 0.35 1.00]
+    K = [1. for i in 1:4]
+    CompetitiveLotkaVolterra{Local,Float64}(λ, α, K)
 end
 
 function replplot(::CompetitiveLotkaVolterra{Local}, traj::Trajectory) 
