@@ -743,7 +743,7 @@ $$</p>
 <p>First we build the model</p>
 <div class="highlight"><pre><span></span><code><span class="n">rm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">RosenzweigMacArthur</span><span class="p">()</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code>RosenzweigMacArthur{Local, Float64}(Bool[0 1; 0 0], [0.0, 0.5], [0.0 5.0; 5.0 0.0], [0.0 3.0; 3.0 0.0], [0.0 0.5; 0.5 0.0], [0.1, 0.0], [0.0, 0.3])
+<div class="highlight"><pre><span></span><code>RosenzweigMacArthur{Local}(Parameter{Int64, Matrix{Int64}}([0 1; 0 0]), Parameter{Float64, Vector{Float64}}([0.0, 0.5]), Parameter{Float64, Matrix{Float64}}([0.0 5.0; 5.0 0.0]), Parameter{Float64, Matrix{Float64}}([0.0 3.0; 3.0 0.0]), Parameter{Float64, Matrix{Float64}}([0.0 0.5; 0.5 0.0]), Parameter{Float64, Vector{Float64}}([0.1, 0.0]), Parameter{Float64, Vector{Float64}}([0.0, 0.3]))
 </code></pre></div>
 <p>Then we setup the problem</p>
 <p>```@example 1
