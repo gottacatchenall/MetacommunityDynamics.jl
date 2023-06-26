@@ -17,11 +17,13 @@ p = problem(RosenzweigMacArthur(), gd);
 
 
 lm = LogisticModel(λ=[0.1])
+p = problem(lm)
+sol = simulate(p)
 
 p = problem(lm, GaussianDrift(3.))
 @time sol = simulate(p)
 
-p = problem(BevertonHolt(R₀=1.2, K=50.))
+p = problem(BevertonHolt())
 @time sol = simulate(p)
 
 sol
@@ -41,6 +43,7 @@ p = problem(CompetitiveLotkaVolterra(), GaussianDrift(0.005))
 rm = RosenzweigMacArthur()
 
 sg = SpatialGraph(EnvironmentLayer());
+
 t = Dict(
     :μ => [0.0, 0.5],
     :σ => [0.0, 0.5],

@@ -9,49 +9,36 @@ building complicated custom models in `EcoDynamics.jl`.
 While EcoDynamics enables simulation of dynamics in a single place (_locally_),
 it's main goal is to enable reaction-diffusion models on spatial graphs.
 Similarly, although EcoDynamics is perfectly adaquete for simulating the
-dynamics of single-species systems, the core design goals are motivated by an
+dynamics of single-species systems, the _core design goals_ are motivated by an
 interest in simulating communities on spatial graphs, where environmental
 variation across each patch/node in the graph influences the dynamics at that
 node/patch, with a particular emphasis on understanding how different levels of
-neutral, niche, and  dispersal processes drive regime shifts in resulting
+neutral, niche, and dispersal processes drive regime shifts in resulting
 species compositions across space. 
 
 What are the essential things you need to build a simulation model that meets
 this criteria?
 
-The first thing is that we need a way to represent different types of
-_models_. 
+1. We need a way to represent different types of _models_ (e.g. Lotka-Volterra,
+   Rosenzweig-MacArthur, etc). 
+2. A _spatial graph_, consisting of a set of nodes/patches connected by
+   dispersal, that also can represent environmental information associated with
+   each patch. 
+3. A _species pool_ with _traits_, which are an arbitrary set of named values
+   that correspond to each species in the species pool.  
+4. The _niche_, where the combination of the local (named!) environmental
+   conditions at a patch and other species present shifts the parameters of the
+   dynamics at that patch.
 
-Second a _spatial graph_, consisting of a set of nodes/patches connected by
-dispersal, that also can represent environmental information associated with each patch.
-
-Third, a _species pool_ with _traits_, which are an arbitrary set of named
-values that correspond to each species in the species pool.
-
-Finally, the _niche_, where the combination of the local (named!) environmental
-conditions at a patch and other species present shifts the parameters of the
-dynamics at that patch.
-
-Note that all are interconnected:
-- the model's parameters must match species pool size  (1 -> 3)
+Note that all are interconnected and must interface with one another to achieve
+our overall goal:
+- the model's parameters must match species pool size and number of spatial
+  sites  (1->2, 1->3)
 - the spatial graph must provide environmental data for the niche (2 -> 4)
 - the species pool must provide traits for the niche (3->4)
 - the niche must provide parameters for the spatial version of the model based
-  on the species pool and (spatial graph w/ environment) ((2,4)->1)
-- both the species and environment must provide named parameters to the niche (2,3)->4
-
-and sadly this graph has cycles
-
-```mermaid
-graph TD;
-    1 --> 3;
-    3 --> 4;
-    4 --> 1;
-    2 --> 1;
-    2 --> 4;
-``` 
-
-which makes designing a type system for this problem quite annoying, as I've learned.
+  on the species pool and (spatial graph w/ environment) (2->1, 4->1)
+- both the species and environment must provide named parameters to the niche (2->4,3->4)
 
 ### Models
 
@@ -75,12 +62,12 @@ values they can take on are defined as abstract types that are subtypes of the
 category they correspond to.
 
 1. `Scale` refers to the organizational scale a model is _originally_ designed,
-with the options being `Population`, `Community`, `Metapopulation`, and
-`Metacommunity`. Note that a model being at the `Population` and `Community`
-scale doesn't preclude it from being turned into reaction-diffusion models on
-spatial graphs, however `Metapopulation` and `Metacommunity` models are such
-that they have no corresponding local version (think Hanksi's metapopulation
-model).  
+   with the options being `Population`, `Community`, `Metapopulation`, and
+   `Metacommunity`. Note that a model being at the `Population` and `Community`
+   scale doesn't preclude it from being turned into reaction-diffusion models on
+   spatial graphs, however `Metapopulation` and `Metacommunity` models are such
+   that they have no corresponding local version (think Hanksi's metapopulation
+   model).  
 
 2. `Measurement` refers to the type of information that is changing over time in
    a given model. There options here are (1) `Occupancy`, which indicates binary
@@ -101,22 +88,38 @@ model).
  
 ### Parameters
 
-Each field of a `Model` is a `Parameter`.  
-
+Each field of a `Model` is a subtype of the abstract type `Parameter`. For now,
+parameters are either of the type `SpeciesSpecificParameter` (where a parameter
+has a scalar value for each species and location), or `PairwiseParameter` (where
+there is a scalar value for each unique pairwise combination of species and
+location). For now, `EcoDynamics` does not support model for higher-order
+interactions, although it is a future goal to build upon `PairwiseParameter`s to
+support an arbitrarily number of higher order effects. 
 
 
 ### Spatial graphs 
 
+The `SpatialGraph` type contains information about the coordinates of each
+patch/node, as well as environmental covariates at each site. Environmental
+covariates are stored in a dictionary where the key is the name of the variable,
+and the value is a vector of values corresponds to each node in the spatial
+graph. 
 
-### Traits
+### Species Pool
+
+Traits are a dict, just like environment is a dict.
 
 
 ### Niches
 
-- Provide a defautl niche function for each model, but enable it to be written
+
+
+- Provide a default niche function for each model, but enable it to be written
   custom. This enables environment-contigent interaction strengths, etc. 
-- Generally, the default niche will map modify the growth rates in a model by a
-  single dimnesional environmental variable, e.g. adjusting $R_0$ in the SIR model  
+- Generally, the default niche will modify the growth rates in a model by a
+  a function of the distance between a single dimensional environmental variable
+  and a species trait, e.g. adjusting $R_0$ in the SIR model  
+
 
 ## Dispatch patterns
 

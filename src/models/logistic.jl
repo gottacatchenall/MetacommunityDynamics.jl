@@ -1,7 +1,7 @@
-@kwdef struct LogisticModel{S,T<:Number} <: Model{Population,Biomass,S,Continuous}
-    λ::Array{T} = [1.2]
-    K::Array{T} = [50.]
-    α::Array{T} = [1.]
+struct LogisticModel{S} <: Model{Population,Biomass,S,Continuous}
+    λ::Parameter
+    K::Parameter
+    α::Parameter
 end 
 
 discreteness(::LogisticModel{T}) where T = MetacommunityDynamics.Continuous 
@@ -16,8 +16,8 @@ growthratename(::LogisticModel) = :λ
 growthrate(lm::LogisticModel) = getfield(lm,growthratename(lm))
 
 
-function ∂u(lm::LogisticModel, u)
-    λs, Ks, αs = lm.λ, lm.K, lm.α
+function ∂u(lm::LogisticModel, u, θ)
+    λs, Ks, αs = θ
     λ, K, α = λs[1], Ks[1], αs[1] 
     return @fastmath λ*u*(1-(u/K)^α)
 end
@@ -43,16 +43,18 @@ end
 #
 # =====================================================
 
-function LogisticModel()
-    λ = [1.2]
-    K = [50.]
-    α  = [1.]
-    LogisticModel{Local,Float64}(λ, K, α)
+function LogisticModel(;
+    λ = [1.2],
+    K = [50.],
+    α  = [1.],
+)
+    LogisticModel{Local}(
+        Parameter(λ), 
+        Parameter(K), 
+        Parameter(α))
 end
 
-
-
-function replplot(::LogisticModel{Local,T}, traj::Trajectory) where T
+function replplot(::LogisticModel{Local}, traj::Trajectory) 
     u = timeseries(traj)
     ymax = max(u...)
     p = lineplot(u, 
@@ -63,9 +65,7 @@ function replplot(::LogisticModel{Local,T}, traj::Trajectory) where T
     p
 end
 
-
-
-function MetacommunityDynamics.replplot(::LogisticModel{Spatial,T}, traj::Trajectory) where T
+function replplot(::LogisticModel{Spatial}, traj::Trajectory)
     u = vcat(Array(traj.sol.u)...)
     ymax = max(u...)
     p = lineplot(u[:,1], 

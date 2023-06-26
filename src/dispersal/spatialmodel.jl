@@ -1,20 +1,3 @@
-struct SpatialModel{M,D<:Union{Diffusion,Vector{Diffusion}}} <: Model{Measurement,Spatial,Discreteness}
-    model::M
-    spatialgraph::SpatialGraph
-    speciespool::SpeciesPool
-    niche::Niche
-    diffusion::D 
-end
-    
-function spatialize(model::T, adjusted_growth) where T<:Model
-    grn = growthratename(model)
-
-    θ = paramdict(model)
-    
-    θ[grn] = adjusted_growth
-    T(;θ...)
-end
-
 function spatialize(model::Model, sg::SpatialGraph, sp::SpeciesPool, niche::Niche, diffusion::D) where D<:Union{Diffusion,Vector{Diffusion}}
 
     @assert numspecies(model) == numspecies(sp)
