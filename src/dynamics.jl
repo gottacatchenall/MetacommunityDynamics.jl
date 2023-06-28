@@ -40,23 +40,40 @@ p = problem(CompetitiveLotkaVolterra(), GaussianDrift(0.005))
 #----------------------------------------------------------
 # spatial 
 
-rm = RosenzweigMacArthur()
 
-sg = SpatialGraph(EnvironmentLayer());
+rosen = RosenzweigMacArthur()
 
-t = Dict(
-    :μ => [0.0, 0.5],
-    :σ => [0.0, 0.5],
-)
-sp = SpeciesPool(traits=t)
-niche = GaussianNiche()
+sp = SpeciesPool(2)
+sg = SpatialGraph()
 
-ϕ = DispersalPotential(DispersalKernel(max_distance=0.4), sg)
-D = Diffusion(0.1, ϕ)
+function niche(model, traits, local_env)
+    θ = paramdict(model)
 
-spatialrm = spatialize(rm, sg,  sp, niche, D)
+    λ_adjusted = similar(θ[:λ])
+    for (i,λᵢ) in enumerate(θ[:λ])
+        adjusted_λᵢ = λᵢ > 0 ? λᵢ*exp(-(traits[:x][i] - local_env[:e1])^2) : 0
+        λ_adjusted[i] = adjusted_λᵢ
+    end
 
-prob = problem(spatialrm, Deterministic, tspan=(0,500))
+    θ[:λ] = λ_adjusted
+    θ
+end
+
+
+spatmodel = spatialize(rosen, sg, sp; niche=niche)
+
+dk = DispersalKernel(max_distance=0.5)
+
+
+
+diff =Diffusion(0.01, DispersalPotential(dk,sg))
+
+prob = problem(spatmodel, diff)
+
+@time simulate(prob)
+
+
+
 
 
 # possible case studies:
@@ -64,7 +81,8 @@ prob = problem(spatialrm, Deterministic, tspan=(0,500))
 #   - number of persisting RM communities in a spatial graph across different demo stochasticities
 
 
-prob = problem(spatialrm, GaussianDrift(0.02))
+
+prob = problem(spatmodel, diff, GaussianDrift(0.005))
 @time traj = simulate(prob)
 
 

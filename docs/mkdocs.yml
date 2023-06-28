@@ -31,7 +31,7 @@ docs_dir: 'build'
 nav:
   - Home: index.md
   - Getting started:
-    - Hello World: getting_started/hello_world.md
+    - Quick Start: getting_started/quick_start.md
     - Package design: getting_started/design.md
   - Examples:
     - Bayesian Inference of community dynamics using Turing.jl: examples/community_inference.md

@@ -33,7 +33,7 @@ function du_dt(C,R,λ,α,η,β,γ,K)
     dC,dR
 end
 
-function ∂u(rm::RosenzweigMacArthur{Local}, u, θ)
+function ∂u(rm::RosenzweigMacArthur, u, θ)
     M, λ, α, η, β, γ, K = θ
 
     I = findall(!iszero, M)
@@ -88,7 +88,7 @@ end
 # =====================================================
 
 function ∂u_spatial(rm::RosenzweigMacArthur, u, θ)
-    M = rm.M
+    M = rm.metaweb
     λ, α, η, β, γ, K = θ
     I = findall(!iszero, M)
     du = similar(u)
@@ -130,6 +130,12 @@ function two_species(::Type{RosenzweigMacArthur};
     )   
 end
 
+# ====================================================
+#
+#   Plots
+#   
+# =====================================================
+
 
 function replplot(::RosenzweigMacArthur{Local}, traj::Trajectory) 
     u = timeseries(traj)
@@ -168,6 +174,12 @@ function replplot(::RosenzweigMacArthur{Spatial}, traj::Trajectory)
     p
 end
 
+# ====================================================
+#
+#   Tests
+#  
+#
+# =====================================================
 
 
 @testitem "Rosenzweig-MacArthur constructor works" begin

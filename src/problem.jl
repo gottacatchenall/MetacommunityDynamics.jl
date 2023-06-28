@@ -43,13 +43,13 @@ function problem(model::Model{SC,M,S,D}, diffusion::Diffusion; tspan=(0,100), u0
 
     prob = D == Continuous ? ODEProblem : DiscreteProblem
 
-    s = numsites(m.spatialgraph)
+    s = numsites(diffusion)
     u0 = isnothing(u0) ? hcat([initial(model) for _ in 1:s]...) : hcat([u0 for _ in 1:s]...)
-    θ = parameters(m)
+    θ = parameters(model)
 
     pr = prob(f, u0, tspan, θ)
 
-    Problem{typeof(pr),Stochastic}(model, pr, tspan, u0)
+    Problem{typeof(pr),Deterministic}(model, pr, tspan, u0)
 end 
 
 function problem(model::Model{SC,M,S,D}, diffusion::Diffusion, gd::GaussianDrift; tspan=(0,100), u0=nothing) where {SC,M,S,D}
@@ -57,10 +57,12 @@ function problem(model::Model{SC,M,S,D}, diffusion::Diffusion, gd::GaussianDrift
   
     prob = D == Continuous ? SDEProblem : DiscreteProblem
 
+    s = numsites(diffusion)
+
     f,g = factory(model, diffusion, gd)
 
     u0 = isnothing(u0) ? hcat([initial(model) for _ in 1:s]...) : hcat([u0 for _ in 1:s]...)
-    θ = parameters(m)
+    θ = parameters(model)
 
     pr = prob(f, g, u0, tspan, θ) 
     Problem{typeof(pr),Stochastic}(model, pr, tspan, u0)

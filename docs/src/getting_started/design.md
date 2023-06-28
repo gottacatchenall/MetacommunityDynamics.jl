@@ -7,14 +7,15 @@ building complicated custom models in `EcoDynamics.jl`.
 ## The type system
 
 While EcoDynamics enables simulation of dynamics in a single place (_locally_),
-it's main goal is to enable reaction-diffusion models on spatial graphs.
+its main goal is to enable reaction-diffusion models on spatial graphs.
 Similarly, although EcoDynamics is perfectly adaquete for simulating the
 dynamics of single-species systems, the _core design goals_ are motivated by an
 interest in simulating communities on spatial graphs, where environmental
 variation across each patch/node in the graph influences the dynamics at that
-node/patch, with a particular emphasis on understanding how different levels of
-neutral, niche, and dispersal processes drive regime shifts in resulting
-species compositions across space. 
+node/patch, with a particular emphasis on understanding how different
+parameterizations of models causes regime shifts in resulting species 
+compositions across space, across different levels of neutral, niche, and
+dispersal proccesses.
 
 What are the essential things you need to build a simulation model that meets
 this criteria?
@@ -29,6 +30,10 @@ this criteria?
 4. The _niche_, where the combination of the local (named!) environmental
    conditions at a patch and other species present shifts the parameters of the
    dynamics at that patch.
+5. A model of _diffusion_. We take a dispersal kernel and normalize its value
+   across each (source->target) pair of patches to create a _dispersal
+   potential_, which is a distribution for each (source->target pair).
+
 
 Note that all are interconnected and must interface with one another to achieve
 our overall goal:
@@ -63,7 +68,7 @@ category they correspond to.
 
 1. `Scale` refers to the organizational scale a model is _originally_ designed,
    with the options being `Population`, `Community`, `Metapopulation`, and
-   `Metacommunity`. Note that a model being at the `Population` and `Community`
+   `Metacommunity`. Note that a model being at the `Population` or `Community`
    scale doesn't preclude it from being turned into reaction-diffusion models on
    spatial graphs, however `Metapopulation` and `Metacommunity` models are such
    that they have no corresponding local version (think Hanksi's metapopulation
@@ -85,17 +90,6 @@ category they correspond to.
    change. The method `spatialize` transforms a `Local` model into spatial
    models. 
 
- 
-### Parameters
-
-Each field of a `Model` is a subtype of the abstract type `Parameter`. For now,
-parameters are either of the type `SpeciesSpecificParameter` (where a parameter
-has a scalar value for each species and location), or `PairwiseParameter` (where
-there is a scalar value for each unique pairwise combination of species and
-location). For now, `EcoDynamics` does not support model for higher-order
-interactions, although it is a future goal to build upon `PairwiseParameter`s to
-support an arbitrarily number of higher order effects. 
-
 
 ### Spatial graphs 
 
@@ -107,19 +101,19 @@ graph.
 
 ### Species Pool
 
-Traits are a dict, just like environment is a dict.
-
+The `SpeciesPool` type contains a list of species names (as `String`s or
+`Symbol`s), and more importantly a dictionary of named trait values. The trait
+values are important as they are one of two inputs to a `Niche`, which enables
+variation in model parameters across space as a function of  enviornmental
+conditions.
 
 ### Niches
-
-
 
 - Provide a default niche function for each model, but enable it to be written
   custom. This enables environment-contigent interaction strengths, etc. 
 - Generally, the default niche will modify the growth rates in a model by a
   a function of the distance between a single dimensional environmental variable
   and a species trait, e.g. adjusting $R_0$ in the SIR model  
-
 
 ## Dispatch patterns
 

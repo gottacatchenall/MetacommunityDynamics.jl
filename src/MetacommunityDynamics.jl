@@ -20,12 +20,13 @@ module MetacommunityDynamics
 
 
     include("species.jl")
-    include("niche.jl")
 
 
     include(joinpath("dispersal", "kernel.jl"))
     include(joinpath("dispersal", "potential.jl"))
     include(joinpath("dispersal", "diffusion.jl"))
+
+    include(joinpath("dispersal", "spatialize.jl"))
 
     include("problem.jl")
     include("trajectory.jl")
@@ -59,7 +60,7 @@ module MetacommunityDynamics
 
     export discreteness, spatialness, measurement, stochasticity
 
-    export parameters
+    export parameters, paramdict
 
     export spatialize
 
