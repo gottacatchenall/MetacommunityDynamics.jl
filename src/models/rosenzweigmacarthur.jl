@@ -118,6 +118,7 @@ function two_species(::Type{RosenzweigMacArthur};
     γ = 0.1,
     K = 0.3)
     (    
+        M = [0 1; 0 0],
         λ = [0., λ],
         α =  [0.0  α;  
             0.0  0.0],

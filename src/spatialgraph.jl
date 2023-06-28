@@ -135,7 +135,7 @@ Builds a spatial graph with `n` nodes in it.
 """
 function SpatialGraph(n::Integer) 
     n <= 1 && throw(ArgumentError, "Number of nodes in spatial graph must be > 1")
-    SpatialGraph([(rand(), rand()) for _ = 1:n], Dict([Symbol("e$i") => rand(5) for i in 1:n]))
+    SpatialGraph([(rand(), rand()) for _ = 1:n], Dict([Symbol("e1") => rand(n)]))
 end
 
 """
