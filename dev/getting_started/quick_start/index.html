@@ -23,7 +23,7 @@
     
     
       
-        <title>Hello World - EcoDynamics.jl</title>
+        <title>Quick Start - EcoDynamics.jl</title>
       
     
     
@@ -107,7 +107,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Hello World
+              Quick Start
             
           </span>
         </div>
@@ -272,7 +272,7 @@
       
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        Hello World
+        Quick Start
       </a>
       
     </li>
@@ -720,30 +720,130 @@
 <p><a id='Hello-World-in-EcoDynamics.jl'></a></p>
 <p><a id='Hello-World-in-EcoDynamics.jl-1'></a></p>
 <h1 id="hello-world-in-ecodynamicsjl">Hello World in <code>EcoDynamics.jl</code></h1>
-<p>Okay</p>
+<p>This document is a quick start to the features in <code>EcoDynamics</code>. Here we will build a model of consumer-resource dynamics on a spatial graph, where the limiting growth rate of the resource is a function of the environmental conditions at each patch.</p>
+<p>First we'll load the package.</p>
 <div class="highlight"><pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="n">MetacommunityDynamics</span>
-<span class="n">sg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SpatialGraph</span><span class="p">()</span>
+</code></pre></div>
+<p>For this example, we are going to use the Rosenzweig-MacArthur [@cite] model of consumer-resource dynamics. Initially, the Rosenzweig-MacArthur was defined as </p>
+<p>$$
+\frac{dR}{dt} = \lambda R \bigg(1 - \frac{R}{K}\bigg) - \frac{\alpha CR}{1 +\alpha \eta R}
+$$</p>
+<p>$$
+\frac{dC}{dt} = \beta \frac{\alpha CR}{1 + \alpha \eta R} - \gamma   C
+$$</p>
+<p>where $R$ is the relative biomass of the resource, $C$ is the relative biomass of the consumer, $\alpha$ is the attack-rate, $\eta$ is the handling type, $\lambda$ is the limiting instric growth rate,  $\beta$ is the intrinsic infintesimal growth of biomass for the consumer per unit resource, and $\gamma$ is the intrinsic death date of consumers.</p>
+<p>By default, in <code>EcoDynamics</code> the <code>RosenzweigMacArthur</code> model is parameterized for two species exhibiting a limit cycle, though it can be used for an arbitrary number of species (See <em>TODO custom parameterization</em> section). </p>
+<div class="highlight"><pre><span></span><code><span class="n">rosen</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">RosenzweigMacArthur</span><span class="p">()</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>RosenzweigMacArthur{Local}(Parameter{Int64, Matrix{Int64}, Matrix{Int64}}([0 1; 0 0]), Parameter{Float64, Vector{Float64}, Vector{Float64}}([0.0, 0.5]), Parameter{Float64, Matrix{Float64}, Matrix{Float64}}([0.0 5.0; 5.0 0.0]), Parameter{Float64, Matrix{Float64}, Matrix{Float64}}([0.0 3.0; 3.0 0.0]), Parameter{Float64, Matrix{Float64}, Matrix{Float64}}([0.0 0.5; 0.5 0.0]), Parameter{Float64, Vector{Float64}, Vector{Float64}}([0.1, 0.0]), Parameter{Float64, Vector{Float64}, Vector{Float64}}([0.0, 0.3]))
+</code></pre></div>
+<p>Here we'll consider the folliwing way in which environmental variation affects the dynamics of this model.</p>
+<p>At each patch $i$ in the spatial graph, the limiting growth rate of the resource at that patch, $\lambda_i$, is a function of the difference between a given trait for the consumer species $x$, and a single environmental variable associated with each patch, $e_i$. </p>
+<p>We'll model $\lambda_i$ as decreasing like a Gaussian as the distance between $e_i$ and $x$ decreases, e.g. </p>
+<p>$$
+\lambda_i = \exp{\bigg(\frac{-(e_i -x)^2}{\sigma^2}\bigg)}
+$$</p>
+<p>where $\sigma$ is a parameter controlling the 'importance' of this trait-environmental matching for consumer growth.</p>
+<p>We'll first do this by initializing a two-species <code>SpeciesPool</code></p>
+<div class="highlight"><pre><span></span><code><span class="n">sp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SpeciesPool</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>A species pool with 2 species.
+</code></pre></div>
+<p>Note that by default, <code>SpeciesPool</code>s initialized without provided traits default to a single dimensional trait named <code>:x</code> uniformally distributed on $[0,1]$. </p>
+<p>Next, we'll initialize a spatial graph with 20 patches. Note that when not initialized with environmental variable,<code>SpatialGraph</code>'s are initialized with a single environmental varaible <code>:e1</code>, similarly uniformally drawn from $[0,1]$.</p>
+<div class="highlight"><pre><span></span><code><span class="n">sg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SpatialGraph</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
 </code></pre></div>
 <div class="highlight"><pre><span></span><code>A spatial graph with 20 locations.
     ┌────────────────────────────────────────┐
    1│⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│
-    │⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⚬⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⚬⠀⠀⠀│
-    │⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⚬⠀⠀⠀│
+    │⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⚬⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│
+    │⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⚬⠀⠀⠀⠀⠀⠀⠀⚬⠀⠀⠀⠀⠀⠀│
+    │⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⚬⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│
+    │⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⚬⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│
+    │⠀⠀⠀⠀⠀⠀⚬⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⚬⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│
+    │⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⚬⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⚬⠀│
     │⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│
-    │⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⚬│
-    │⠀⠀⠀⠀⠀⠀⠀⠀⚬⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⚬⠀⠀⠀⠀⚬⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│
-    │⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⚬⠀⠀⚬⠀│
-    │⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⚬⠀⠀⠀⚬⠀⠀⠀⠀⠀⠀│
-    │⠀⠀⠀⠀⠀⠀⠀⚬⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│
-    │⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⚬⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│
-    │⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⚬⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│
+    │⠀⚬⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⚬⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⚬⠀⠀⠀│
+    │⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⚬⠀⠀│
+    │⠀⠀⠀⚬⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⚬⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│
     │⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│
-    │⠀⠀⠀⚬⠀⚬⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⚬⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│
-    │⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⚬│
-   0│⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⚬⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⚬⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│
+    │⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│
+    │⠀⠀⠀⠀⠀⚬⠀⠀⠀⠀⠀⠀⠀⚬⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⚬⠀│
+   0│⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⚬⠀⠀⠀⠀⠀⠀⚬│
     └────────────────────────────────────────┘
     ⠀0⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀1⠀
 </code></pre></div>
+<p>Now, we provide a function that encodes our model of the niche as described above. Note that a niche function is expected to take a <code>model</code>, <code>traits</code>, and particular patch's environmental condition, and return the modified the parameters for that particular <em>patch</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="k">function</span><span class="w"> </span><span class="n">niche</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="w"> </span><span class="n">traits</span><span class="p">,</span><span class="w"> </span><span class="n">local_env</span><span class="p">)</span>
+<span class="w">    </span><span class="n">θ</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">paramdict</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+<span class="w">    </span><span class="n">θ</span><span class="p">[</span><span class="ss">:λ</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">λᵢ</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">λᵢ</span><span class="o">*</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">traits</span><span class="p">[</span><span class="ss">:x</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">local_env</span><span class="p">[</span><span class="ss">:e1</span><span class="p">])</span><span class="o">^</span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">λᵢ</span><span class="p">)</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">enumerate</span><span class="p">(</span><span class="n">θ</span><span class="p">[</span><span class="ss">:λ</span><span class="p">])]</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">θ</span>
+<span class="k">end</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>niche (generic function with 1 method)
+</code></pre></div>
+<p>Now, we use the <code>spatialize</code> method to combine our <code>Model</code>, <code>SpatialGraph</code>, <code>SpeciesPool</code>, and <code>niche</code>. Note that <code>niche</code> here is a keyword argument. If not provided, by default spatialize will used identical parameters across all sites. This may be of interested if the goal is understanding the consequences of dispersal absent environmental variation.</p>
+<p>```@example 1
+spatialrm = spatialize(rosen, sg, sp; niche=niche)
+<div class="highlight"><pre><span></span><code>The final thing we need to run this model is our `Diffsion` model. `Diffusion` models are constructed using a few components, first a `DispersalKernel`. The dispersal kernel describes a relative likeliheed of how far an individual organism is going to disperse. By default, the `DispersalKernel`s are initialized with an exponential dispersal kernel, i.e. the kernel $f$ is given by 
+
+
+$$
+f(x, \alpha) = e^{-\alpha d_{ij}}
+$$
+
+
+where $\alpha$ indicates the strength of decay, i.e. for small $\alpha$ the organism can disperse far, and vice-versa, and $d_{ij}$ is the distance between patch $i$ and patch $j$.  The `DispersalKernel` also takes an optional `max_distance` argument, which is the furthest any organism can feasibly disperse, meaning for any $d_{ij}$ greater than the `max_distance`, the kernel will be equal to zero. 
+
+
+```julia
+dk = DispersalKernel(max_distance=0.5)
+</code></pre></div></p>
+<div class="highlight"><pre><span></span><code>╭──── DispersalKernel ────────────╮
+│                                 │
+│  Decay: 3.0                     │
+│  Maximum Dispersal Distance:    │
+│  0.5                            │
+│                                 │
+│                                 │
+╰─────────────────────────────────╯
+</code></pre></div>
+<p>Before we can use the <code>DispersalKernel</code> to build a diffusion model, we need to first compute the <code>DispersalPotential</code>. The potential $\Phi$ normalizes over the kernel values for each patch, so that $\Phi_{ij}$ is the probability that any individual originating in patch $i$ disperses to patch $j$. </p>
+<div class="highlight"><pre><span></span><code><span class="n">ϕ</span><span class="w"> </span><span class="o">=</span><span class="w">  </span><span class="n">DispersalPotential</span><span class="p">(</span><span class="n">dk</span><span class="p">,</span><span class="n">sg</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>             ┌──────────────────────────────┐  0.4    
+          20 │▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄│ ┌──┐    
+             │▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄│ │▄▄│    
+             │▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄│ │▄▄│    
+             │▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄│ │▄▄│    
+             │▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄│ │▄▄│    
+             │▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄│ │▄▄│    
+             │▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄│ │▄▄│    
+   Node j    │▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄│ │▄▄│ ϕᵢⱼ
+             │▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄│ │▄▄│    
+             │▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄│ │▄▄│    
+             │▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄│ │▄▄│    
+             │▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄│ │▄▄│    
+             │▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄│ │▄▄│    
+             │▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄│ │▄▄│    
+           1 │▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄│ └──┘    
+             └──────────────────────────────┘  0      
+              1                           20          
+                          Node i                      
+</code></pre></div>
+<p>Finally, we can define our <code>Diffusion</code> model using a base migration probability and the dispersal potential.</p>
+<p>```@example 1
+m = 0.01
+diff =Diffusion(m, phi)
+<div class="highlight"><pre><span></span><code>Now, we can finally construct the a `Problem` using our local dynamics `spatialrm` model and our diffusion model `diff`. Initial conditions and timespan can be provided here.
+
+
+```@example 1
+prob = problem(spatialrm, diff)
+</code></pre></div></p>
+<p>and run the model using <code>simulate</code></p>
+<p><code>@example 1
+simulate(prob)</code></p>
 
 
 

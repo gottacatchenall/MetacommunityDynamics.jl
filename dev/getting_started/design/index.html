@@ -13,7 +13,7 @@
       
       
       
-        <link rel="prev" href="../hello_world/">
+        <link rel="prev" href="../quick_start/">
       
       
         <link rel="next" href="../../examples/community_inference/">
@@ -262,8 +262,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../hello_world/" class="md-nav__link">
-        Hello World
+      <a href="../quick_start/" class="md-nav__link">
+        Quick Start
       </a>
     </li>
   
@@ -320,13 +320,6 @@
           <li class="md-nav__item">
   <a href="#models" class="md-nav__link">
     Models
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#parameters" class="md-nav__link">
-    Parameters
   </a>
   
 </li>
@@ -809,13 +802,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#parameters" class="md-nav__link">
-    Parameters
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#spatial-graphs" class="md-nav__link">
     Spatial graphs
   </a>
@@ -880,13 +866,14 @@
 <p><a id='The-type-system'></a></p>
 <p><a id='The-type-system-1'></a></p>
 <h2 id="the-type-system">The type system</h2>
-<p>While EcoDynamics enables simulation of dynamics in a single place (<em>locally</em>), it's main goal is to enable reaction-diffusion models on spatial graphs. Similarly, although EcoDynamics is perfectly adaquete for simulating the dynamics of single-species systems, the <em>core design goals</em> are motivated by an interest in simulating communities on spatial graphs, where environmental variation across each patch/node in the graph influences the dynamics at that node/patch, with a particular emphasis on understanding how different levels of neutral, niche, and dispersal processes drive regime shifts in resulting species compositions across space. </p>
+<p>While EcoDynamics enables simulation of dynamics in a single place (<em>locally</em>), its main goal is to enable reaction-diffusion models on spatial graphs. Similarly, although EcoDynamics is perfectly adaquete for simulating the dynamics of single-species systems, the <em>core design goals</em> are motivated by an interest in simulating communities on spatial graphs, where environmental variation across each patch/node in the graph influences the dynamics at that node/patch, with a particular emphasis on understanding how different parameterizations of models causes regime shifts in resulting species  compositions across space, across different levels of neutral, niche, and dispersal proccesses.</p>
 <p>What are the essential things you need to build a simulation model that meets this criteria?</p>
 <ol>
 <li>We need a way to represent different types of <em>models</em> (e.g. Lotka-Volterra, Rosenzweig-MacArthur, etc).</li>
 <li>A <em>spatial graph</em>, consisting of a set of nodes/patches connected by dispersal, that also can represent environmental information associated with each patch.</li>
 <li>A <em>species pool</em> with <em>traits</em>, which are an arbitrary set of named values that correspond to each species in the species pool.</li>
 <li>The <em>niche</em>, where the combination of the local (named!) environmental conditions at a patch and other species present shifts the parameters of the dynamics at that patch.</li>
+<li>A model of <em>diffusion</em>. We take a dispersal kernel and normalize its value across each (source-&gt;target) pair of patches to create a <em>dispersal potential</em>, which is a distribution for each (source-&gt;target pair).</li>
 </ol>
 <p>Note that all are interconnected and must interface with one another to achieve our overall goal:</p>
 <ul>
@@ -904,15 +891,11 @@
 <p>Specifically there are four different important properties which <code>Model</code> stores (in Julia development, this design pattern is called using 'traits', although we refrain from using that terminology in this documentation to avoid confusion with <code>Trait</code>s as the type of information that describes properties about species).</p>
 <p>These four properties are <code>Scale</code>, <code>Measurement</code>, <code>Spatialness</code>, and <code>Discreteness</code>. Each of these are defined as abstract types, and the different values they can take on are defined as abstract types that are subtypes of the category they correspond to.</p>
 <ol>
-<li><code>Scale</code> refers to the organizational scale a model is <em>originally</em> designed, with the options being <code>Population</code>, <code>Community</code>, <code>Metapopulation</code>, and <code>Metacommunity</code>. Note that a model being at the <code>Population</code> and <code>Community</code> scale doesn't preclude it from being turned into reaction-diffusion models on spatial graphs, however <code>Metapopulation</code> and <code>Metacommunity</code> models are such that they have no corresponding local version (think Hanksi's metapopulation model).</li>
+<li><code>Scale</code> refers to the organizational scale a model is <em>originally</em> designed, with the options being <code>Population</code>, <code>Community</code>, <code>Metapopulation</code>, and <code>Metacommunity</code>. Note that a model being at the <code>Population</code> or <code>Community</code> scale doesn't preclude it from being turned into reaction-diffusion models on spatial graphs, however <code>Metapopulation</code> and <code>Metacommunity</code> models are such that they have no corresponding local version (think Hanksi's metapopulation model).</li>
 <li><code>Measurement</code> refers to the type of information that is changing over time in a given model. There options here are (1) <code>Occupancy</code>, which indicates binary presence/absence state, (2) <code>Abundance</code>, where each state is a non-negative integer representing the count of individuals and (3) <code>Biomass</code>, where each state is a non-negative real number indicating some relative measure of biomass.</li>
 <li><code>Discreteness</code> refers to whether a model is defined in <code>Continuous</code> or <code>Discrete</code> time.</li>
 <li><code>Spatialness</code> refers to whether a constructed model is only occuring at a single location (<code>Local</code>), or whether the model is constructed across a spatial graph (<code>Spatial</code>). This type-parameter is distinct because it can change. The method <code>spatialize</code> transforms a <code>Local</code> model into spatial models.</li>
 </ol>
-<p><a id='Parameters'></a></p>
-<p><a id='Parameters-1'></a></p>
-<h3 id="parameters">Parameters</h3>
-<p>Each field of a <code>Model</code> is a subtype of the abstract type <code>Parameter</code>. For now, parameters are either of the type <code>SpeciesSpecificParameter</code> (where a parameter has a scalar value for each species and location), or <code>PairwiseParameter</code> (where there is a scalar value for each unique pairwise combination of species and location). For now, <code>EcoDynamics</code> does not support model for higher-order interactions, although it is a future goal to build upon <code>PairwiseParameter</code>s to support an arbitrarily number of higher order effects. </p>
 <p><a id='Spatial-graphs'></a></p>
 <p><a id='Spatial-graphs-1'></a></p>
 <h3 id="spatial-graphs">Spatial graphs</h3>
@@ -920,7 +903,7 @@
 <p><a id='Species-Pool'></a></p>
 <p><a id='Species-Pool-1'></a></p>
 <h3 id="species-pool">Species Pool</h3>
-<p>Traits are a dict, just like environment is a dict.</p>
+<p>The <code>SpeciesPool</code> type contains a list of species names (as <code>String</code>s or <code>Symbol</code>s), and more importantly a dictionary of named trait values. The trait values are important as they are one of two inputs to a <code>Niche</code>, which enables variation in model parameters across space as a function of  enviornmental conditions.</p>
 <p><a id='Niches'></a></p>
 <p><a id='Niches-1'></a></p>
 <h3 id="niches">Niches</h3>

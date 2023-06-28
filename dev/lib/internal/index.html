@@ -258,8 +258,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../getting_started/hello_world/" class="md-nav__link">
-        Hello World
+      <a href="../../getting_started/quick_start/" class="md-nav__link">
+        Quick Start
       </a>
     </li>
   
@@ -723,25 +723,25 @@
 <div class="highlight"><pre><span></span><code><span class="n">Base</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">sg</span><span class="o">::</span><span class="kt">SpatialGraph</span><span class="p">)</span>
 </code></pre></div>
 <p>Returns the number of nodes in a spatial graph <code>sg</code>.</p>
-<p><a target='_blank' href='https://github.com/gottacatchenall/EcoDynamics.jl/blob/6d2342b2f720230c2e829beb77fc805d5b5d2229/src/spatialgraph.jl#L19-L23' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/gottacatchenall/EcoDynamics.jl/blob/7e146f688298c797286ad1649b66e385f14726db/src/spatialgraph.jl#L19-L23' class='documenter-source'>source</a><br></p>
 <p><a id='MetacommunityDynamics._env_from_layer-Tuple{Any, EnvironmentLayer}' href='#MetacommunityDynamics._env_from_layer-Tuple{Any, EnvironmentLayer}'>#</a>
 <strong><code>MetacommunityDynamics._env_from_layer</code></strong> &mdash; <em>Method</em>.</p>
 <div class="highlight"><pre><span></span><code><span class="n">_env_from_layer</span><span class="p">(</span><span class="n">coords</span><span class="p">,</span><span class="w"> </span><span class="n">layer</span><span class="o">::</span><span class="kt">EnvironmentLayer</span><span class="p">)</span>
 </code></pre></div>
 <p>Returns the values in the layer at the given coordinates, given the bounding-box os the coordinates is the extent of the layer.</p>
-<p><a target='_blank' href='https://github.com/gottacatchenall/EcoDynamics.jl/blob/6d2342b2f720230c2e829beb77fc805d5b5d2229/src/spatialgraph.jl#L73-L78' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/gottacatchenall/EcoDynamics.jl/blob/7e146f688298c797286ad1649b66e385f14726db/src/spatialgraph.jl#L76-L81' class='documenter-source'>source</a><br></p>
 <p><a id='MetacommunityDynamics.distance_matrix-Tuple{SpatialGraph}' href='#MetacommunityDynamics.distance_matrix-Tuple{SpatialGraph}'>#</a>
 <strong><code>MetacommunityDynamics.distance_matrix</code></strong> &mdash; <em>Method</em>.</p>
 <div class="highlight"><pre><span></span><code><span class="n">distance_matrix</span><span class="p">(</span><span class="n">sg</span><span class="o">::</span><span class="kt">SpatialGraph</span><span class="p">;</span><span class="w"> </span><span class="n">distance</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Euclidean</span><span class="p">())</span>
 </code></pre></div>
 <p>Returns a matrix of pairwise distances for all nodes in a <code>SpatialGraph</code>. The argument passed to <code>distance</code> must be of type <code>Distance</code> from <code>Distances.jl</code>.</p>
-<p><a target='_blank' href='https://github.com/gottacatchenall/EcoDynamics.jl/blob/6d2342b2f720230c2e829beb77fc805d5b5d2229/src/spatialgraph.jl#L51-L55' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/gottacatchenall/EcoDynamics.jl/blob/7e146f688298c797286ad1649b66e385f14726db/src/spatialgraph.jl#L54-L58' class='documenter-source'>source</a><br></p>
 <p><a id='MetacommunityDynamics.∂u-Tuple{BevertonHolt, Any, Any}' href='#MetacommunityDynamics.∂u-Tuple{BevertonHolt, Any, Any}'>#</a>
 <strong><code>MetacommunityDynamics.∂u</code></strong> &mdash; <em>Method</em>.</p>
 <div class="highlight"><pre><span></span><code><span class="n">∂u</span><span class="p">(</span><span class="n">bm</span><span class="o">::</span><span class="kt">BevertonHolt</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p">)</span>
 </code></pre></div>
 <p>Single time-step for the <code>BevertonHolt</code> model. </p>
-<p><a target='_blank' href='https://github.com/gottacatchenall/EcoDynamics.jl/blob/6d2342b2f720230c2e829beb77fc805d5b5d2229/src/models/bevertonholt.jl#L22-L26' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/gottacatchenall/EcoDynamics.jl/blob/7e146f688298c797286ad1649b66e385f14726db/src/models/bevertonholt.jl#L22-L26' class='documenter-source'>source</a><br></p>
 
 
 
