@@ -42,9 +42,12 @@ numsites(sg::SpatialGraph) = length(coordinates(sg))
 """
     environment(sg::SpatialGraph)
 
-Returns the matrix of environmental variables of a `SpatialGraph` `sg`
+Returns the dictionary of environmental variables of a `SpatialGraph` `sg`
 """
 environment(sg::SpatialGraph) = sg.environment
+
+environment(sg::SpatialGraph, i) = Dict(zip(keys(environment(sg)), [v[i] for v in values(environment(sg))]))
+
 coordinates(sg::SpatialGraph) = sg.coordinates
 
 
@@ -114,12 +117,12 @@ and vectors of that variable across each node in the `SpatialGraph`.
 function SpatialGraph(; coords = nothing, env = nothing)  
     if isnothing(coords) && isnothing(env)
         c = [(rand(), rand()) for _ = 1:20]
-        e = Dict([Symbol("e$i") => rand(5) for i in 1:length(c)])
+        e = Dict(:e1 => rand(length(c)))
         return SpatialGraph(c, e)
     else
         coords = isnothing(coords) ? 
             (isnothing(env) ? [(rand(), rand()) for _ = 1:20] : [(rand(), rand()) for _ in 1:length(first(values(env)))]) : coords
-            env = isnothing(env) ?  Dict([Symbol("e$i") => rand(5) for i in 1:length(c)]) : env
+            env = isnothing(env) ?  Dict(:e1 => rand(length(c))) : env
         !allequal([length(v) for v in values(env)]) && throw(ArgumentError, "Not all environmental variables match in size.")
         return SpatialGraph(coords, env)
     end 

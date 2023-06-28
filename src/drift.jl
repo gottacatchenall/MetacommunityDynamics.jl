@@ -13,3 +13,8 @@ function ∂w(gd::GaussianDrift, x::Matrix{T}) where T<:Real
     σ = similar(x)
     σ .= gd.σ
 end
+
+function ∂w(gd::GaussianDrift, du, x::Matrix{T}) where T<:Real
+    σ = similar(x)
+    σ .= gd.σ
+end

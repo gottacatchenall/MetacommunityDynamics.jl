@@ -6,14 +6,7 @@ end
 
 discreteness(::LogisticModel{T}) where T = MetacommunityDynamics.Continuous 
 initial(::LogisticModel{T}) where T = 5.
-
 numspecies(::LogisticModel) = 1
-
-paramnames(::LogisticModel) = fieldnames(LogisticModel)
-
-
-growthratename(::LogisticModel) = :λ
-growthrate(lm::LogisticModel) = getfield(lm,growthratename(lm))
 
 
 function ∂u(lm::LogisticModel, u, θ)
@@ -35,8 +28,6 @@ function ∂u_spatial(lm::LogisticModel, u)
     du 
 end
 
-
-
 # ====================================================
 #
 #   Constructors
@@ -44,15 +35,21 @@ end
 # =====================================================
 
 function LogisticModel(;
-    λ = [1.2],
-    K = [50.],
-    α  = [1.],
-)
+    λ::Vector{T} = [1.2],
+    K::Vector{T} = [50.],
+    α::Vector{T}  = [1.],
+) where T 
     LogisticModel{Local}(
         Parameter(λ), 
         Parameter(K), 
         Parameter(α))
 end
+
+# ====================================================
+#
+#   Plotting 
+#
+# =====================================================
 
 function replplot(::LogisticModel{Local}, traj::Trajectory) 
     u = timeseries(traj)
