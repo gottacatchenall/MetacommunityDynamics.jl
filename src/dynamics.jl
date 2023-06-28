@@ -64,7 +64,7 @@ spatmodel = spatialize(rosen, sg, sp; niche=niche)
 
 dk = DispersalKernel(max_distance=0.5)
 
-
+ϕ =  DispersalPotential(dk,sg)
 
 diff =Diffusion(0.01, DispersalPotential(dk,sg))
 

@@ -116,16 +116,14 @@ kernel values for each patch, so that $\Phi_{ij}$ is the probability that any
 individual originating in patch $i$ disperses to patch $j$. 
 
 ```@example 1
-ϕ =  DispersalPotential(dk,sg)
+ϕ =  DispersalPotential(dk,sg);
 ```
-
 Finally, we can define our `Diffusion` model using a base migration probability and the dispersal potential.
 
 ```@example 1
 m = 0.01
-diff =Diffusion(m, phi)
+diff =Diffusion(m, ϕ)
 ```
-
 Now, we can finally construct the a `Problem` using our local dynamics
 `spatialrm` model and our diffusion model `diff`. Initial conditions and
 timespan can be provided here.

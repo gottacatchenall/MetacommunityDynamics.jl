@@ -15,7 +15,9 @@ The _Rosenzweig-MacArthur_ model is a model of consumer-resource dynamics.
 
 It is described by the equations 
 
-$$\frac{dR}{dt} = \lambda R \bigg(1 - \frac{R}{K}\bigg) - \frac{\alpha CR}{1 +\alpha \eta R}$$
+$$\frac{dR}{dt} = \lambda R \bigg(1 - \frac{R}{K}\bigg) - \frac{\alpha CR}{1
++\alpha \eta R}$$
+
 $$\frac{dC}{dt} = \beta \frac{\alpha CR}{1 + \alpha \eta R} - \gamma   C$$
 
 where $R$ is the relative biomass of the resource, $C$ is the relative biomass
@@ -36,7 +38,7 @@ rm = RosenzweigMacArthur()
 Then we setup the problem
 
 ```@example 1
-prob = problem(rm, Deterministic)
+prob = problem(rm)
 ```
 
 Third we simulate!
