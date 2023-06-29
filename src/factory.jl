@@ -1,17 +1,21 @@
-function factory(m::Model{SC,M,Local,D}) where {SC,M,D}
+function factory(m::Model{SC,M,Local,D}) where {SC<:Union{Population,Community},M,D}
     (u,θ,_) -> ∂u(m, u, θ)
 end
 
-function factory(m::Model, stoch::T) where {T<:Stochasticity}
+function factory(m::Model{SC,M,SP,D}, stoch::T) where {SC<:Union{Population,Community},M,SP,D,T<:Stochasticity}
     (u,θ,_) -> ∂u(m, u, θ), (u,_,_) -> ∂w(stoch, u)
 end
 
-function factory(m::Model{SC,M,Spatial,D}, d::T) where {T<:Union{Diffusion,Vector{Diffusion}},SC,M,D}
+function factory(m::Model{SC,M,Spatial,D}, d::T) where {T<:Union{Diffusion,Vector{Diffusion}},SC<:Union{Population,Community},M,D}
     return _spatial_factory(m,d)
 end
 
-function factory(m::Model{SC,M,Spatial,D}, d::T, stoch::S) where {T<:Union{Diffusion,Vector{Diffusion}}, S<:Stochasticity,SC,M,D}
+function factory(m::Model{SC,M,Spatial,D}, d::T, stoch::S) where {T<:Union{Diffusion,Vector{Diffusion}},S<:Stochasticity,SC<:Union{Population,Community},M,D}
     _spatial_factory(m,d), (u,_,_) -> ∂w(stoch, u)     
+end
+
+function factory(m::Model{SC,M,Spatial,D}) where {SC<:Union{Metapopulation,Metacommunity},M,D}
+    (u,θ,_) -> ∂u(m, u, θ)
 end
 
 
@@ -30,3 +34,4 @@ function _spatial_factory(m::Model, d::Diffusion)
     end
     return f
 end 
+

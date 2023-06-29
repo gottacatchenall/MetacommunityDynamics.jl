@@ -1,5 +1,5 @@
 """
-    struct RosenzweigMacArthur{S,T<:Number} <: Model
+    struct RosenzweigMacArthur{S<:Spatialness} <: Model{Community,Biomass,S,Continuous}
 
 
 Dynamics given by
@@ -18,6 +18,8 @@ struct RosenzweigMacArthur{S<:Spatialness} <: Model{Community,Biomass,S,Continuo
     γ::Parameter       # heterotroph death rate (0 for all autotrophs)
     K::Parameter       # autotroph carrying capacity (0 for heterotrophs)
 end 
+
+
 
 # No longer necessary with this as parameter to model type
 # discreteness(::RosenzweigMacArthur) = Continuous 
@@ -58,16 +60,16 @@ end
 # =====================================================
 
 function RosenzweigMacArthur(;
-    metaweb = [0 1; 0 0],
-    λ =  [0.0, 0.5],   
-    α =  [0.0  5.0;    
+    metaweb::Matrix = [0 1; 0 0],
+    λ::Vector =  [0.0, 0.5],   
+    α::Matrix =  [0.0  5.0;    
           5.0  0.0],
-    η =  [0.0  3.0;   
+    η::Matrix =  [0.0  3.0;   
           3.0  0.0],
-    β =  [0.0  0.5; 
+    β::Matrix =  [0.0  0.5; 
           0.5  0.0],
-    γ =  [0.1, 0.],  
-    K =  [0.0, 0.3]
+    γ::Vector =  [0.1, 0.],  
+    K::Vector =  [0.0, 0.3]
 )
     RosenzweigMacArthur{Local}(
         Parameter(metaweb), 
@@ -80,54 +82,25 @@ function RosenzweigMacArthur(;
     )
 end
 
-# ====================================================
-#
-#   Spatial, soon we will delete this and have generic method for any spatial
-#   model that cycles over locations and runs the local version of this model
-#
-# =====================================================
-
-function ∂u_spatial(rm::RosenzweigMacArthur, u, θ)
-    M = rm.metaweb
-    λ, α, η, β, γ, K = θ
-    I = findall(!iszero, M)
-    du = similar(u)
-    du .= 0
-
-    n_sites = size(u,2)
-    for site in 1:n_sites
-        for i in I
-            ci,ri = i[1], i[2]
-            C,R = u[ci,site], u[ri,site]
-            if C > 0 && R > 0
-                λᵢ, αᵢ, ηᵢ, βᵢ, γᵢ, Kᵢ = λ[ri,site], α[ci,ri], η[ci,ri], β[ci,ri], γ[ci], K[ri]
-                dC, dR = du_dt(C,R, λᵢ, αᵢ, ηᵢ, βᵢ, γᵢ, Kᵢ)
-                du[ci,site] += dC
-                du[ri,site] += dR
-            end 
-        end 
-    end
-    du 
-end
-
-function two_species(::Type{RosenzweigMacArthur}; 
-    λ = 0.5, 
-    α = 5.0 ,
-    η = 3.0,
-    β = 0.5,
-    γ = 0.1,
-    K = 0.3)
-    (    
-        M = [0 1; 0 0],
-        λ = [0., λ],
-        α =  [0.0  α;  
-            0.0  0.0],
-        η =  [0.0  η;    
-            0.0 0.0],
-        β =  [0.0  β;   
-            0.0  0.0],
-        γ =  [γ, 0.],         
-        K =  [0.0, K]
+function RosenzweigMacArthur(;
+    λ::T = 0.5, 
+    α::T = 5.0,
+    η::T = 3.0,
+    β::T = 0.5,
+    γ::T = 0.1,
+    K::T = 0.3) where T<:Number
+    
+    RosenzweigMacArthur{Local}(
+        Parameter([0 1; 0 0]),
+        Parameter([0., λ]),
+        Parameter([0.0  α;  
+            0.0  0.0]),
+        Parameter([0.0  η;    
+            0.0 0.0]),
+        Parameter([0.0  β;   
+            0.0  0.0]),
+        Parameter([γ, 0.]),         
+        Parameter([0.0, K])
     )   
 end
 

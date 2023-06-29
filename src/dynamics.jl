@@ -1,6 +1,6 @@
 using DifferentialEquations
 using Distributions
-using MetacommunityDynamics
+using MetacommunityDynamics 
 using CairoMakie
 using NeutralLandscapes
 using ProgressMeter
@@ -34,8 +34,10 @@ p = problem(CompetitiveLotkaVolterra())
 
 
 
-p = problem(CompetitiveLotkaVolterra(), GaussianDrift(0.005))
+p = problem(CompetitiveLotkaVolterra(), GaussianDrift(0.01))
 @time sol = simulate(p)
+
+
 
 #----------------------------------------------------------
 # spatial 
@@ -66,12 +68,20 @@ dk = DispersalKernel(max_distance=0.5)
 
 ϕ =  DispersalPotential(dk,sg)
 
-diff =Diffusion(0.01, DispersalPotential(dk,sg))
+diffusion =Diffusion(0.001, DispersalPotential(dk,sg))
 
-prob = problem(spatmodel, diff)
+prob = problem(spatmodel, diffusion)
 
 @time simulate(prob)
 
+
+# ----------- metapop
+
+lev = LevinsMetapopulation(c=0.1)
+
+pr = problem(lev)
+
+t = simulate(pr)
 
 
 
@@ -115,19 +125,14 @@ prob = problem(spatiallm, GaussianDrift(3.))
 clv = CompetitiveLotkaVolterra()
 el = EnvironmentLayer(generator=PlanarGradient())
 
-
-σ = 0.1
-niche = GaussianNiche()
-
 ϕ = DispersalPotential(DispersalKernel(max_distance=0.4), sg)
 D = Diffusion(0.01, ϕ)
 
 
-prob = problem(spatialclv, Deterministic)
+prob = problem(spatialclv)
 @time traj = simulate(prob)
 
 # measure alpha div vs. σ
-
 _tfactory(σ) = Dict(
     :μ => [0.2, 0.4, 0.6, 0.8],
     :σ => fill(σ,4),

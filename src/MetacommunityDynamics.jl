@@ -42,6 +42,9 @@ module MetacommunityDynamics
     include(joinpath("models", "lvcompetition.jl"))
     include(joinpath("models", "rosenzweigmacarthur.jl"))
 
+    include(joinpath("models", "levins.jl"))
+
+
     export Diffusion, SpatialModel
     export diffusion!
 
@@ -77,6 +80,8 @@ module MetacommunityDynamics
     export CompetitiveLotkaVolterra
     export RosenzweigMacArthur 
     export LogisticModel
+
+    export LevinsMetapopulation
 
     export GaussianNiche, Niche
 
