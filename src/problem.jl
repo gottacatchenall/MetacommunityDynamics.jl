@@ -14,7 +14,7 @@ model(p::Problem) = p.model
 
 # lot's of redundant code here, there are def way to shorten number of lines here
 
-function problem(m::Model{SC,M,Local,D}; tspan=(0,100), u0=nothing) where {SC,M,D}
+function problem(m::Model{SC,M,Local,D}; tspan=(0,100), u0=nothing) where {SC<:Union{Population,Community},M,D}
     prob = D == Continuous ? ODEProblem : DiscreteProblem
     
     f = factory(m) 
@@ -24,6 +24,19 @@ function problem(m::Model{SC,M,Local,D}; tspan=(0,100), u0=nothing) where {SC,M,
     pr = prob(f, u0, tspan, θ) 
     Problem{typeof(pr),Deterministic}(m, pr, tspan, u0)
 end
+
+function problem(m::Model{SC,M,Spatial,D}; tspan=(0,100), u0=nothing) where {SC<:Union{Metapopulation,Metacommunity},M,D}
+    prob = DiscreteProblem
+    
+    f = factory(m) 
+    u0 = isnothing(u0) ? initial(m) : u0
+
+    θ = parameters(m)
+
+    pr = prob(f, u0, tspan, θ) 
+    Problem{typeof(pr),Deterministic}(m, pr, tspan, u0)
+end
+
 
 function problem(m::Model{SC,M,Local,D}, gd::GaussianDrift; tspan=(0,100), u0=nothing) where {SC,M,D}
     prob = D == Continuous ? SDEProblem : DiscreteProblem
@@ -37,8 +50,7 @@ function problem(m::Model{SC,M,Local,D}, gd::GaussianDrift; tspan=(0,100), u0=no
 end
 
 function problem(model::Model{SC,M,S,D}, diffusion::Diffusion; tspan=(0,100), u0=nothing) where {SC,M,S,D}
-    S != Spatial && throw("Can't combine Diffusion with a Local model.")
-
+    S != Spatial && throw(ArgumentError, "Can't combine Diffusion with a Local model.")
     f = factory(model, diffusion)
 
     prob = D == Continuous ? ODEProblem : DiscreteProblem
@@ -53,7 +65,7 @@ function problem(model::Model{SC,M,S,D}, diffusion::Diffusion; tspan=(0,100), u0
 end 
 
 function problem(model::Model{SC,M,S,D}, diffusion::Diffusion, gd::GaussianDrift; tspan=(0,100), u0=nothing) where {SC,M,S,D}
-    S != Spatial && throw("Can't combine Diffusion with a Local model.")
+    S != Spatial && throw(ArgumentError, "Can't combine Diffusion with a Local model.")
   
     prob = D == Continuous ? SDEProblem : DiscreteProblem
 
@@ -68,5 +80,16 @@ function problem(model::Model{SC,M,S,D}, diffusion::Diffusion, gd::GaussianDrift
     Problem{typeof(pr),Stochastic}(model, pr, tspan, u0)
 end 
 
+
+# Printing
+
+Base.string(p::Problem{T,R}) where {T,R} = """
+A {blue}$R{/blue} {bold}{#a686eb}Problem{/#a686eb}{/bold} 
+- model: $(typeof(p.model)) $(spatialness(p.model))
+- u0: $(p.initial_condition)
+- tspan: $(p.tspan)
+"""
+
+Base.show(io::IO,  p::Problem{T,R}) where {T,R} = tprint(p)
 
 

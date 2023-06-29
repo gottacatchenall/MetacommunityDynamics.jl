@@ -168,12 +168,13 @@ end
 
 Base.string(sg::SpatialGraph) = """
 A {green}{bold}spatial graph{/bold}{/green} with {bold}{blue}$(length(sg.coordinates)){/blue}{/bold} locations.
+
+Environment: $(environment(sg))
 """
 
 Base.show(io::IO, ::MIME"text/plain", sg::SpatialGraph) = begin 
     i = [coordinates(sg)[idx][1] for idx in eachindex(coordinates(sg))]
     j = [coordinates(sg)[idx][1] for idx in eachindex(coordinates(sg))]
-
     plt = scatterplot(
         [x[1] for x in sg.coordinates],
         [x[2] for x in sg.coordinates],

@@ -3,6 +3,17 @@
 
 ## Beverton-Holt
 
-```@doc
+```@docs
 BevertonHolt 
 ```
+
+
+
+## Logisitic Model
+
+```@docs
+LogisiticModel 
+```
+
+
+

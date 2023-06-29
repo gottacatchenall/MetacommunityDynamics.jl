@@ -1,4 +1,8 @@
-# Hello World in `EcoDynamics.jl`
+# A quick start guide to  `EcoDynamics.jl`
+
+!!! abstract
+
+    This is meant as a quick tutorial to show a typical workflow using EcoDynamics.jl. We will introduce many concepts quite quickly in order to show off the features that make `EcoDynamics` tick. If it feels like the content is moving fast, that's okay. More detailed explanations of the functionality showcased here will follow in subsequent parts of the 'Getting Started' guide.
 
 This document is a quick start to the features in `EcoDynamics`. Here we will
 build a model of consumer-resource dynamics on a spatial graph, where the
@@ -11,17 +15,22 @@ First we'll load the package.
 using MetacommunityDynamics
 ```
 
-For this example, we are going to use the Rosenzweig-MacArthur [@cite] model of
-consumer-resource dynamics. Initially, the Rosenzweig-MacArthur was defined as 
+For this example, we are going to use one of the many models included in the
+`EcoDynamics` library. The Rosenzweig-MacArthur [@cite] model of
+consumer-resource dynamics. Initially, the Rosenzweig-MacArthur was originally
+defined as  
 
-$$\frac{dR}{dt} = \lambda R \bigg(1 - \frac{R}{K}\bigg) - \frac{\alpha CR}{1 +\alpha \eta R}$$
+$$\frac{dR}{dt} = \lambda R \bigg(1 - \frac{R}{K}\bigg) - \frac{\alpha CR}{1
++\alpha \eta R}$$
+
 $$\frac{dC}{dt} = \beta \frac{\alpha CR}{1 + \alpha \eta R} - \gamma   C$$
 
 where $R$ is the relative biomass of the resource, $C$ is the relative biomass
 of the consumer, $\alpha$ is the attack-rate, $\eta$ is the handling type,
 $\lambda$ is the limiting instric growth rate,  $\beta$ is the intrinsic
 infintesimal growth of biomass for the consumer per unit resource, and $\gamma$
-is the intrinsic death date of consumers.
+is the intrinsic death date of consumers. (Note that this is equivalent to a
+Lotka-Volterra model with a Holling Type-II functional response).
 
 By default, in `EcoDynamics` the `RosenzweigMacArthur` model is parameterized
 for two species exhibiting a limit cycle, though it can be used for an arbitrary
@@ -122,7 +131,7 @@ Finally, we can define our `Diffusion` model using a base migration probability 
 
 ```@example 1
 m = 0.01
-diff =Diffusion(m, ϕ)
+diff = Diffusion(m, ϕ)
 ```
 Now, we can finally construct the a `Problem` using our local dynamics
 `spatialrm` model and our diffusion model `diff`. Initial conditions and
