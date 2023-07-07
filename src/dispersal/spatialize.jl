@@ -7,7 +7,6 @@ end
 
 function _spatial_parameters(model::M, sg, sp, niche) where {M<:Model}
     paramnames = fieldnames(M)
-
     tr = sp.traits
     ns = numsites(sg)
     θs = []
@@ -18,4 +17,3 @@ function _spatial_parameters(model::M, sg, sp, niche) where {M<:Model}
     end
     NamedTuple([p=>[θ[p] for θ in θs] for p in paramnames])
 end 
-

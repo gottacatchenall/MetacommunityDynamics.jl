@@ -16,17 +16,19 @@ module MetacommunityDynamics
     include("parameters.jl")
 
     include("environment.jl")
-    include("spatialgraph.jl")
-
+    include("coordinates.jl")
 
     include("species.jl")
 
 
     include(joinpath("dispersal", "kernel.jl"))
-    include(joinpath("dispersal", "potential.jl"))
+
+    include("spatialgraph.jl")
     include(joinpath("dispersal", "diffusion.jl"))
 
     include(joinpath("dispersal", "spatialize.jl"))
+
+
 
     include("problem.jl")
     include("trajectory.jl")
@@ -67,10 +69,14 @@ module MetacommunityDynamics
 
     export spatialize
 
+    export Coordinates
     export SpatialGraph
     export DispersalKernel
-    export DispersalPotential
+    
+    export kernel
+    export max_distance, decay
 
+    export multispecies
 
     export Species, SpeciesPool, Niche, GaussianNiche
     export EnvironmentLayer

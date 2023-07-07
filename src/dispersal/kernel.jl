@@ -4,8 +4,12 @@
     decay = 3.0 # a positive real number 
     max_distance = 1.0 # cutoff threshold for a value of func to be considered 0
 end
+
+max_distance(dk::DispersalKernel) = dk.max_distance
+decay(dk::DispersalKernel) = dk.decay
+
 function (dk::DispersalKernel)(x)
-    x > dk.max_distance ? 0 : dk.func(x, dk.decay)
+    x > max_distance(dk) ? 0 : dk.func(x, decay(dk))
 end
 
 Base.string(kern::DispersalKernel) = """
