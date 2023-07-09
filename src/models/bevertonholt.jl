@@ -1,5 +1,5 @@
 """
-    BevertonHolt <: Model
+    BevertonHolt{S} <: Model{Population,Biomass,S,Discrete}
 
 The [Beverton-Holt
 model](https://en.wikipedia.org/wiki/Beverton%E2%80%93Holt_model) is a
@@ -26,8 +26,10 @@ Single time-step for the `BevertonHolt` model.
 """
 function ∂u(bm::BevertonHolt, x, θ) 
     R₀, K =  θ
+    N = x[1]
+    N <= 0 && return 0 
     @fastmath M = K[1]/(R₀[1]-1)
-    @fastmath R₀[1] * x / (1 + (x/M))
+    @fastmath R₀[1] * x / (1 + (N/M))
 end 
 
 
@@ -53,8 +55,7 @@ end
 #
 # =====================================================
 
-
-function replplot(::BevertonHolt, traj)
+function replplot(::BevertonHolt{Local}, traj::Trajectory) 
     u = timeseries(traj)
     ymax = max(u...)
     p = lineplot(u, 
@@ -62,6 +63,21 @@ function replplot(::BevertonHolt, traj)
         ylabel="Abundance", 
         width=80,
         ylim=(0,ymax))
+    p
+end
+
+function replplot(::BevertonHolt{Spatial}, traj::Trajectory)
+    u = vcat(Array(traj.sol.u)...)
+    ymax = max(u...)
+    p = lineplot(u[:,1], 
+        xlabel="time (t)", 
+        ylabel="Abundance", 
+        width=80,
+        ylim=(0,ymax))
+
+    for i in eachcol(u)[2:end]
+        lineplot!(p, i)
+    end
     p
 end
 

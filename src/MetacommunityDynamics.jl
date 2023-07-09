@@ -6,6 +6,7 @@ module MetacommunityDynamics
     using Distances
     using NeutralLandscapes
     using DifferentialEquations
+    using CairoMakie
 
     using TestItems
     
@@ -114,5 +115,6 @@ module MetacommunityDynamics
 
     export numsites, coordinates, environment, envdims
 
+    export makieplot
 
 end # module

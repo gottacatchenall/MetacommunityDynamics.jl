@@ -36,7 +36,7 @@ An {green}{bold}environmental layer{/bold}{/green} of size $(size(env.matrix)).
 Base.show(io::IO, ::MIME"text/plain", env::EnvironmentLayer) = begin 
     tprint(io, string(env))
     print(io, 
-        heatmap(
+        UnicodePlots.heatmap(
             env.matrix,
             xlabel="x",
             ylabel="y",

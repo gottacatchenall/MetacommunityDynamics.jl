@@ -1,4 +1,8 @@
+"""
+    CompetitiveLotkaVolterra{S} <: Model{Community,Biomass,S,Continuous}
 
+Competitive Lotka-Voterra.
+"""
 struct CompetitiveLotkaVolterra{S} <: Model{Community,Biomass,S,Continuous}
     λ::Parameter
     α::Parameter

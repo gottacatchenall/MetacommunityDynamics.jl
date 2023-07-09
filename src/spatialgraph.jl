@@ -10,6 +10,9 @@ coordinates(sg::SpatialGraph) = sg.coordinates
 numsites(sg::SpatialGraph) = numsites(coordinates(sg))
 envdims(sg::SpatialGraph) = envdims(coordinates(sg))
 
+environment(sg::SpatialGraph) = environment(coordinates(sg))
+environment(sg::SpatialGraph, i) = environment(coordinates(sg), i)
+
 
 SpatialGraph(coords::Coordinates, kernel::DispersalKernel) = SpatialGraph(coords, kernel, dispersal_potential(kernel, coords))
 SpatialGraph(kernel::DispersalKernel, coords::Coordinates) = SpatialGraph(coords, kernel, dispersal_potential(kernel, coords))
@@ -22,9 +25,12 @@ function dispersal_potential(kernel::DispersalKernel, coords::Coordinates{T,P}) 
     ns = numsites(coords)
     kernmat = kernel_matrix(coords, kernel)
     mat = zeros(T, size(kernmat))
-    for i = 1:ns, j = 1:ns
-        if (sum(kernmat[i, :]) > 0)
-            mat[i, j] = kernmat[i, j] / sum(kernmat[i, :])
+    for (i,r) in enumerate(eachrow(kernmat))
+        s = sum(r)
+        if (s > 0)
+            for j in 1:ns
+                mat[i, j] = kernmat[i, j] / s
+            end
         end
     end
     return mat
@@ -32,6 +38,13 @@ end
 
 _possible_links(mat) = prod(size(mat)) - size(mat,1)
 
+
+
+# ====================================================
+#
+#   Plotting
+#
+# =====================================================
 
 Base.string(sg::SpatialGraph) = """
 {bold}{#87d6c1}SpatialGraph{/#87d6c1}{/bold} with {blue}$(length(findall(!iszero,
@@ -41,10 +54,34 @@ Base.show(io::IO, ::MIME"text/plain", sg::SpatialGraph) = begin
     tprint(string(sg))
     print(
         io,
-        heatmap(sg.potential, xlabel="Node i", ylabel="Node j", zlabel="ϕᵢⱼ", width=30)
+        UnicodePlots.heatmap(sg.potential, xlabel="Node i", ylabel="Node j", zlabel="ϕᵢⱼ", width=30)
     )
 end
 
+
+function makieplot(
+    sg::SpatialGraph;
+    markersize = 25,
+    alphamap = x->1.5x,
+    widthmap = x->5exp(x)
+)
+    coords = (coordinates(sg).coordinates)
+    x, y = [i[1] for i in coords], [i[2] for i in coords]
+    ϕ = sg.potential
+
+    f = Figure(resolution=(900,900))
+    ax = Axis(f[1,1])
+    for s in CartesianIndices(ϕ)
+        ϕᵢⱼ = ϕ[s[1],s[2]]
+
+        lw = widthmap(ϕᵢⱼ)
+        lc = (:grey30, alphamap(ϕᵢⱼ))
+        CairoMakie.lines!(ax, [x[s[1]], x[s[2]]], [y[s[1]], y[s[2]]], linewidth=lw, color=lc)
+    end
+    CairoMakie.scatter!(ax, x,y; markersize=markersize)
+
+    f
+end 
 
 
 # ====================================================
