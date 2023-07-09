@@ -55,8 +55,19 @@ obs = observe(Observer(frequency=1), traj)
 
 First we define our model for inference.
 
-```@example 1
-print("Fitting model...")
+```@example 2
+using Turing, DiffEqBayes
+using DifferentialEquations
+using MetacommunityDynamics
+using LinearAlgebra
+using CairoMakie
+rm = RosenzweigMacArthur(K=0.25)
+
+freq = 4
+prob = problem(rm, tspan=(1,100))
+traj = simulate(prob)
+obs = observe(Observer(frequency=freq, measurement_error=Normal(0,0.01)), traj)
+
 @model function fit_rm(data, prob)
     σ ~ InverseGamma(2,3)
     λ ~ TruncatedNormal(0.5,1, 0,1.5)
@@ -64,32 +75,68 @@ print("Fitting model...")
     η ~ Normal(2,3.)
     β ~ TruncatedNormal(0.5,1,0,1.5)
     γ ~ TruncatedNormal(0.5,1,0,1.5)
-    K ~ TruncatedNormal(0.5,1,0,1.5)
+    K ~ TruncatedNormal(0.5,1.,0,1.5)
 
-    θ = two_species(RosenzweigMacArthur, λ=λ, α=α, η=η, β=β, γ=γ, K=K)
-    predicted = solve(prob, Tsit5(); p=θ, saveat=1)
+    θ = parameters(RosenzweigMacArthur(λ=λ, α=α, η=η, β=β, γ=γ, K=K))
+    predicted = solve(prob, Tsit5(); p=θ, saveat=freq)[1:end-1]
     
+
     for i in eachindex(predicted)
         data[:,i] ~ MvNormal(predicted[i], σ^2 * I)
     end
 end
+
 model = fit_rm(obs, prob.prob)
 chain = sample(model, NUTS(0.65), MCMCSerial(), 300, 1)
+
+
 posterior_samples = sample(chain[[:λ, :α, :η, :β, :γ, :K]], 300)
-f = Figure()
+
+
+
+endtime = 250
+prob = problem(rm, tspan=(1,endtime))
+true_traj = Array(simulate(prob).sol)
+
+
+f = Figure(resolution=(2400,1500), fontsize=60)
 ax = Axis(f[1,1], xlabel="Time", ylabel="Biomass")
-xlims!(0,100)
+ylims!(0,0.23)
+xlims!(0,endtime)
+
+ensemble_traj = zeros(2,endtime)
+
 for p in eachrow(Array(posterior_samples))
     λ, α, η, β, γ, K =  p
-    θ = two_species(RosenzweigMacArthur, λ=λ, α=α, η=η, β=β, γ=γ, K=K)
+    θ = parameters(RosenzweigMacArthur(λ=λ, α=α, η=η, β=β, γ=γ, K=K))
+    sol_p = solve(prob.prob, Tsit5(); tspan=(1,endtime),p=θ, saveat=1)
 
-    sol_p = solve(prob.prob, Tsit5(); p=θ, saveat=1)
+    ensemble_traj .+= Array(sol_p)
 
-    lines!(ax, sol_p.t, [sol_p.u[i][1] for i in eachindex(sol_p.t)], color=(:lightskyblue1, 0.1))
-    lines!(ax, sol_p.t, [sol_p.u[i][2] for i in eachindex(sol_p.t)], color=(:lightcoral, 0.04))
+    lines!(ax, sol_p.t, [sol_p.u[i][1] for i in eachindex(sol_p.t)], color=(:lightskyblue1, 0.3))
+    lines!(ax, sol_p.t, [sol_p.u[i][2] for i in eachindex(sol_p.t)], color=(:lightcoral, 0.15))
 end
-scatter!(ax, 1:size(obs,2), obs[1,:], color=(:dodgerblue))
-scatter!(ax, 1:size(obs,2), obs[2,:], color=(:red, 0.5))
+
+ensemble_traj = ensemble_traj ./ length(posterior_samples)
+
+scatter!(ax, 1:freq:100, obs[1,:], color=(:dodgerblue))
+scatter!(ax, 1:freq:100, obs[2,:], color=(:red, 0.5))
+
+
+
+ens_C = lines!(ax, 1:size(true_traj,2), ensemble_traj[1,:], color=:dodgerblue, linewidth=8, linestyle=:dash)
+ens_R = lines!(ax, 1:size(true_traj,2), ensemble_traj[2,:], color=:red, linewidth=8, linestyle=:dash)
+
+
+true_C = lines!(ax, 1:size(true_traj,2), true_traj[1,:], color=:dodgerblue, linewidth=8)
+true_R = lines!(ax, 1:size(true_traj,2), true_traj[2,:], color=:red, linewidth=8)
+obs_C = scatter!(ax, 1:freq:100, obs[1,:], strokewidth=6, markersize=42,strokecolor=(:dodgerblue), color=:white)
+obs_R = scatter!(ax, 1:freq:100, obs[2,:], strokewidth=6, markersize=42, strokecolor=(:red, 0.5), color=:white)
+
+axislegend(ax,
+[true_C, true_R],
+["Consumer", "Resource"],position=:rt)
+
 f
 ```
 

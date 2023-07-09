@@ -28,7 +28,7 @@ function _spatial_factory(m::Model, d::Diffusion)
         for s in 1:ns
             u_local = u[:,s]    
             θ_local = [x[s] for x in θ]
-            du[:,s] = ∂u(m, u_local, θ_local)
+            du[:,s] .= ∂u(m, u_local, θ_local)
         end 
         du 
     end

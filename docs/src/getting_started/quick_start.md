@@ -71,7 +71,7 @@ initialized with environmental variable,`SpatialGraph`'s are initialized with a
 single environmental varaible `:e1`, similarly uniformally drawn from $[0,1]$.
 
 ```@example 1
-sg = SpatialGraph(20)
+sg = SpatialGraph(Coordinates(20), DispersalKernel(max_distance=0.3))
 ```
 
 Now, we provide a function that encodes our model of the niche as described
@@ -83,7 +83,7 @@ particular _patch_.
 ```@example 1
 function niche(model, traits, local_env)
     θ = paramdict(model)
-    θ[:λ] = [λᵢ > 0 ? λᵢ*exp(-(traits[:x][i] - local_env[:e1])^2) : 0 for (i,λᵢ) in enumerate(θ[:λ])]
+    θ[:λ] = [λᵢ > 0 ? λᵢ*exp(-(traits[:x][i] - local_env[:e])^2) : 0 for (i,λᵢ) in enumerate(θ[:λ])]
     return θ
 end
 ```
@@ -115,23 +115,11 @@ disperse, meaning for any $d_{ij}$ greater than the `max_distance`, the kernel
 will be equal to zero. 
 
 
-```@example 1
-dk = DispersalKernel(max_distance=0.5)
-```
-
-Before we can use the `DispersalKernel` to build a diffusion model, we need to
-first compute the `DispersalPotential`. The potential $\Phi$ normalizes over the
-kernel values for each patch, so that $\Phi_{ij}$ is the probability that any
-individual originating in patch $i$ disperses to patch $j$. 
-
-```@example 1
-ϕ =  DispersalPotential(dk,sg);
-```
 Finally, we can define our `Diffusion` model using a base migration probability and the dispersal potential.
 
 ```@example 1
 m = 0.01
-diff = Diffusion(m, ϕ)
+diff = Diffusion(m, sg)
 ```
 Now, we can finally construct the a `Problem` using our local dynamics
 `spatialrm` model and our diffusion model `diff`. Initial conditions and

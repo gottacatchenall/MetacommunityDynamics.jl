@@ -1,3 +1,8 @@
+"""
+    LogisticModel{S} <: Model{Population,Biomass,S,Continuous}
+
+Logistic Model. 
+"""
 struct LogisticModel{S} <: Model{Population,Biomass,S,Continuous}
     λ::Parameter
     K::Parameter
@@ -11,22 +16,12 @@ numspecies(::LogisticModel) = 1
 
 function ∂u(lm::LogisticModel, u, θ)
     λs, Ks, αs = θ
+    N = u[1]
+    N <= 0 && return 0
     λ, K, α = λs[1], Ks[1], αs[1] 
-    return @fastmath λ*u*(1-(u/K)^α)
+    return @fastmath λ*u*(1-(N/K)^α)
 end
 
-function ∂u_spatial(lm::LogisticModel, u)
-    λs, Ks, αs = lm.λ, lm.K, lm.α
-    K, α = Ks[1], αs[1] 
-    du = similar(u)
-    du .= 0
-
-    n_sites = size(u,2)
-    for site in 1:n_sites
-        @fastmath  du[site] = λs[site]*u[site]*(1-(u[site]/K)^α)
-    end
-    du 
-end
 
 # ====================================================
 #

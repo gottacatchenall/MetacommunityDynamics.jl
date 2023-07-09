@@ -47,3 +47,4 @@ Base.show(io::IO, ::MIME"text/plain", traj::Trajectory) = begin
         replplot(model(traj), traj)
     )
 end 
+
