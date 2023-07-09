@@ -774,7 +774,7 @@
 <span class="k">using</span><span class="w"> </span><span class="n">CairoMakie</span>
 </code></pre></div>
 <div class="highlight"><pre><span></span><code>┌ Warning: Environment variable CMDSTAN_HOME not set. Use set_cmdstan_home!.
-└ @ StanBase ~/.julia/packages/StanBase/EKgLz/src/StanBase.jl:52
+└ @ StanBase ~/.julia/packages/StanBase/QkvTT/src/StanBase.jl:52
 </code></pre></div>
 <p>The <em>Rosenzweig-MacArthur</em> model is a model of consumer-resource dynamics. </p>
 <p>It is described by the equations </p>
@@ -824,50 +824,97 @@ $$</p>
 <div class="highlight"><pre><span></span><code><span class="n">obs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">observe</span><span class="p">(</span><span class="n">Observer</span><span class="p">(</span><span class="n">frequency</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span><span class="w"> </span><span class="n">traj</span><span class="p">)</span>
 </code></pre></div>
 <div class="highlight"><pre><span></span><code>2×101 Matrix{Float64}:
- 0.194628  0.199632  0.166467  0.216652  …  0.157877   0.184676   0.141837
- 0.204412  0.213035  0.157645  0.143511     0.0525351  0.0569378  0.0500668
+ 0.199288  0.226325  0.180771  0.193625  …  0.175821  0.174762   0.14495
+ 0.213336  0.181221  0.17115   0.167627     0.055232  0.0829845  0.0331384
 </code></pre></div>
 <p><a id='Inference'></a></p>
 <p><a id='Inference-1'></a></p>
 <h2 id="inference">Inference</h2>
 <p>First we define our model for inference.</p>
-<p>```@example 1
-print("Fitting model...")
-@model function fit_rm(data, prob)
-    σ ~ InverseGamma(2,3)
-    λ ~ TruncatedNormal(0.5,1, 0,1.5)
-    α ~ Normal(2,3.)
-    η ~ Normal(2,3.)
-    β ~ TruncatedNormal(0.5,1,0,1.5)
-    γ ~ TruncatedNormal(0.5,1,0,1.5)
-    K ~ TruncatedNormal(0.5,1,0,1.5)</p>
-<pre><code>θ = two_species(RosenzweigMacArthur, λ=λ, α=α, η=η, β=β, γ=γ, K=K)
-predicted = solve(prob, Tsit5(); p=θ, saveat=1)
+<div class="highlight"><pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="n">Turing</span><span class="p">,</span><span class="w"> </span><span class="n">DiffEqBayes</span>
+<span class="k">using</span><span class="w"> </span><span class="n">DifferentialEquations</span>
+<span class="k">using</span><span class="w"> </span><span class="n">MetacommunityDynamics</span>
+<span class="k">using</span><span class="w"> </span><span class="n">LinearAlgebra</span>
+<span class="k">using</span><span class="w"> </span><span class="n">CairoMakie</span>
+<span class="n">rm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">RosenzweigMacArthur</span><span class="p">(</span><span class="n">K</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
 
-for i in eachindex(predicted)
-    data[:,i] ~ MvNormal(predicted[i], σ^2 * I)
-end
-</code></pre>
-<p>end
-model = fit_rm(obs, prob.prob)
-chain = sample(model, NUTS(0.65), MCMCSerial(), 300, 1)
-posterior_samples = sample(chain[[:λ, :α, :η, :β, :γ, :K]], 300)
-f = Figure()
-ax = Axis(f[1,1], xlabel="Time", ylabel="Biomass")
-xlims!(0,100)
-for p in eachrow(Array(posterior_samples))
-    λ, α, η, β, γ, K =  p
-    θ = two_species(RosenzweigMacArthur, λ=λ, α=α, η=η, β=β, γ=γ, K=K)</p>
-<pre><code>sol_p = solve(prob.prob, Tsit5(); p=θ, saveat=1)
+<span class="n">freq</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span>
+<span class="n">prob</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">problem</span><span class="p">(</span><span class="n">rm</span><span class="p">,</span><span class="w"> </span><span class="n">tspan</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">100</span><span class="p">))</span>
+<span class="n">traj</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">simulate</span><span class="p">(</span><span class="n">prob</span><span class="p">)</span>
+<span class="n">obs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">observe</span><span class="p">(</span><span class="n">Observer</span><span class="p">(</span><span class="n">frequency</span><span class="o">=</span><span class="n">freq</span><span class="p">,</span><span class="w"> </span><span class="n">measurement_error</span><span class="o">=</span><span class="n">Normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.01</span><span class="p">)),</span><span class="w"> </span><span class="n">traj</span><span class="p">)</span>
 
-lines!(ax, sol_p.t, [sol_p.u[i][1] for i in eachindex(sol_p.t)], color=(:lightskyblue1, 0.1))
-lines!(ax, sol_p.t, [sol_p.u[i][2] for i in eachindex(sol_p.t)], color=(:lightcoral, 0.04))
-</code></pre>
-<p>end
-scatter!(ax, 1:size(obs,2), obs[1,:], color=(:dodgerblue))
-scatter!(ax, 1:size(obs,2), obs[2,:], color=(:red, 0.5))
-f
-```</p>
+<span class="nd">@model</span><span class="w"> </span><span class="k">function</span><span class="w"> </span><span class="n">fit_rm</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="n">prob</span><span class="p">)</span>
+<span class="w">    </span><span class="n">σ</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">InverseGamma</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+<span class="w">    </span><span class="n">λ</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">TruncatedNormal</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="mf">1.5</span><span class="p">)</span>
+<span class="w">    </span><span class="n">α</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">Normal</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mf">3.</span><span class="p">)</span>
+<span class="w">    </span><span class="n">η</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">Normal</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mf">3.</span><span class="p">)</span>
+<span class="w">    </span><span class="n">β</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">TruncatedNormal</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.5</span><span class="p">)</span>
+<span class="w">    </span><span class="n">γ</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">TruncatedNormal</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.5</span><span class="p">)</span>
+<span class="w">    </span><span class="n">K</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">TruncatedNormal</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">1.</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.5</span><span class="p">)</span>
+
+<span class="w">    </span><span class="n">θ</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">parameters</span><span class="p">(</span><span class="n">RosenzweigMacArthur</span><span class="p">(</span><span class="n">λ</span><span class="o">=</span><span class="n">λ</span><span class="p">,</span><span class="w"> </span><span class="n">α</span><span class="o">=</span><span class="n">α</span><span class="p">,</span><span class="w"> </span><span class="n">η</span><span class="o">=</span><span class="n">η</span><span class="p">,</span><span class="w"> </span><span class="n">β</span><span class="o">=</span><span class="n">β</span><span class="p">,</span><span class="w"> </span><span class="n">γ</span><span class="o">=</span><span class="n">γ</span><span class="p">,</span><span class="w"> </span><span class="n">K</span><span class="o">=</span><span class="n">K</span><span class="p">))</span>
+<span class="w">    </span><span class="n">predicted</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">solve</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span><span class="w"> </span><span class="n">Tsit5</span><span class="p">();</span><span class="w"> </span><span class="n">p</span><span class="o">=</span><span class="n">θ</span><span class="p">,</span><span class="w"> </span><span class="n">saveat</span><span class="o">=</span><span class="n">freq</span><span class="p">)[</span><span class="mi">1</span><span class="o">:</span><span class="k">end</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">eachindex</span><span class="p">(</span><span class="n">predicted</span><span class="p">)</span>
+<span class="w">        </span><span class="n">data</span><span class="p">[</span><span class="o">:</span><span class="p">,</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">MvNormal</span><span class="p">(</span><span class="n">predicted</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="w"> </span><span class="n">σ</span><span class="o">^</span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">I</span><span class="p">)</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="k">end</span>
+
+<span class="n">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fit_rm</span><span class="p">(</span><span class="n">obs</span><span class="p">,</span><span class="w"> </span><span class="n">prob</span><span class="o">.</span><span class="n">prob</span><span class="p">)</span>
+<span class="n">chain</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sample</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="w"> </span><span class="n">NUTS</span><span class="p">(</span><span class="mf">0.65</span><span class="p">),</span><span class="w"> </span><span class="n">MCMCSerial</span><span class="p">(),</span><span class="w"> </span><span class="mi">300</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span>
+
+
+<span class="n">posterior_samples</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sample</span><span class="p">(</span><span class="n">chain</span><span class="p">[[</span><span class="ss">:λ</span><span class="p">,</span><span class="w"> </span><span class="ss">:α</span><span class="p">,</span><span class="w"> </span><span class="ss">:η</span><span class="p">,</span><span class="w"> </span><span class="ss">:β</span><span class="p">,</span><span class="w"> </span><span class="ss">:γ</span><span class="p">,</span><span class="w"> </span><span class="ss">:K</span><span class="p">]],</span><span class="w"> </span><span class="mi">300</span><span class="p">)</span>
+
+
+
+<span class="n">endtime</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">250</span>
+<span class="n">prob</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">problem</span><span class="p">(</span><span class="n">rm</span><span class="p">,</span><span class="w"> </span><span class="n">tspan</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">endtime</span><span class="p">))</span>
+<span class="n">true_traj</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">Array</span><span class="p">(</span><span class="n">simulate</span><span class="p">(</span><span class="n">prob</span><span class="p">)</span><span class="o">.</span><span class="n">sol</span><span class="p">)</span>
+
+
+<span class="n">f</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Figure</span><span class="p">(</span><span class="n">resolution</span><span class="o">=</span><span class="p">(</span><span class="mi">2400</span><span class="p">,</span><span class="mi">1500</span><span class="p">),</span><span class="w"> </span><span class="n">fontsize</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+<span class="n">ax</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Axis</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="n">xlabel</span><span class="o">=</span><span class="s">&quot;Time&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ylabel</span><span class="o">=</span><span class="s">&quot;Biomass&quot;</span><span class="p">)</span>
+<span class="n">ylims!</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.23</span><span class="p">)</span>
+<span class="n">xlims!</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">endtime</span><span class="p">)</span>
+
+<span class="n">ensemble_traj</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="n">endtime</span><span class="p">)</span>
+
+<span class="k">for</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">eachrow</span><span class="p">(</span><span class="kt">Array</span><span class="p">(</span><span class="n">posterior_samples</span><span class="p">))</span>
+<span class="w">    </span><span class="n">λ</span><span class="p">,</span><span class="w"> </span><span class="n">α</span><span class="p">,</span><span class="w"> </span><span class="n">η</span><span class="p">,</span><span class="w"> </span><span class="n">β</span><span class="p">,</span><span class="w"> </span><span class="n">γ</span><span class="p">,</span><span class="w"> </span><span class="n">K</span><span class="w"> </span><span class="o">=</span><span class="w">  </span><span class="n">p</span>
+<span class="w">    </span><span class="n">θ</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">parameters</span><span class="p">(</span><span class="n">RosenzweigMacArthur</span><span class="p">(</span><span class="n">λ</span><span class="o">=</span><span class="n">λ</span><span class="p">,</span><span class="w"> </span><span class="n">α</span><span class="o">=</span><span class="n">α</span><span class="p">,</span><span class="w"> </span><span class="n">η</span><span class="o">=</span><span class="n">η</span><span class="p">,</span><span class="w"> </span><span class="n">β</span><span class="o">=</span><span class="n">β</span><span class="p">,</span><span class="w"> </span><span class="n">γ</span><span class="o">=</span><span class="n">γ</span><span class="p">,</span><span class="w"> </span><span class="n">K</span><span class="o">=</span><span class="n">K</span><span class="p">))</span>
+<span class="w">    </span><span class="n">sol_p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">solve</span><span class="p">(</span><span class="n">prob</span><span class="o">.</span><span class="n">prob</span><span class="p">,</span><span class="w"> </span><span class="n">Tsit5</span><span class="p">();</span><span class="w"> </span><span class="n">tspan</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">endtime</span><span class="p">),</span><span class="n">p</span><span class="o">=</span><span class="n">θ</span><span class="p">,</span><span class="w"> </span><span class="n">saveat</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="w">    </span><span class="n">ensemble_traj</span><span class="w"> </span><span class="o">.+=</span><span class="w"> </span><span class="kt">Array</span><span class="p">(</span><span class="n">sol_p</span><span class="p">)</span>
+
+<span class="w">    </span><span class="n">lines!</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span><span class="w"> </span><span class="n">sol_p</span><span class="o">.</span><span class="n">t</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="n">sol_p</span><span class="o">.</span><span class="n">u</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">eachindex</span><span class="p">(</span><span class="n">sol_p</span><span class="o">.</span><span class="n">t</span><span class="p">)],</span><span class="w"> </span><span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="ss">:lightskyblue1</span><span class="p">,</span><span class="w"> </span><span class="mf">0.3</span><span class="p">))</span>
+<span class="w">    </span><span class="n">lines!</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span><span class="w"> </span><span class="n">sol_p</span><span class="o">.</span><span class="n">t</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="n">sol_p</span><span class="o">.</span><span class="n">u</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">eachindex</span><span class="p">(</span><span class="n">sol_p</span><span class="o">.</span><span class="n">t</span><span class="p">)],</span><span class="w"> </span><span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="ss">:lightcoral</span><span class="p">,</span><span class="w"> </span><span class="mf">0.15</span><span class="p">))</span>
+<span class="k">end</span>
+
+<span class="n">ensemble_traj</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ensemble_traj</span><span class="w"> </span><span class="o">./</span><span class="w"> </span><span class="n">length</span><span class="p">(</span><span class="n">posterior_samples</span><span class="p">)</span>
+
+<span class="n">scatter!</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="o">:</span><span class="n">freq</span><span class="o">:</span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="n">obs</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="o">:</span><span class="p">],</span><span class="w"> </span><span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="ss">:dodgerblue</span><span class="p">))</span>
+<span class="n">scatter!</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="o">:</span><span class="n">freq</span><span class="o">:</span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="n">obs</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="o">:</span><span class="p">],</span><span class="w"> </span><span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="ss">:red</span><span class="p">,</span><span class="w"> </span><span class="mf">0.5</span><span class="p">))</span>
+
+
+
+<span class="n">ens_C</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">lines!</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="o">:</span><span class="n">size</span><span class="p">(</span><span class="n">true_traj</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span><span class="w"> </span><span class="n">ensemble_traj</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="o">:</span><span class="p">],</span><span class="w"> </span><span class="n">color</span><span class="o">=</span><span class="ss">:dodgerblue</span><span class="p">,</span><span class="w"> </span><span class="n">linewidth</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="n">linestyle</span><span class="o">=</span><span class="ss">:dash</span><span class="p">)</span>
+<span class="n">ens_R</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">lines!</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="o">:</span><span class="n">size</span><span class="p">(</span><span class="n">true_traj</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span><span class="w"> </span><span class="n">ensemble_traj</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="o">:</span><span class="p">],</span><span class="w"> </span><span class="n">color</span><span class="o">=</span><span class="ss">:red</span><span class="p">,</span><span class="w"> </span><span class="n">linewidth</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="n">linestyle</span><span class="o">=</span><span class="ss">:dash</span><span class="p">)</span>
+
+
+<span class="n">true_C</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">lines!</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="o">:</span><span class="n">size</span><span class="p">(</span><span class="n">true_traj</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span><span class="w"> </span><span class="n">true_traj</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="o">:</span><span class="p">],</span><span class="w"> </span><span class="n">color</span><span class="o">=</span><span class="ss">:dodgerblue</span><span class="p">,</span><span class="w"> </span><span class="n">linewidth</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+<span class="n">true_R</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">lines!</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="o">:</span><span class="n">size</span><span class="p">(</span><span class="n">true_traj</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span><span class="w"> </span><span class="n">true_traj</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="o">:</span><span class="p">],</span><span class="w"> </span><span class="n">color</span><span class="o">=</span><span class="ss">:red</span><span class="p">,</span><span class="w"> </span><span class="n">linewidth</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+<span class="n">obs_C</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">scatter!</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="o">:</span><span class="n">freq</span><span class="o">:</span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="n">obs</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="o">:</span><span class="p">],</span><span class="w"> </span><span class="n">strokewidth</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="n">markersize</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span><span class="n">strokecolor</span><span class="o">=</span><span class="p">(</span><span class="ss">:dodgerblue</span><span class="p">),</span><span class="w"> </span><span class="n">color</span><span class="o">=</span><span class="ss">:white</span><span class="p">)</span>
+<span class="n">obs_R</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">scatter!</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="o">:</span><span class="n">freq</span><span class="o">:</span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="n">obs</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="o">:</span><span class="p">],</span><span class="w"> </span><span class="n">strokewidth</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="n">markersize</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span><span class="w"> </span><span class="n">strokecolor</span><span class="o">=</span><span class="p">(</span><span class="ss">:red</span><span class="p">,</span><span class="w"> </span><span class="mf">0.5</span><span class="p">),</span><span class="w"> </span><span class="n">color</span><span class="o">=</span><span class="ss">:white</span><span class="p">)</span>
+
+<span class="n">axislegend</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span>
+<span class="p">[</span><span class="n">true_C</span><span class="p">,</span><span class="w"> </span><span class="n">true_R</span><span class="p">],</span>
+<span class="p">[</span><span class="s">&quot;Consumer&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Resource&quot;</span><span class="p">],</span><span class="n">position</span><span class="o">=</span><span class="ss">:rt</span><span class="p">)</span>
+
+<span class="n">f</span>
+</code></pre></div>
+<p><img alt="" src="../dshalba.png" /></p>
 
 
 

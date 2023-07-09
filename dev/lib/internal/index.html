@@ -718,30 +718,6 @@
 <p><a id='Documentation-for-internal-methods'></a></p>
 <p><a id='Documentation-for-internal-methods-1'></a></p>
 <h1 id="documentation-for-internal-methods">Documentation for internal methods</h1>
-<p><a id='Base.size-Tuple{Coordinates}' href='#Base.size-Tuple{Coordinates}'>#</a>
-<strong><code>Base.size</code></strong> &mdash; <em>Method</em>.</p>
-<div class="highlight"><pre><span></span><code><span class="n">Base</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">coords</span><span class="o">::</span><span class="kt">Coordinates</span><span class="p">)</span>
-</code></pre></div>
-<p>Returns the number of nodes in a coordinate set <code>coords</code>.</p>
-<p><a target='_blank' href='https://github.com/gottacatchenall/EcoDynamics.jl/blob/5285b8407fa0aa8f43419eaea360cd99c47688f8/src/coordinates.jl#L14-L18' class='documenter-source'>source</a><br></p>
-<p><a id='MetacommunityDynamics._env_from_layer-Tuple{Any, EnvironmentLayer}' href='#MetacommunityDynamics._env_from_layer-Tuple{Any, EnvironmentLayer}'>#</a>
-<strong><code>MetacommunityDynamics._env_from_layer</code></strong> &mdash; <em>Method</em>.</p>
-<div class="highlight"><pre><span></span><code><span class="n">_env_from_layer</span><span class="p">(</span><span class="n">coords</span><span class="p">,</span><span class="w"> </span><span class="n">layer</span><span class="o">::</span><span class="kt">EnvironmentLayer</span><span class="p">)</span>
-</code></pre></div>
-<p>Returns the values in the layer at the given coordinates, given the bounding-box os the coordinates is the extent of the layer.</p>
-<p><a target='_blank' href='https://github.com/gottacatchenall/EcoDynamics.jl/blob/5285b8407fa0aa8f43419eaea360cd99c47688f8/src/coordinates.jl#L71-L76' class='documenter-source'>source</a><br></p>
-<p><a id='MetacommunityDynamics.distance_matrix-Tuple{Coordinates}' href='#MetacommunityDynamics.distance_matrix-Tuple{Coordinates}'>#</a>
-<strong><code>MetacommunityDynamics.distance_matrix</code></strong> &mdash; <em>Method</em>.</p>
-<div class="highlight"><pre><span></span><code><span class="n">distance_matrix</span><span class="p">(</span><span class="n">coords</span><span class="o">::</span><span class="kt">Coordinates</span><span class="p">;</span><span class="w"> </span><span class="n">distance</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Euclidean</span><span class="p">())</span>
-</code></pre></div>
-<p>Returns a matrix of pairwise distances for all nodes in a <code>Coordinates</code>. The argument passed to <code>distance</code> must be of type <code>Distance</code> from <code>Distances.jl</code>.</p>
-<p><a target='_blank' href='https://github.com/gottacatchenall/EcoDynamics.jl/blob/5285b8407fa0aa8f43419eaea360cd99c47688f8/src/coordinates.jl#L49-L53' class='documenter-source'>source</a><br></p>
-<p><a id='MetacommunityDynamics.∂u-Tuple{BevertonHolt, Any, Any}' href='#MetacommunityDynamics.∂u-Tuple{BevertonHolt, Any, Any}'>#</a>
-<strong><code>MetacommunityDynamics.∂u</code></strong> &mdash; <em>Method</em>.</p>
-<div class="highlight"><pre><span></span><code><span class="n">∂u</span><span class="p">(</span><span class="n">bm</span><span class="o">::</span><span class="kt">BevertonHolt</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p">)</span>
-</code></pre></div>
-<p>Single time-step for the <code>BevertonHolt</code> model. </p>
-<p><a target='_blank' href='https://github.com/gottacatchenall/EcoDynamics.jl/blob/5285b8407fa0aa8f43419eaea360cd99c47688f8/src/models/bevertonholt.jl#L22-L26' class='documenter-source'>source</a><br></p>
 
 
 

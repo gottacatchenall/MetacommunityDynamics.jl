@@ -785,10 +785,15 @@
 <p><a id='Beverton-Holt'></a></p>
 <p><a id='Beverton-Holt-1'></a></p>
 <h2 id="beverton-holt">Beverton-Holt</h2>
-<div class="admonition warning">
-<p class="admonition-title">Missing docstring.</p>
-<p>Missing docstring for <code>BevertonHolt</code>. Check Documenter's build log for details.</p>
-</div>
+<p><a id='MetacommunityDynamics.BevertonHolt' href='#MetacommunityDynamics.BevertonHolt'>#</a>
+<strong><code>MetacommunityDynamics.BevertonHolt</code></strong> &mdash; <em>Type</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="kt">BevertonHolt</span><span class="p">{</span><span class="kt">S</span><span class="p">}</span><span class="w"> </span><span class="o">&lt;:</span><span class="w"> </span><span class="kt">Model</span><span class="p">{</span><span class="kt">Population</span><span class="p">,</span><span class="kt">Biomass</span><span class="p">,</span><span class="kt">S</span><span class="p">,</span><span class="kt">Discrete</span><span class="p">}</span>
+</code></pre></div>
+<p>The <a href="https://en.wikipedia.org/wiki/Beverton%E2%80%93Holt_model">Beverton-Holt model</a> is a discrete-time, deterministic model of population dynamics. It is commonly interpreted as a discrete-time version of the logistic model.</p>
+<p>It is described by </p>
+<p>$N_{t+1} =\frac{R_0 M}{N_t + M}N_t$</p>
+<p>where $K = (R_0 - 1)M$ is the carrying capacity.</p>
+<p><a target='_blank' href='https://github.com/gottacatchenall/EcoDynamics.jl/blob/01fb7fc4770e979693778ecf463bc1ee383ea792/src/models/bevertonholt.jl#L1-L15' class='documenter-source'>source</a><br></p>
 <p><a id='Logisitic-Model'></a></p>
 <p><a id='Logisitic-Model-1'></a></p>
 <h2 id="logisitic-model">Logisitic Model</h2>
