@@ -9,8 +9,8 @@ struct CompetitiveLotkaVolterra{S} <: Model{Community,Biomass,S,Continuous}
     K::Parameter
 end 
 
-initial(::CompetitiveLotkaVolterra) = rand(Uniform(0.5,1), 4, 1)
-numspecies(clv::CompetitiveLotkaVolterra) = size(clv.α, 1)
+initial(::CompetitiveLotkaVolterra) = rand(Uniform(0.5,1),4)
+numspecies(clv::CompetitiveLotkaVolterra) = length(clv.K)
 
 
 function ∂u(clv::CompetitiveLotkaVolterra, u, θ)
@@ -22,26 +22,6 @@ function ∂u(clv::CompetitiveLotkaVolterra, u, θ)
     end
     du
 end
-
-function ∂u_spatial(clv::CompetitiveLotkaVolterra, u, θ)
-    λ, α, K = θ
-
-    du = similar(u)
-    du .= 0
-    n_species = numspecies(clv)
-    n_sites = size(u,2)
-    for site in 1:n_sites
-        for sp in 1:n_species
-            if u[sp,site] > 0 
-                @fastmath du[sp, site] = u[sp, site] * λ[sp,site] * (1 - (sum([u[t,site]*α[sp,t] for t in 1:n_species]) / K[sp]))
-            else
-                u[sp,site] = 0
-            end
-        end 
-    end
-    du 
-end
-
 
 # ====================================================
 #

@@ -1,6 +1,3 @@
-using MetacommunityDynamics
-
-
 struct LevinsMetapopulation <: Model{Metapopulation,Occupancy,Spatial,Discrete}
     sg::SpatialGraph
     c::Parameter
