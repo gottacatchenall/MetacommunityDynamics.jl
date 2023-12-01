@@ -4,6 +4,16 @@
     measurement_error = Normal(0,0.02)
 end 
 
+### TODO
+# Observed data points should absolutely be a struct instead of returns as a
+# method
+
+@kwdef struct Observation{T<:Number}
+    observer::Observer
+    data::Array{T}
+end
+
+
 
 function observe(observer::Observer, traj::Trajectory)
     ts = timeseries(traj)

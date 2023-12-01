@@ -29,8 +29,6 @@ module MetacommunityDynamics
 
     include(joinpath("dispersal", "spatialize.jl"))
 
-
-
     include("problem.jl")
     include("trajectory.jl")
     include("observer.jl")
@@ -42,6 +40,7 @@ module MetacommunityDynamics
     include(joinpath("models", "logistic.jl"))
 
 
+    include(joinpath("models", "trophiclv.jl"))
     include(joinpath("models", "lvcompetition.jl"))
     include(joinpath("models", "rosenzweigmacarthur.jl"))
 
@@ -87,6 +86,7 @@ module MetacommunityDynamics
     export CompetitiveLotkaVolterra
     export RosenzweigMacArthur 
     export LogisticModel
+    export TrophicLotkaVolterra
 
     export LevinsMetapopulation
 
