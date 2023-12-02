@@ -5,7 +5,7 @@ Base.string(m::Model{SC,M,SP,D}) where {SC,M,SP,D} = """
 """
 
 Base.show(io::IO, ::MIME"text/plain", m::Model) = begin 
-    tprint(io, string(m))
+    tprint(m)
 end 
 
 
