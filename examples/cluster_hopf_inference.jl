@@ -91,7 +91,7 @@ function main(
         infered_subcritical=[],    
     )
 
-    sample_freqs = [1, 5, 10] 
+    sample_freqs = [0.05, 0.1, 1.0, 4.0] 
 
     for freq in sample_freqs
         for k in K_range
