@@ -45,7 +45,7 @@ function eigenvalues(λ, α, η, β, γ, K)
     x + 0.5sqrt(Complex(δ)), x - 0.5sqrt(Complex(δ))
 end 
 
-get_greatest_real_eig(K) = maximum(real.(eigenvalues()))
+#get_greatest_real_eig(K) = maximum(real.(eigenvalues()))
 is_subcritical(K) = get_greatest_real_eig(K) < 0
 
 get_rm(; λ=0.5, α=5.0, η=3.0, β=0.5, γ=0.1, K=0.25) = RosenzweigMacArthur(λ=λ, α=α, η=η, β=β, γ=γ, K=K)
@@ -54,15 +54,15 @@ get_rm(; λ=0.5, α=5.0, η=3.0, β=0.5, γ=0.1, K=0.25) = RosenzweigMacArthur(�
 # highly informative? This might be worth it just for the sim
 
 @model function fit_rm(data, prob; freq=4)   
-    σ ~ TruncatedNormal(0,0.5, 0, 1) 
-    #λ ~ TruncatedNormal(0.5,0.5,0,1)
-    #α ~ Normal(3,0.5) 
-    #η ~ Normal(5.,0.5) 
-    #β ~ TruncatedNormal(0.5,0.5,0,1)  
-    #γ ~ TruncatedNormal(0.1,0.5,0,0.2) # Shifted way right, true is 0.1
-    K ~ Uniform(0.23, 0.3) # This is way right too---maybe uniform on the interval we are siming across? 
+    σ ~ TruncatedNormal(0,1, 0, 1) 
+    λ ~ Normal(0.5, 0.01)
+    α ~ Normal(5, 0.01) 
+    η ~ Normal(3., 0.01) 
+    β ~ Normal(0.5,0.01)  
+    γ ~ Normal(0.1, 0.01) # Shifted way right, true is 0.1
+    K ~ Uniform(0.2, 0.3) # This is way right too---maybe uniform on the interval we are siming across? 
 
-    θ = parameters(RosenzweigMacArthur(K=K))
+    θ = parameters(RosenzweigMacArthur(λ=λ, α=α, η=η, β=β, γ=γ, K=K))
     predicted = solve(prob, Vern7(); p=θ, saveat=freq)
     try 
         predicted = predicted[1:size(obs,2)]
@@ -91,7 +91,7 @@ function main(
         infered_subcritical=[],    
     )
 
-    sample_freqs = [0.1, 0.5, 1, 4] 
+    sample_freqs = [1, 5, 10] 
 
     for freq in sample_freqs
         for k in K_range
@@ -102,7 +102,7 @@ function main(
 
             inf_model = fit_rm(obs, prob.prob; freq=freq)
 
-            chain = sample(inf_model, HMC(0.1, 5), MCMCSerial(), 300, 1)
+            chain = sample(inf_model, HMC(0.01, 10), MCMCSerial(), 300, 1)
             posterior_samples = sample(chain[[:λ, :α, :η, :β, :γ, :K]], 300) 
             θ = Dict(zip((posterior_samples |> mean).nt...))
 
@@ -121,3 +121,6 @@ end
 
 id = parse(Int, ENV["SLURM_ARRAY_TASK_ID"])
 main(id)
+
+
+main(1)
