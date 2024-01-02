@@ -44,8 +44,9 @@ module MetacommunityDynamics
     include(joinpath("models", "trophiclv.jl"))
     include(joinpath("models", "lvcompetition.jl"))
     include(joinpath("models", "rosenzweigmacarthur.jl"))
-
     include(joinpath("models", "levins.jl"))
+
+    include("plots.jl")
 
 
     export Diffusion, SpatialModel
