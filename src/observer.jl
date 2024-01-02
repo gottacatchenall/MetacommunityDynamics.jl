@@ -1,4 +1,6 @@
 
+## TODO obviously this should be an abstract type what even is this???
+
 @kwdef struct Observer
     frequency = 5
     measurement_error = Normal(0,0.02)
