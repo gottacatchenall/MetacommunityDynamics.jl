@@ -20,10 +20,15 @@ forms:
 4. Explanation (_understanding-oriented_ discussions on the software design)
 
 
-# ⛺️ Tutorials
+# 🐛 Tutorials
 
-# 🏕 How-to Guides
+- [Hello World in EcoDynamics.jl](@ref)
+- 
+
+# 🦋 How-to Guides
+
+
 
 # 📚 Reference
 
-# 🏗 Explanation
+# 🧪 Explanation
