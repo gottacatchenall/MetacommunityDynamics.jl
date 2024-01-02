@@ -23,7 +23,7 @@ forms:
 # 🐛 Tutorials
 
 - [Getting started with `EcoDynamics.jl`](@ref)
-- 
+- []
 
 # 🦋 How-to Guides
 

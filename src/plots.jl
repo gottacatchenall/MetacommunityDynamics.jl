@@ -3,7 +3,6 @@ makieplot(traj::Trajectory) = makieplot(traj.prob.model, traj)
 
 function makieplot(m::Model{Community,M,Local,D}, traj) where {M<:Union{Biomass,Abundance},D}
     ns = numspecies(m)
-
     time = traj.sol.t
 
     f = Figure()
@@ -13,7 +12,7 @@ function makieplot(m::Model{Community,M,Local,D}, traj) where {M<:Union{Biomass,
         ylabel=string(M)
     )
 
-    xs = Array(sol.sol)
+    xs = hcat(Array(traj.sol.u)...)
     for s in 1:ns
         scatterlines!(ax, time, xs[s,:])
     end
@@ -49,3 +48,43 @@ function makieplot(::Model{Metapopulation,Occupancy,S,D}, traj) where {S,D}
     f
 end 
 
+
+
+
+function replplot(m::Model{Community,M,Local,D}, traj) where {M<:Union{Biomass,Abundance},D}
+    ns = numspecies(m)
+    time = traj.sol.t
+    u = timeseries(traj)
+    ymax = max([extrema(x)[2] for x in timeseries(traj)]...)
+    ts(s) = [mean(u[t][s,:]) for t in 1:length(traj)]
+
+    height,width = displaysize(stdout)    
+    p = lineplot(time, ts(1), 
+        xlabel="time (t)", 
+        ylabel=string(M), 
+        width=width-40,
+        ylim=(0,ymax)
+    )
+
+    for i in 2:length(u[1])
+        lineplot!(p, ts(i))
+    end 
+    p
+end 
+
+
+function replplot(::Model{Population,M,Local,D}, traj) where {M<:Union{Biomass,Abundance},D}
+    time = traj.sol.t
+    u = timeseries(traj)
+    ymax = max([extrema(x)[2] for x in timeseries(traj)]...)
+    ts(s) = [mean(u[t][s,:]) for t in 1:length(traj)]
+
+    _,width = displaysize(stdout)    
+    p = lineplot(time, ts(1), 
+        xlabel="time (t)", 
+        ylabel=string(M),
+        width=width-40,
+        ylim=(0,ymax)
+    )
+    p
+end 

@@ -31,26 +31,3 @@ function TrophicLotkaVolterra(;
 end
 
 
-
-# ====================================================
-#
-#   Plots
-#   
-# =====================================================
-
-
-function replplot(::TrophicLotkaVolterra{Local}, traj::Trajectory) 
-    u = timeseries(traj)
-    ymax = max([extrema(x)[2] for x in timeseries(traj)]...)
-    ts(s) = [mean(u[t][s,:]) for t in 1:length(traj)]
-    p = lineplot( ts(1), 
-        xlabel="time (t)", 
-        ylabel="Biomass", 
-        width=80,
-        ylim=(0,ymax))
-
-    for i in 2:length(u[1])
-        lineplot!(p, ts(i))
-    end 
-    p
-end
