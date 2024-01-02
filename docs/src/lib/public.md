@@ -1,1 +1,4 @@
 # Public methods 
+
+```@index
+```

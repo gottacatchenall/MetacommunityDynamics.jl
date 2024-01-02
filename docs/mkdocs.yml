@@ -30,14 +30,10 @@ docs_dir: 'build'
 
 nav:
   - Home: index.md
-  - Getting started:
+  - Tutorials:
     - Quick Start: getting_started/quick_start.md
-    - Package design: getting_started/design.md
-  - Examples:
-    - Bayesian Inference of community dynamics using Turing.jl: examples/community_inference.md
-    - Inference of metapopulation dynamics: examples/metapopulation_inference.md  
-    - Custom functional response: examples/custom_functional_response.md
-    - Transition from species sorting to neutral dynamics in a metacommunity: examples/neutral_to_niche.md
+  - How-To Guides:
+    - Bayesian Inference of Dynamics: examples/community_inference.md
   - Reference:
     - Population dynamics:
       - Overview: model_index/population/overview.md
@@ -47,6 +43,6 @@ nav:
       - Overview: model_index/community/overview.md
     - Metacommunity dynamics:  
       - Overview: model_index/metacommunity/overview.md
-  - API:
     - Public: lib/public.md
     - Internal: lib/internal.md
+  - Explanation: explanation/design.md
