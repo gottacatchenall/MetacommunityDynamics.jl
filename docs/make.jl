@@ -5,7 +5,7 @@ using DocumenterMarkdown
 using DocumenterCitations
 using MetacommunityDynamics
 
-bibliography = CitationBibliography(joinpath(@__DIR__, "EcoDynamics.bib"), sorting = :nyt)
+bibliography = CitationBibliography(joinpath(@__DIR__, "EcoDynamics.bib"))
 
 makedocs(
     bibliography;
