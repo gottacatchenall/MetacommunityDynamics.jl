@@ -3,7 +3,7 @@ push!(LOAD_PATH, "../src/")
 using Documenter
 using DocumenterMarkdown
 using DocumenterCitations
-using MetacommunityDynamics
+using EcoDynamics
 
 bibliography = CitationBibliography(joinpath(@__DIR__, "EcoDynamics.bib"))
 
