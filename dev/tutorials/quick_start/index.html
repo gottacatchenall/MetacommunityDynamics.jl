@@ -1,0 +1,963 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Julia package for simulation of population and community dynamics across space">
+      
+      
+        <meta name="author" content="Michael D. Catchen">
+      
+      
+      
+        <link rel="prev" href="../..">
+      
+      
+        <link rel="next" href="../../how_to/community_inference/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.3">
+    
+    
+      
+        <title>Hello World - EcoDynamics.jl</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.50c56a3b.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/Documenter.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="light-blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#hellow-world-in-ecodynamicsjl" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="EcoDynamics.jl" class="md-header__button md-logo" aria-label="EcoDynamics.jl" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            EcoDynamics.jl
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Hello World
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/gottacatchenall/EcoDynamics.jl" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="EcoDynamics.jl" class="md-nav__button md-logo" aria-label="EcoDynamics.jl" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    EcoDynamics.jl
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/gottacatchenall/EcoDynamics.jl" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Tutorials
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Tutorials
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Hello World
+  </span>
+  
+
+      </a>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    How-To Guides
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            How-To Guides
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../how_to/community_inference/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Bayesian Inference of Dynamics
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Reference
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_1" id="__nav_4_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Population dynamics
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_1">
+            <span class="md-nav__icon md-icon"></span>
+            Population dynamics
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/model_index/population/overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_2" id="__nav_4_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Metapopulation dynamics
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            Metapopulation dynamics
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/model_index/metapopulation/overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_3" id="__nav_4_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Community dynamics
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_3">
+            <span class="md-nav__icon md-icon"></span>
+            Community dynamics
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/model_index/community/overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_4" id="__nav_4_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Metacommunity dynamics
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_4">
+            <span class="md-nav__icon md-icon"></span>
+            Metacommunity dynamics
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../model_index/metacommunity/overview.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../lib/public.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Public
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../lib/internal.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Internal
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../explanation/design/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Explanation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<p><a id='Hellow-World-in-EcoDynamics.jl'></a></p>
+<p><a id='Hellow-World-in-EcoDynamics.jl-1'></a></p>
+<h1 id="hellow-world-in-ecodynamicsjl">Hellow World in  <code>EcoDynamics.jl</code></h1>
+<div class="admonition abstract">
+<p class="admonition-title">Abstract</p>
+<p>This is meant as a quick tutorial to show a typical workflow using EcoDynamics.jl. We will introduce many concepts quite quickly in order to show off the features that make <code>EcoDynamics</code> tick. If it feels like the content is moving fast, that's okay. More detailed explanations of the functionality showcased here will follow in subsequent parts of the 'Getting Started' guide.</p>
+</div>
+<p>This document is a quick start to the features in <code>EcoDynamics</code>. Here we will build a model of consumer-resource dynamics on a spatial graph, where the limiting growth rate of the resource is a function of the environmental conditions at each patch.</p>
+<p>First we'll load the package.</p>
+<div class="highlight"><pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="n">MetacommunityDynamics</span>
+</code></pre></div>
+<p>For this example, we are going to use one of the many models included in the <code>EcoDynamics</code> library. The Rosenzweig-MacArthur [@cite] model of consumer-resource dynamics. Initially, the Rosenzweig-MacArthur was originally defined as  </p>
+<p>$$
+\frac{dR}{dt} = \lambda R \bigg(1 - \frac{R}{K}\bigg) - \frac{\alpha CR}{1
++\alpha \eta R}
+$$</p>
+<p>$$
+\frac{dC}{dt} = \beta \frac{\alpha CR}{1 + \alpha \eta R} - \gamma   C
+$$</p>
+<p>where $R$ is the relative biomass of the resource, $C$ is the relative biomass of the consumer, $\alpha$ is the attack-rate, $\eta$ is the handling type, $\lambda$ is the limiting instric growth rate,  $\beta$ is the intrinsic infintesimal growth of biomass for the consumer per unit resource, and $\gamma$ is the intrinsic death date of consumers. (Note that this is equivalent to a Lotka-Volterra model with a Holling Type-II functional response).</p>
+<p>By default, in <code>EcoDynamics</code> the <code>RosenzweigMacArthur</code> model is parameterized for two species exhibiting a limit cycle, though it can be used for an arbitrary number of species (See <em>TODO custom parameterization</em> section). </p>
+<div class="highlight"><pre><span></span><code><span class="n">rosen</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">RosenzweigMacArthur</span><span class="p">()</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>
+</code></pre></div>
+<p>Here we'll consider the folliwing way in which environmental variation affects the dynamics of this model.</p>
+<p>At each patch $i$ in the spatial graph, the limiting growth rate of the resource at that patch, $\lambda_i$, is a function of the difference between a given trait for the consumer species $x$, and a single environmental variable associated with each patch, $e_i$. </p>
+<p>We'll model $\lambda_i$ as decreasing like a Gaussian as the distance between $e_i$ and $x$ decreases, e.g. </p>
+<p>$$
+\lambda_i = \exp{\bigg(\frac{-(e_i -x)^2}{\sigma^2}\bigg)}
+$$</p>
+<p>where $\sigma$ is a parameter controlling the 'importance' of this trait-environmental matching for consumer growth.</p>
+<p>We'll first do this by initializing a two-species <code>SpeciesPool</code></p>
+<div class="highlight"><pre><span></span><code><span class="n">sp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SpeciesPool</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>A species pool with 2 species.
+</code></pre></div>
+<p>Note that by default, <code>SpeciesPool</code>s initialized without provided traits default to a single dimensional trait named <code>:x</code> uniformally distributed on $[0,1]$. </p>
+<p>Next, we'll initialize a spatial graph with 20 patches. Note that when not initialized with environmental variable,<code>SpatialGraph</code>'s are initialized with a single environmental varaible <code>:e1</code>, similarly uniformally drawn from $[0,1]$.</p>
+<div class="highlight"><pre><span></span><code><span class="n">sg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SpatialGraph</span><span class="p">(</span><span class="n">Coordinates</span><span class="p">(</span><span class="mi">20</span><span class="p">),</span><span class="w"> </span><span class="n">DispersalKernel</span><span class="p">(</span><span class="n">max_distance</span><span class="o">=</span><span class="mf">0.3</span><span class="p">))</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>             ┌──────────────────────────────┐  1      
+          20 │▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄│ ┌──┐    
+             │▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄│ │▄▄│    
+             │▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄│ │▄▄│    
+             │▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄│ │▄▄│    
+             │▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄│ │▄▄│    
+             │▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄│ │▄▄│    
+             │▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄│ │▄▄│    
+   Node j    │▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄│ │▄▄│ ϕᵢⱼ
+             │▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄│ │▄▄│    
+             │▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄│ │▄▄│    
+             │▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄│ │▄▄│    
+             │▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄│ │▄▄│    
+             │▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄│ │▄▄│    
+             │▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄│ │▄▄│    
+           1 │▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄│ └──┘    
+             └──────────────────────────────┘  0      
+              1                           20          
+                          Node i                      
+</code></pre></div>
+<p>Now, we provide a function that encodes our model of the niche as described above. Note that a niche function is expected to take a <code>model</code>, <code>traits</code>, and particular patch's environmental condition, and return the modified the parameters for that particular <em>patch</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="k">function</span><span class="w"> </span><span class="n">niche</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="w"> </span><span class="n">traits</span><span class="p">,</span><span class="w"> </span><span class="n">local_env</span><span class="p">)</span>
+<span class="w">    </span><span class="n">θ</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">paramdict</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+<span class="w">    </span><span class="n">θ</span><span class="p">[</span><span class="ss">:λ</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">λᵢ</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">λᵢ</span><span class="o">*</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">traits</span><span class="p">[</span><span class="ss">:x</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">local_env</span><span class="p">[</span><span class="ss">:e</span><span class="p">])</span><span class="o">^</span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">λᵢ</span><span class="p">)</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">enumerate</span><span class="p">(</span><span class="n">θ</span><span class="p">[</span><span class="ss">:λ</span><span class="p">])]</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">θ</span>
+<span class="k">end</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>niche (generic function with 1 method)
+</code></pre></div>
+<p>Now, we use the <code>spatialize</code> method to combine our <code>Model</code>, <code>SpatialGraph</code>, <code>SpeciesPool</code>, and <code>niche</code>. Note that <code>niche</code> here is a keyword argument. If not provided, by default spatialize will used identical parameters across all sites. This may be of interested if the goal is understanding the consequences of dispersal absent environmental variation.</p>
+<div class="highlight"><pre><span></span><code><span class="n">spatialrm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spatialize</span><span class="p">(</span><span class="n">rosen</span><span class="p">,</span><span class="w"> </span><span class="n">sg</span><span class="p">,</span><span class="w"> </span><span class="n">sp</span><span class="p">;</span><span class="w"> </span><span class="n">niche</span><span class="o">=</span><span class="n">niche</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>
+</code></pre></div>
+<p>The final thing we need to run this model is our <code>Diffsion</code> model. <code>Diffusion</code> models are constructed using a few components, first a <code>DispersalKernel</code>. The dispersal kernel describes a relative likeliheed of how far an individual organism is going to disperse. By default, the <code>DispersalKernel</code>s are initialized with an exponential dispersal kernel, i.e. the kernel $f$ is given by </p>
+<p>$$
+f(x, \alpha) = e^{-\alpha d_{ij}}
+$$</p>
+<p>where $\alpha$ indicates the strength of decay, i.e. for small $\alpha$ the organism can disperse far, and vice-versa, and $d_{ij}$ is the distance between patch $i$ and patch $j$.  The <code>DispersalKernel</code> also takes an optional <code>max_distance</code> argument, which is the furthest any organism can feasibly disperse, meaning for any $d_{ij}$ greater than the <code>max_distance</code>, the kernel will be equal to zero. </p>
+<p>Finally, we can define our <code>Diffusion</code> model using a base migration probability and the dispersal potential.</p>
+<div class="highlight"><pre><span></span><code><span class="n">m</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.01</span>
+<span class="n">diff</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Diffusion</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">sg</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>Diffusion{Float64}([0.99 0.0009695460080955546 … 0.0 0.0009469491596960488; 0.0017309076943620787 0.99 … 0.0 0.002652744766099631; … ; 0.0 0.0 … 0.99 0.0; 0.0014806910665169945 0.002323420268269937 … 0.0 0.99])
+</code></pre></div>
+<p>Now, we can finally construct the a <code>Problem</code> using our local dynamics <code>spatialrm</code> model and our diffusion model <code>diff</code>. Initial conditions and timespan can be provided here.</p>
+<div class="highlight"><pre><span></span><code><span class="n">prob</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">problem</span><span class="p">(</span><span class="n">spatialrm</span><span class="p">,</span><span class="w"> </span><span class="n">diff</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>
+</code></pre></div>
+<p>and run the model using <code>simulate</code></p>
+<div class="highlight"><pre><span></span><code><span class="n">simulate</span><span class="p">(</span><span class="n">prob</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>An trajectory of length 101.
+                    ┌────────────────────────────────────────────────────────────────────────────────┐ 
+           0.274954 │⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣤⣴⣶⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣶⣶⣤⣤⣄⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│ 
+                    │⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⡾⡻⣻⡿⠛⠛⠿⢿⣟⣳⡿⣯⣾⣛⣽⢾⣻⠿⣟⣿⢿⣿⣿⣿⣷⣶⣤⣤⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│ 
+                    │⠀⠀⠀⠀⢀⣀⣀⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣼⡯⡿⣱⡿⠁⠀⠀⠀⠀⠀⠈⠉⠛⠺⢯⣗⣻⢗⣫⠵⣪⡭⣓⡫⢽⣿⢾⣭⣟⣻⠿⣿⣶⣤⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│ 
+                    │⠀⡠⠴⠚⠛⠻⣿⣿⣿⣦⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣼⣿⣻⣳⣿⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠻⢶⣭⣓⠪⣒⡯⢕⠮⢍⠒⠷⣾⠽⡲⢭⡛⠿⣿⣷⣶⣤⡀⠀⠀⠀⠀⠀⠀⠀⠀│ 
+                    │⠸⡄⠀⠀⠀⠀⠈⢻⣟⣟⢾⢦⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣰⡿⣧⣏⣿⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⠻⢶⣍⡑⢍⡒⠭⣳⣤⣿⠾⢿⣿⣟⡿⣿⡿⣯⣿⣷⡂⠀⠀⠀⠀⠀⠀│ 
+                    │⠀⢻⡄⠀⠀⠀⠀⠀⢹⣿⡿⣽⣳⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣿⡻⡾⣼⡏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢈⣹⣶⣾⡟⢏⣙⠤⡓⣪⡭⠷⢿⣫⢽⠶⣞⣛⡇⠀⠀⠀⠀⠀⠀│ 
+                    │⠀⠈⣿⡄⠀⠀⠀⠀⠀⢻⣯⣿⣺⡿⣆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣼⣿⢻⢣⣿⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣴⣶⠟⠊⡡⠼⠻⣧⣼⠒⣍⡱⢞⡛⣅⡽⠶⣓⣯⡽⡆⠀⠀⠀⠀⠀⠀│ 
+   Biomass          │⠀⠀⢹⣿⣄⠀⠀⠀⠀⠀⠹⣿⣾⡯⣟⢦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢰⣿⣝⣟⣾⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣤⣶⠿⠋⣉⠤⢒⣉⠔⠚⣉⠬⠛⠽⣧⡬⢖⣛⠤⣗⡪⡟⣛⢯⡂⠀⠀⠀⠀⠀⠀│ 
+                    │⠀⠀⠀⢿⣿⣆⠀⠀⠀⠀⠀⠙⣿⡯⣿⣮⣷⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣹⣹⡟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣠⣲⠿⠛⡡⠤⢒⡩⠴⠒⣁⠤⠊⢉⣠⠴⢚⣉⢽⣻⣿⣚⡫⣝⣺⣭⣷⣾⠇⠀⠀⠀⠀⠀⠀│ 
+                    │⠀⠀⠀⠘⣿⣿⣧⠀⠀⠀⠀⠀⠈⢿⣾⢝⡷⡝⢦⠀⠀⠀⠀⠀⠀⠀⢸⣿⣎⣯⣿⠃⠀⠀⠀⠀⠀⠀⠀⢀⣠⣴⡶⠟⣋⡩⠤⣊⡩⠖⢊⡡⠔⠚⣉⡤⠴⣋⣩⣒⡮⢝⣚⠥⣒⣽⣿⣾⡿⠿⣛⠫⢌⠂⠀⠀⠀⠀⠀⠀│ 
+                    │⠀⠀⠀⠀⠸⣿⣿⣷⡀⠀⠀⠀⠀⠀⠹⢷⣯⣟⣽⣛⢦⣀⠀⠀⠀⢀⣿⡿⡼⣾⡏⠀⠀⠀⣀⣀⣤⡶⠾⣛⡩⢕⣒⠭⠕⣒⡩⠕⢒⣉⡥⠶⣚⣩⣤⡶⢝⡪⢽⣒⣯⣵⣶⡿⠟⠋⠉⠉⠫⣷⣀⠓⢄⠁⠀⠀⠀⠀⠀⠀│ 
+                    │⠀⠀⠀⠀⠀⢻⣿⣿⡷⡄⠀⠀⠀⠀⠀⠀⠙⣿⣿⣫⣷⢿⣛⡦⣤⣾⣿⣽⣽⣿⣤⠶⢾⣛⡫⣭⣒⠮⠭⣒⡪⠥⢒⣊⡭⢴⣒⣫⣭⢶⣾⠿⢯⣛⣶⣽⣷⠿⠟⠛⠉⠉⠀⠀⠀⠀⠀⠀⠀⠈⠓⣷⣄⠁⠀⠀⠀⠀⠀⠀│ 
+                    │⠀⠀⠀⠀⠀⠀⢻⣿⣟⣟⢦⠀⠀⠀⠀⠀⠀⠀⠙⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣭⣛⡳⣭⣝⣒⡮⢭⣽⣒⣾⣽⣷⠶⣿⣟⣿⣯⣽⠷⠾⠛⠛⠋⠉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⠃⠀⠀⠀⠀⠀⠀│ 
+                    │⠀⠀⠀⠀⠀⠀⠀⢻⣷⣷⣻⣗⣆⣀⠀⠀⠀⠀⠀⠀⠀⣈⣽⣿⣿⣿⣿⣿⣶⣾⣭⣿⣿⣷⣾⣿⣿⡿⠿⠿⠿⠛⠛⠛⠉⠉⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│ 
+                  0 │⠀⠀⠀⠀⠀⠀⠀⠀⠉⠻⠿⣿⣿⣿⣿⣷⣶⣶⣶⣿⣿⡿⠿⠟⠛⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│ 
+                    └────────────────────────────────────────────────────────────────────────────────┘ 
+                    ⠀0⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀110⠀ 
+                    ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀time (t)⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
+</code></pre></div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7c377c4.min.js"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_HTML"></script>
+      
+        <script src="../../assets/mathjaxhelper.js"></script>
+      
+    
+  </body>
+</html>
