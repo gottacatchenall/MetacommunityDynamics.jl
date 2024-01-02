@@ -1,6 +1,6 @@
-name = "MetacommunityDynamics"
+name = "EcoDynamics"
 uuid = "fe88e339-4f5d-4d49-b138-24d030ba5b68"
-authors = ["michael catchen <michael.catchen@colorado.edu>"]
+authors = ["michael catchen <michael.catchen@mcgill.ca>"]
 version = "0.1.0"
 
 [deps]

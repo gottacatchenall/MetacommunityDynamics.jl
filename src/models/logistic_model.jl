@@ -40,23 +40,4 @@ function LogisticModel(;
         Parameter(α))
 end
 
-# ====================================================
-#
-#   Plotting 
-#
-# =====================================================
 
-function replplot(::LogisticModel{Spatial}, traj::Trajectory)
-    u = vcat(Array(traj.sol.u)...)
-    ymax = max(u...)
-    p = lineplot(u[:,1], 
-        xlabel="time (t)", 
-        ylabel="Biomass", 
-        width=80,
-        ylim=(0,ymax))
-
-    for i in eachcol(u)[2:end]
-        lineplot!(p, i)
-    end
-    p
-end

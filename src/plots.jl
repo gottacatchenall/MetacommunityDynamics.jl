@@ -27,7 +27,7 @@ function makieplot(::Model{Population,M,Local,D}, traj) where {M<:Union{Biomass,
         xlabel="Time",
         ylabel=string(M)
     )
-    xs = Array(sol.sol)
+    xs = Array(traj.sol)
     scatterlines!(ax, time, xs)
     f
 end 
@@ -77,10 +77,8 @@ function replplot(::Model{Population,M,Local,D}, traj) where {M<:Union{Biomass,A
     time = traj.sol.t
     u = timeseries(traj)
     ymax = max([extrema(x)[2] for x in timeseries(traj)]...)
-    ts(s) = [mean(u[t][s,:]) for t in 1:length(traj)]
-
     _,width = displaysize(stdout)    
-    p = lineplot(time, ts(1), 
+    p = lineplot(time, [u[t] for t in 1:length(traj)], 
         xlabel="time (t)", 
         ylabel=string(M),
         width=width-40,
