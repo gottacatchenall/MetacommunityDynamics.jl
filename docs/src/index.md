@@ -9,6 +9,32 @@ _Julia_ language.
     not expected to change a ton, we still do not yet guarantee it will remain
     constant until the first `v1.0` productoin release. 
 
+# Installation 
+
+If you need to install Julia, you can do so using the `juliaup`
+installation manager with instructions found
+[here](https://julialang.org/downloads/). 
+
+From within Julia, you can install the release with 
+
+```
+using Pkg
+Pkg.add("EcoDynamics")
+```
+
+Or from the [REPL Pkg mode](https://docs.julialang.org/en/v1/stdlib/Pkg/), you
+can use
+
+```
+pkg> add EcoDynamics
+```
+
+# Background and Motivation
+
+- so this should justify the major elements that must be includeable in
+  simulation 
+
+# Documentation Structure
 
 This documentation is structured loosely using the
 [Diátaxis](https://diataxis.fr/) format, which separates documentation into four
@@ -19,16 +45,15 @@ forms:
 3. Reference (_information-oriented_ "techinical descriptions of the machinery")
 4. Explanation (_understanding-oriented_ discussions on the software design)
 
+## 🐛 Tutorials
 
-# 🐛 Tutorials
+- [Getting started with `EcoDynamics.jl`]()
+- []()
 
-- [Getting started with `EcoDynamics.jl`](@ref)
-- []
+## 🦋 How-to Guides
 
-# 🦋 How-to Guides
+## 📚 Reference
+
+## 🧪 Explanation
 
 
-
-# 📚 Reference
-
-# 🧪 Explanation

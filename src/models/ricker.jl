@@ -12,7 +12,7 @@ abstract type SexStochasticity <: RickerStochasticityType end
 
 
 struct RickerParams{T}
-
+    
 end
 
 struct RickerModel{T<:RickerStochasticityType}
