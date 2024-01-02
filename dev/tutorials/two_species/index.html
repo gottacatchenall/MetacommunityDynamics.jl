@@ -13,6 +13,10 @@
       
       
       
+        <link rel="prev" href="../..">
+      
+      
+        <link rel="next" href="../../how_to/community_inference/">
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
@@ -20,7 +24,7 @@
     
     
       
-        <title>Metapopulation synchrony - EcoDynamics.jl</title>
+        <title>A Two Species Model - EcoDynamics.jl</title>
       
     
     
@@ -71,6 +75,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#our-first-two-species-model" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -102,7 +111,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Metapopulation synchrony
+              A Two Species Model
             
           </span>
         </div>
@@ -235,19 +244,21 @@
       
   
   
+    
   
   
+  
     
     
     
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
         
           
           <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
@@ -261,7 +272,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
             Tutorials
@@ -275,7 +286,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../tutorials/getting_started.md" class="md-nav__link">
+      <a href="../getting_started.md" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -293,10 +304,19 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../tutorials/two_species/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
@@ -305,6 +325,7 @@
   
 
       </a>
+      
     </li>
   
 
@@ -361,7 +382,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../community_inference/" class="md-nav__link">
+      <a href="../../how_to/community_inference/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -769,6 +790,8 @@
   
   
   
+    
+  
   
 </nav>
                   </div>
@@ -786,9 +809,23 @@
   
 
 
-  <h1>Metapopulation synchrony</h1>
-
-
+<p><a id='Our-First-Two-Species-Model'></a></p>
+<p><a id='Our-First-Two-Species-Model-1'></a></p>
+<h1 id="our-first-two-species-model">Our First Two-Species Model</h1>
+<div class="admonition abstract">
+<p class="admonition-title">Abstract</p>
+<p>In this tutorial, we explore our first multi-species model: Lotka-Volttera dynamics.</p>
+</div>
+<p>First we'll load the package.</p>
+<div class="highlight"><pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="n">MetacommunityDynamics</span>
+</code></pre></div>
+<p>```@example 2
+lv = TrophicLotkaVolterra()
+<div class="highlight"><pre><span></span><code>```@example 3
+prob = problem(lv)
+</code></pre></div></p>
+<p><code>@example 4
+traj = simulate(prob)</code></p>
 
 
 
