@@ -1,4 +1,4 @@
-# Hellow World in  `EcoDynamics.jl`
+# Hello World in  `EcoDynamics.jl`
 
 !!! abstract
 

@@ -31,7 +31,8 @@ docs_dir: 'build'
 nav:
   - Home: index.md
   - Tutorials:
-    - Hello World: tutorials/quick_start.md
+    - Getting Started: tutorials/getting_started.md
+    - A Two Species Model: tutorials/two_species.md
   - How-To Guides:
     - Bayesian Inference of Dynamics: how_to/community_inference.md
   - Reference:

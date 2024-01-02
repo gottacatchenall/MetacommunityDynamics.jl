@@ -37,7 +37,8 @@ module MetacommunityDynamics
 
     include(joinpath("models", "ricker.jl"))
     include(joinpath("models", "bevertonholt.jl"))
-    include(joinpath("models", "logistic.jl"))
+    include(joinpath("models", "logistic_model.jl"))
+    include(joinpath("models", "logistic_map.jl"))
 
 
     include(joinpath("models", "trophiclv.jl"))
@@ -86,6 +87,7 @@ module MetacommunityDynamics
     export CompetitiveLotkaVolterra
     export RosenzweigMacArthur 
     export LogisticModel
+    export LogisticMap
     export TrophicLotkaVolterra
 
     export LevinsMetapopulation
