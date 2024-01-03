@@ -13,3 +13,12 @@ Term = "22787eb5-b846-44ae-b979-8e399b8463ab"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 TestItems = "1c621080-faea-4a02-84b6-bbd5e436b8fe"
 UnicodePlots = "b8865327-cd53-5732-bb35-84acbb429228"
+
+[compat]
+julia="1.9"
+CairoMakie="0.11"
+DifferentialEquations="7.12"
+Distributions="0.25"
+NeutralLandscapes="0.1.4"
+Term="2.0"
+UnicodePlots="3.6"
