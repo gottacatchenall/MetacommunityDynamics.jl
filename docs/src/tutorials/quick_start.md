@@ -2,7 +2,7 @@
 
 !!! abstract
 
-    This is meant as a quick tutorial to show a typical workflow using EcoDynamics.jl. We will introduce many concepts quite quickly in order to show off the features that make `EcoDynamics` tick. If it feels like the content is moving fast, that's okay. More detailed explanations of the functionality showcased here will follow in subsequent parts of the 'Getting Started' guide.
+    This is meant as a quick tutorial to show a typical workflow using EcologicalDynamics.jl. We will introduce many concepts quite quickly in order to show off the features that make `EcoDynamics` tick. If it feels like the content is moving fast, that's okay. More detailed explanations of the functionality showcased here will follow in subsequent parts of the 'Getting Started' guide.
 
 This document is a quick start to the features in `EcoDynamics`. Here we will
 build a model of consumer-resource dynamics on a spatial graph, where the
@@ -12,7 +12,7 @@ conditions at each patch.
 First we'll load the package.
 
 ```@example 1
-using MetacommunityDynamics
+using EcologicalDynamics
 ```
 
 For this example, we are going to use one of the many models included in the

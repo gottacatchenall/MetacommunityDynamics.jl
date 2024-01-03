@@ -1,2 +1,2 @@
-using EcoDynamics
+using EcologicalDynamics
 

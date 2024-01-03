@@ -19,7 +19,7 @@ Overview
 First we'll load the package.
 
 ```@example 1
-using EcoDynamics
+using MetacommunityDynamics
 ```
 
 # An introduction to Consumer-Resource models
