@@ -1,9 +1,7 @@
 push!(LOAD_PATH, "../src/")
 
 using Documenter
-using DocumenterMarkdown
-using DocumenterCitations
-using EcologicalDynamics
+using MetacommunityDynamics
 
 bibliography = CitationBibliography(joinpath(@__DIR__, "EcoDynamics.bib"))
 
@@ -17,7 +15,7 @@ makedocs(
 
 deploydocs(;
     deps = Deps.pip("mkdocs", "pygments", "python-markdown-math", "mkdocs-material"),
-    repo = "github.com/gottacatchenall/EcoDynamics.jl.git",
+    repo = "github.com/gottacatchenall/MetacommunityDynamics.jl.git",
     devbranch = "main",
     make = () -> run(`mkdocs build`),
     target = "site",
