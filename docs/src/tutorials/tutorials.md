@@ -34,6 +34,7 @@ Build up to Gaussian drift to LV many species system on a SG
 - Assumes previous tutorials
 - strong env gradient from NL.jl
 
+6. Multi-species occupancy models
 
-5. Inference
+7. Inference
 - Bayes integration tutorial  

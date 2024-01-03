@@ -1,7 +1,7 @@
-name = "EcoDynamics"
-uuid = "83b723f8-09ff-4e90-a4ed-f84f2fed5574"
+name = "MetacommunityDynamics"
+uuid = "fe88e339-4f5d-4d49-b138-24d030ba5b68"
 authors = ["michael d. catchen <mdcatchen@gmail.com>"]
-version = "0.1.0"
+version = "0.2.0"
 
 [deps]
 CairoMakie = "13f3f980-e62b-5c42-98c6-ff1f3baf88f0"
