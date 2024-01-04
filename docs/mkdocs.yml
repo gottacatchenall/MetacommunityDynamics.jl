@@ -30,7 +30,7 @@ docs_dir: 'build'
 
 nav:
   - Home: index.md
-  - Tutorials: tutorials/tutorials.md
+  - Tutorials: 
     - Getting Started: tutorials/getting_started.md
     - A Two Species Model: tutorials/two_species.md
   - Reference:
