@@ -9,7 +9,7 @@ bibliography = CitationBibliography(joinpath(@__DIR__, "EcoDynamics.bib"))
 
 makedocs(
     bibliography;
-    sitename = "EcoDynamics",
+    sitename = "MetacommunityDynamics.jl",
     authors = "Michael D. Catchen",
     modules = [MetacommunityDynamics],
     format = Markdown(),
