@@ -1,5 +1,6 @@
 module MetacommunityDynamics
     using Distributions
+    using Distances
     using Term
     using UnicodePlots
     using NeutralLandscapes
