@@ -10,43 +10,43 @@ First we'll load the package.
 using MetacommunityDynamics
 ```
 
-```@example 2   
+```@example 1
 logistic_map = LogisticMap(r=[3.6])
 ```
 
-```@example 3
+```@example 1
 prob = problem(logistic_map)
 ```
 
-```@example 4
+```@example 1
 traj = simulate(prob)
 ```
 
 
-```@example 5
+```@example 1
 coords = Coordinates(20)
 ```
 
-```@example 6
+```@example 1
 kern = DispersalKernel(decay=5.0, max_distance=0.5)
 ```
 
-```@example 7
+```@example 1
 sg = SpatialGraph(coords, kern)
 ```
 
-```@example 8
+```@example 1
 spatial_logmap = spatialize(logistic_map, sg, SpeciesPool(1))
 ```
 
-```@example 9
+```@example 1
 diffusion = Diffusion(sg, 0.05)
 ```
 
-```@example 10
+```@example 1
 spatial_prob = problem(spatial_logmap, diffusion)
 ```
-```@example 11
+```@example 1
 simulate(spatial_prob)
 ```
 
