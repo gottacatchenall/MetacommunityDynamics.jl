@@ -30,7 +30,6 @@ function problem(m::Model{SC,M,Spatial,D}; tspan=(0,100), u0=nothing) where {SC<
     
     f = factory(m) 
     u0 = isnothing(u0) ? initial(m) : u0
-
     θ = parameters(m)
 
     pr = prob(f, u0, tspan, θ) 
@@ -49,14 +48,14 @@ function problem(m::Model{SC,M,Local,D}, gd::GaussianDrift; tspan=(0,100), u0=no
     Problem{typeof(pr),Stochastic}(m, pr, tspan, u0)
 end
 
-function problem(model::Model{SC,M,S,D}, diffusion::Diffusion; tspan=(0,100), u0=nothing) where {SC,M,S,D}
-    S != Spatial && throw(ArgumentError, "Can't combine Diffusion with a Local model.")
+function problem(model::Model{SC,M,SP,D}, diffusion::Diffusion; tspan=(0,100), u0=nothing) where {SC,M,SP,D}
+    SP != Spatial && throw(ArgumentError, "Can't combine Diffusion with a Local model.")
     f = factory(model, diffusion)
 
     prob = D == Continuous ? ODEProblem : DiscreteProblem
 
     s = numsites(diffusion)
-    u0 = isnothing(u0) ? hcat([initial(model) for _ in 1:s]...) : hcat([u0 for _ in 1:s]...)
+    u0 = isnothing(u0) ? hcat([initial(model) for _ in 1:s]...) : u0 
     θ = parameters(model)
 
     pr = prob(f, u0, tspan, θ)

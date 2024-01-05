@@ -86,3 +86,26 @@ function replplot(::Model{Population,M,Local,D}, traj) where {M<:Union{Biomass,A
     )
     p
 end 
+
+
+function replplot(::Model{Population,M,Spatial,D}, traj) where {M<:Union{Biomass,Abundance},D}
+    
+    a = Array(traj.sol.u)
+    T = length(a)
+    num_pops = length(a[1])
+    
+    timeseries = [[a[t][p] for t in 1:T] for p in 1:num_pops]
+    ymax = max([extrema(x)[2] for x in timeseries]...)
+    _,width = displaysize(stdout)    
+    p = lineplot(timeseries[1], 
+        xlabel="time (t)", 
+        ylabel=string(M), 
+        width=width-40,
+        ylim=(0,ymax)
+    )
+
+    for ts in timeseries[2:end]
+        lineplot!(p, ts)
+    end
+    p
+end 
