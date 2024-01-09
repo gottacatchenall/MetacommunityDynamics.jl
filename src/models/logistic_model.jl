@@ -30,9 +30,9 @@ end
 # =====================================================
 
 function LogisticModel(;
-    λ::Vector{T} = [1.2],
-    K::Vector{T} = [50.],
-    α::Vector{T}  = [1.],
+    λ::T = 1.2,
+    K::T = 50.,
+    α::T  = 1.
 ) where T 
     LogisticModel{Local}(
         Parameter(λ), 

@@ -1,5 +1,5 @@
-struct Problem{T,R<:Stochasticity}
-    model::Model
+struct Problem{M,T,R<:Stochasticity}
+    model::M
     prob::T
     tspan
     initial_condition
@@ -8,7 +8,7 @@ end
 discreteness(p::Problem) = discreteness(model(p))
 spatialness(p::Problem) = spatialness(model(p))
 measurement(p::Problem) = measurement(model(p))
-stochasticity(::Problem{T,R}) where {T,R} = R
+stochasticity(::Problem{M,T,R}) where {M,T,R} = R
 
 model(p::Problem) = p.model
 
@@ -22,7 +22,7 @@ function problem(m::Model{SC,M,Local,D}; tspan=(0,100), u0=nothing) where {SC<:U
     θ = parameters(m)
 
     pr = prob(f, u0, tspan, θ) 
-    Problem{typeof(pr),Deterministic}(m, pr, tspan, u0)
+    Problem{typeof(m),typeof(pr),Deterministic}(m, pr, tspan, u0)
 end
 
 function problem(m::Model{SC,M,Spatial,D}; tspan=(0,100), u0=nothing) where {SC<:Union{Metapopulation,Metacommunity},M,D}
@@ -33,7 +33,7 @@ function problem(m::Model{SC,M,Spatial,D}; tspan=(0,100), u0=nothing) where {SC<
     θ = parameters(m)
 
     pr = prob(f, u0, tspan, θ) 
-    Problem{typeof(pr),Deterministic}(m, pr, tspan, u0)
+    Problem{typeof(m),typeof(pr),Deterministic}(m, pr, tspan, u0)
 end
 
 
@@ -45,7 +45,7 @@ function problem(m::Model{SC,M,Local,D}, gd::GaussianDrift; tspan=(0,100), u0=no
     θ = parameters(m)
 
     pr = prob(f, g, u0, tspan, θ) 
-    Problem{typeof(pr),Stochastic}(m, pr, tspan, u0)
+    Problem{typeof(m),typeof(pr),Stochastic}(m, pr, tspan, u0)
 end
 
 function problem(model::Model{SC,M,SP,D}, diffusion::Diffusion; tspan=(0,100), u0=nothing) where {SC,M,SP,D}
@@ -60,11 +60,12 @@ function problem(model::Model{SC,M,SP,D}, diffusion::Diffusion; tspan=(0,100), u
 
     pr = prob(f, u0, tspan, θ)
 
-    Problem{typeof(pr),Deterministic}(model, pr, tspan, u0)
+    Problem{typeof(model), typeof(pr),Deterministic}(model, pr, tspan, u0)
 end 
 
 function problem(model::Model{SC,M,S,D}, diffusion::Diffusion, gd::GaussianDrift; tspan=(0,100), u0=nothing) where {SC,M,S,D}
-    S != Spatial && throw(ArgumentError, "Can't combine Diffusion with a Local model.")
+    S != Spatial && throw(ArgumentError("Can't combine Diffusion with a Local model."))
+    D != Continuous && throw(ArgumentError("Can't combine Gaussian Drift with a Discrete time model."))
   
     prob = D == Continuous ? SDEProblem : DiscreteProblem
 
@@ -76,17 +77,14 @@ function problem(model::Model{SC,M,S,D}, diffusion::Diffusion, gd::GaussianDrift
     θ = parameters(model)
 
     pr = prob(f, g, u0, tspan, θ) 
-    Problem{typeof(pr),Stochastic}(model, pr, tspan, u0)
+    Problem{typeof(model), typeof(pr),Stochastic}(model, pr, tspan, u0)
 end 
 
 
 # Printing
 
-Base.string(p::Problem{T,R}) where {T,R} = """
-A {blue}$R{/blue} {bold}{#a686eb}Problem{/#a686eb}{/bold} 
-- model: $(typeof(p.model)) $(spatialness(p.model))
-- u0: $(p.initial_condition)
-- tspan: $(p.tspan)
+Base.string(p::Problem{M,T,R}) where {M,T,R} = """
+A {blue}$M{/blue} {green}$(spatialness(p.model)){/green} {bold}{#a686eb}Problem{/#a686eb}{/bold} 
 """
 
 Base.show(io::IO,  p::Problem{T,R}) where {T,R} = tprint(p)

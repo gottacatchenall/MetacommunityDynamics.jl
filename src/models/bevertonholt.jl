@@ -40,47 +40,13 @@ end
 # =====================================================
 
 function BevertonHolt(;
-    R₀ = [1.2],
-    K = [50.]
-)
+    R₀::T = 1.2,
+    K::T = 50.
+) where T 
     BevertonHolt{Local}(
         Parameter(R₀),
         Parameter(K))
 end
-
-
-# ====================================================
-#
-#   Plotting
-#
-# =====================================================
-
-function replplot(::BevertonHolt{Local}, traj::Trajectory) 
-    u = timeseries(traj)
-    ymax = max(u...)
-    p = lineplot(u, 
-        xlabel="time (t)", 
-        ylabel="Abundance", 
-        width=80,
-        ylim=(0,ymax))
-    p
-end
-
-function replplot(::BevertonHolt{Spatial}, traj::Trajectory)
-    u = vcat(Array(traj.sol.u)...)
-    ymax = max(u...)
-    p = lineplot(u[:,1], 
-        xlabel="time (t)", 
-        ylabel="Abundance", 
-        width=80,
-        ylim=(0,ymax))
-
-    for i in eachcol(u)[2:end]
-        lineplot!(p, i)
-    end
-    p
-end
-
 
 # ====================================================
 #

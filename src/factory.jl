@@ -19,7 +19,23 @@ function factory(m::Model{SC,M,Spatial,D}) where {SC<:Union{Metapopulation,Metac
 end
 
 
-function _spatial_factory(m::Model, d::Diffusion) 
+function _spatial_factory(m::Model{Population,M,SP,D}, d::Diffusion) where {M,SP,D}
+    function f(u, θ, _)
+        du = similar(u)
+        ns = numsites(d)
+        diffusion!(u,d)
+
+        for s in 1:ns
+            u_local = u[s]    
+            θ_local = [x[s] for x in θ]
+            du[s] = ∂u(m, u_local, θ_local)
+        end 
+        du 
+    end
+    return f
+end 
+
+function _spatial_factory(m::Model{Community,M,SP,D}, d::Diffusion) where {M,SP,D}
     function f(u, θ, _)
         du = similar(u)
         ns = numsites(d)
