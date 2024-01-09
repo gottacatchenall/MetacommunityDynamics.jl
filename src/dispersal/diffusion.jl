@@ -12,16 +12,24 @@ function _diffusion_mat(sg::SpatialGraph, m::T) where T<:Number
     [i[1] == i[2] ? 1-m : sg.potential[i[1],i[2]] * m for i in idx]
 end
 
-function diffusion!(u, d::Diffusion)
-    u[findall(x->x<0, u)] .= 0
+# Dimensionality of u_i matters.
+# 
 
+function diffusion!(u::Vector, d::Diffusion)
+    u[findall(x->x<0, u)] .= 0
+    u = d.matrix * u
+end 
+
+function diffusion!(u::Matrix, d::Diffusion)
+    u[findall(x->x<0, u)] .= 0
+    
     for (i,r) in enumerate(eachrow(u))
         u[i,:] .= d.matrix * r
     end
-    u
+    return u
 end 
 
-
+# Diffusion is per species level 
 function diffusion!(u, d::Vector{Diffusion})
     for (i,r) in enumerate(eachrow(u))
         u[i,:] .= d[i].matrix * r

@@ -29,7 +29,7 @@ function simulate(p::Problem; solver=nothing)
     solver = isnothing(solver) ? _default_solver(s,d) : solver
 
     sol = solve(p.prob, solver, saveat=(p.tspan[1]:1:p.tspan[2]))
-    Trajectory(p, sol)
+    Trajectory{typeof(sol)}(p, sol)
 end
 
 # ====================================================

@@ -29,9 +29,9 @@ end
 # =====================================================
 
 function LogisticMap(;
-    r::Vector{T} = [1.8],
-    K::Vector{T} = [1.],
-) where T 
+    r::T = 1.8,
+    K::T = 1.,
+) where {T<:Number}
     LogisticMap{Local}(
         Parameter(r), 
         Parameter(K))
