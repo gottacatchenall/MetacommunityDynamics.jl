@@ -754,134 +754,34 @@
 <p>First we'll load the package. </p>
 <div class="highlight"><pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="n">MetacommunityDynamics</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="n">logistic_map</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">LogisticMap</span><span class="p">(</span><span class="n">r</span><span class="o">=</span><span class="p">[</span><span class="mf">3.6</span><span class="p">])</span>
-</code></pre></div>
+<p><code>@example 1
+logistic_map = LogisticMap(r=3.6)</code></p>
+<p>```</p>
+<p>@example 1 prob = problem(logistic_map)</p>
 <div class="highlight"><pre><span></span><code>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="n">prob</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">problem</span><span class="p">(</span><span class="n">logistic_map</span><span class="p">)</span>
-</code></pre></div>
+<p>@example 1 traj = simulate(prob)</p>
 <div class="highlight"><pre><span></span><code>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="n">traj</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">simulate</span><span class="p">(</span><span class="n">prob</span><span class="p">)</span>
+<p>@example 1 coords = Coordinates(20)</p>
+<div class="highlight"><pre><span></span><code>foo
 </code></pre></div>
-<div class="highlight"><pre><span></span><code>An trajectory of length 101.
-                    ┌────────────────────────────────────────┐ 
-           0.899997 │⠀⢠⣆⢸⠀⣆⣴⢠⡆⢸⡇⢠⡆⣴⡇⢸⠀⣴⣆⢸⠀⡇⢸⠀⡆⣴⡇⢸⠀⣦⣴⢀⡇⢠⣦⢰⡄⣆⣸⠀│ 
-                    │⠀⣼⣿⢸⡀⣿⣿⢸⡇⣿⣇⣸⡇⣿⣿⣼⡀⣿⣿⢸⡆⣷⣾⢠⡇⣿⣷⣸⡄⣿⣿⢸⡇⣸⣿⢸⡇⣿⣿⢠│ 
-                    │⣆⣿⣿⣿⣇⣿⣿⣼⣧⣿⣿⣿⣧⣿⣿⣿⣇⣿⣿⣿⣧⣿⣿⢸⣧⣿⣿⣿⣧⣿⣿⢸⣧⣿⣿⣼⣧⣿⣿⢸│ 
-                    │⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣼⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣼│ 
-                    │⡇⢻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿│ 
-                    │⡇⠸⣿⣿⡏⣿⣿⣿⣿⢻⣿⢹⣿⣿⣿⣿⡇⣿⣿⣿⣿⣿⡇⡏⢻⢿⣿⣿⡟⣿⣿⣿⣿⠏⣿⣿⣿⣿⡟⡿│ 
-                    │⡇⠀⣿⣿⡇⢹⡏⣿⣿⢸⣿⢸⣿⢸⣿⢿⡇⢹⡿⣿⡇⢿⠁⡇⢸⢸⣿⢻⡇⢹⡇⣿⣿⠀⡏⣿⣿⢻⡇⡇│ 
-   Biomass          │⡇⠀⡇⢹⡇⢸⡇⡿⣿⠀⡿⢸⣿⠸⡇⢸⡇⢸⡇⢻⡇⢸⠀⡇⢸⠸⡏⢸⡇⢸⡇⡇⢸⠀⡇⣿⣿⢸⠃⡇│ 
-                    │⡇⠀⡇⢸⡇⠘⠁⠃⢸⠀⡇⠀⠙⠀⡇⢸⡇⠀⠇⢸⡇⢸⠀⡇⠸⠀⡇⢸⡇⠘⠀⡇⢸⠀⠁⠉⠃⠸⠀⡇│ 
-                    │⡇⠀⠀⠸⠇⠀⠀⠀⠀⠀⠇⠀⠀⠀⠀⠸⠇⠀⠀⠈⠃⠈⠀⠃⠀⠀⠁⠘⠃⠀⠀⠀⠸⠀⠀⠀⠀⠀⠀⠃│ 
-                    │⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│ 
-                    │⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│ 
-                    │⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│ 
-                    │⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│ 
-                  0 │⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│ 
-                    └────────────────────────────────────────┘ 
-                    ⠀0⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀100⠀ 
-                    ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀time (t)⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
+<p>@example 1 kern = DispersalKernel(decay=5.0, max_distance=0.5)</p>
+<div class="highlight"><pre><span></span><code>bar
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="n">coords</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Coordinates</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<p>@example 1 sg = SpatialGraph(coords, kern)</p>
+<div class="highlight"><pre><span></span><code>foobar
 </code></pre></div>
-<div class="highlight"><pre><span></span><code>A Coorindate set with 20 sites.                                                 
-
-Environment: Dict(:e =&gt; [0.1260022633282324, 0.41370325115308604, 0.21480708469 
-92115, 0.03276390483093461, 0.4977367497917985, 0.10514236283756195, 0.05528555 
-6126577484, 0.3488468957182995, 0.6424701421480222, 0.3011950888645688, 0.12598 
-567002607342, 0.6978866762019185, 0.2545989841093681, 0.5038468495687417,       
-0.7386879279846852, 0.5829874739272692, 0.05360669500166981, 0.9450195456186249 
-, 0.2624497807409769, 0.9368764055301182])                                      
-                                                                                    ┌────────────────────────────────────────┐
-   1│⠀⠀⠀⠀⠀⠀⚬⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⚬⠀│
-    │⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⚬⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│
-    │⠀⠀⠀⠀⠀⠀⠀⠀⠀⚬⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⚬⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│
-    │⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⚬⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│
-    │⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│
-    │⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⚬⠀⠀⠀│
-    │⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│
-    │⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│
-    │⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⚬⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│
-    │⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│
-    │⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⚬⚬⠀⠀⠀⚬⠀⚬⠀⠀⠀⠀⚬⠀⠀⠀⠀│
-    │⠀⠀⚬⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│
-    │⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⚬⠀⠀⠀⠀⠀⚬⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│
-    │⠀⠀⠀⠀⠀⠀⠀⠀⚬⠀⠀⚬⠀⠀⠀⚬⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│
-   0│⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⚬⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│
-    └────────────────────────────────────────┘
-    ⠀0⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀1⠀
+<p>@example 1 spatial<em>logmap = spatialize(logistic</em>map, sg, SpeciesPool(1))</p>
+<div class="highlight"><pre><span></span><code>baz
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="n">kern</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DispersalKernel</span><span class="p">(</span><span class="n">decay</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span><span class="w"> </span><span class="n">max_distance</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<p>@example 1 diffusion = Diffusion(sg, 0.05)</p>
+<div class="highlight"><pre><span></span><code>foobarbaz
 </code></pre></div>
-<div class="highlight"><pre><span></span><code>╭──── DispersalKernel ────────────╮
-│                                 │
-│  Decay: 5.0                     │
-│  Maximum Dispersal Distance:    │
-│  0.5                            │
-│                                 │
-│                                 │
-╰─────────────────────────────────╯
-</code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="n">sg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SpatialGraph</span><span class="p">(</span><span class="n">coords</span><span class="p">,</span><span class="w"> </span><span class="n">kern</span><span class="p">)</span>
-</code></pre></div>
-<div class="highlight"><pre><span></span><code>             ┌──────────────────────────────┐  0.5    
-          20 │▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄│ ┌──┐    
-             │▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄│ │▄▄│    
-             │▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄│ │▄▄│    
-             │▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄│ │▄▄│    
-             │▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄│ │▄▄│    
-             │▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄│ │▄▄│    
-             │▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄│ │▄▄│    
-   Node j    │▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄│ │▄▄│ ϕᵢⱼ
-             │▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄│ │▄▄│    
-             │▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄│ │▄▄│    
-             │▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄│ │▄▄│    
-             │▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄│ │▄▄│    
-             │▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄│ │▄▄│    
-             │▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄│ │▄▄│    
-           1 │▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄│ └──┘    
-             └──────────────────────────────┘  0      
-              1                           20          
-                          Node i                      
-</code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="n">spatial_logmap</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spatialize</span><span class="p">(</span><span class="n">logistic_map</span><span class="p">,</span><span class="w"> </span><span class="n">sg</span><span class="p">,</span><span class="w"> </span><span class="n">SpeciesPool</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
-</code></pre></div>
+<p>@example 1 spatial<em>prob = problem(spatial</em>logmap, diffusion; u0=[rand() for _ in 1:numsites(sg)])</p>
 <div class="highlight"><pre><span></span><code>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="n">diffusion</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Diffusion</span><span class="p">(</span><span class="n">sg</span><span class="p">,</span><span class="w"> </span><span class="mf">0.05</span><span class="p">)</span>
-</code></pre></div>
-<div class="highlight"><pre><span></span><code>Diffusion{Float64}([0.95 0.0 … 0.0 0.0; 0.0 0.95 … 0.003623425852342644 0.003982955553162546; … ; 0.0 0.0019497390238729128 … 0.95 0.0; 0.0 0.006180441164962039 … 0.0 0.95])
-</code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="n">spatial_prob</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">problem</span><span class="p">(</span><span class="n">spatial_logmap</span><span class="p">,</span><span class="w"> </span><span class="n">diffusion</span><span class="p">)</span>
-</code></pre></div>
-<div class="highlight"><pre><span></span><code>
-</code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="n">simulate</span><span class="p">(</span><span class="n">spatial_prob</span><span class="p">)</span>
-</code></pre></div>
-<div class="highlight"><pre><span></span><code>An trajectory of length 101.
-                    ┌────────────────────────────────────────┐ 
-           0.899997 │⠀⠀⣆⢸⠀⣦⢰⣴⡆⡇⢠⢰⡄⡇⣸⢠⣴⡀⡇⢸⠀⡇⢰⣴⡇⡇⢰⢠⡆⣸⠀⣦⣴⡄⣆⢸⠀⠀⠀⠀│ 
-                    │⠀⡄⣿⢸⣠⣿⣼⣿⣿⣷⣸⢸⡇⣿⣿⣸⣿⣇⣷⢸⣦⣧⣿⣿⣷⣷⣼⢸⡇⣿⢀⣿⣿⣧⣿⢸⡄⠀⠀⠀│ 
-                    │⢰⣿⣿⣼⣿⣿⣿⣿⣿⣿⣿⣼⣿⣿⣿⣿⣿⣿⣿⣾⣿⣿⣿⣿⣿⣿⣿⣾⡇⣿⣸⣿⣿⣿⣿⣼⡇⠀⠀⠀│ 
-                    │⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⠀⠀⠀│ 
-                    │⢸⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠀⠀⠀│ 
-                    │⢸⠸⣿⣿⡏⣿⣿⣿⣿⣿⠏⣿⣿⣿⣿⡇⣿⣿⣿⣿⣿⣿⢻⣿⣿⣿⠛⣿⣿⣿⡏⢹⣿⣿⣿⣿⡿⠀⠀⠀│ 
-                    │⢸⠀⣿⣿⡇⣿⣿⢻⡇⣿⠀⣿⣿⣿⢿⡇⡟⣿⣿⢸⡏⣿⢸⢿⡏⢻⠀⣿⣿⡇⡇⢸⡏⣿⣿⣿⡇⠀⠀⠀│ 
-   Biomass          │⡇⠀⢿⢹⡇⡟⣿⢸⡇⢸⠀⣿⡿⣿⢸⠇⡇⡟⣿⢸⡇⣿⢸⠸⡇⢸⠀⡿⣿⠀⡇⢸⡇⣿⢿⢻⡇⠀⠀⠀│ 
-                    │⡇⠀⢸⢸⡇⠃⠙⠀⡇⢸⠀⠙⠃⡇⢸⠀⠀⠇⢹⢸⡇⡟⠸⠀⡇⢸⠀⠃⢸⠀⡇⠈⠁⠃⠸⢸⡇⠀⠀⠀│ 
-                    │⡇⠀⠀⠸⠇⠀⠀⠀⠀⠸⠀⠀⠀⠀⠸⠀⠀⠀⠘⠀⠁⠃⠀⠀⠁⠘⠀⠀⠀⠀⠇⠀⠀⠀⠀⠘⠃⠀⠀⠀│ 
-                    │⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│ 
-                    │⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│ 
-                    │⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│ 
-                    │⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│ 
-                  0 │⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│ 
-                    └────────────────────────────────────────┘ 
-                    ⠀0⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀110⠀ 
-                    ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀time (t)⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
-</code></pre></div>
+<p>@example 1 simulate(spatial_prob) ``` biz</p>
 
 
 
