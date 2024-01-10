@@ -12,7 +12,7 @@ using MetacommunityDynamics
 
 ```@example 1
 logistic_map = LogisticMap(r=3.6)
-  ```
+```
 
 ```@example 1
 prob = problem(logistic_map)

@@ -3,7 +3,7 @@
 !!! abstract
     In this tutorial, we explore our first multi-species model: Lotka-Volterra
     dynamics. We'll learn about building consumer-resource models in
-    `EcoDynamics`, and using included and custom functional responses. 
+    `MetacommunityDynamics`, and using included and custom functional responses. 
 
 Overview
 
@@ -40,13 +40,13 @@ Why are CR models of interest? Stability of systems.
 It's included. Just like in previous tutorial we can use the constructor to
 create an instance of the Lotka-Volterra model:
 
-```@example 2
+```@example 1
 lv = TrophicLotkaVolterra()
 ```
 
 and convert it to a `Problem` and `simulate`, just as we did before
 
-```@example 3
+```@example 1
 prob = problem(lv)
 traj = simulate(prob)
 ```
