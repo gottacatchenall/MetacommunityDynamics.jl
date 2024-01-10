@@ -1,6 +1,8 @@
 
 makieplot(traj::Trajectory) = makieplot(traj.prob.model, traj)
 
+
+
 function makieplot(m::Model{Community,M,Local,D}, traj) where {M<:Union{Biomass,Abundance},D}
     ns = numspecies(m)
     time = traj.sol.t
@@ -18,6 +20,8 @@ function makieplot(m::Model{Community,M,Local,D}, traj) where {M<:Union{Biomass,
     end
     f
 end 
+
+
 
 function makieplot(::Model{Population,M,Local,D}, traj) where {M<:Union{Biomass,Abundance},D}
     time = traj.sol.t

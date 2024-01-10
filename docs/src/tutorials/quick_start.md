@@ -1,10 +1,10 @@
-# Hello World in  `EcoDynamics.jl`
+# Hello World in  `MetacommunityDynamics.jl`
 
 !!! abstract
 
-    This is meant as a quick tutorial to show a typical workflow using EcologicalDynamics.jl. We will introduce many concepts quite quickly in order to show off the features that make `EcoDynamics` tick. If it feels like the content is moving fast, that's okay. More detailed explanations of the functionality showcased here will follow in subsequent parts of the 'Getting Started' guide.
+    This is meant as a quick tutorial to show a typical workflow using EcologicalDynamics.jl. We will introduce many concepts quite quickly in order to show off the features that make `MetacommunityDynamics` tick. If it feels like the content is moving fast, that's okay. More detailed explanations of the functionality showcased here will follow in subsequent parts of the 'Getting Started' guide.
 
-This document is a quick start to the features in `EcoDynamics`. Here we will
+This document is a quick start to the features in `MetacommunityDynamics`. Here we will
 build a model of consumer-resource dynamics on a spatial graph, where the
 limiting growth rate of the resource is a function of the environmental
 conditions at each patch.
@@ -12,11 +12,11 @@ conditions at each patch.
 First we'll load the package.
 
 ```@example 1
-using EcologicalDynamics
+using MetacommunityDynamics
 ```
 
 For this example, we are going to use one of the many models included in the
-`EcoDynamics` library. The Rosenzweig-MacArthur [@cite] model of
+`MetacommunityDynamics` library. The Rosenzweig-MacArthur [@cite] model of
 consumer-resource dynamics. Initially, the Rosenzweig-MacArthur was originally
 defined as  
 
@@ -32,7 +32,7 @@ infintesimal growth of biomass for the consumer per unit resource, and $\gamma$
 is the intrinsic death date of consumers. (Note that this is equivalent to a
 Lotka-Volterra model with a Holling Type-II functional response).
 
-By default, in `EcoDynamics` the `RosenzweigMacArthur` model is parameterized
+By default, in `MetacommunityDynamics` the `RosenzweigMacArthur` model is parameterized
 for two species exhibiting a limit cycle, though it can be used for an arbitrary
 number of species (See _TODO custom parameterization_ section). 
 
