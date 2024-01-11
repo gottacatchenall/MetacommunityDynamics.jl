@@ -30,4 +30,17 @@ function TrophicLotkaVolterra(;
     )
 end
 
+function TrophicLotkaVolterra(;
+    λ::T = 0.02,
+    α::T = 0.2,
+    β::T = 0.1,
+    γ::T = 0.1
+) where T<:Number
+    r = [-γ, λ]
+    A = [0. α; -β 0]
+    TrophicLotkaVolterra{Local}(
+        Parameter(r),
+        Parameter(A)
+    )
+end
 

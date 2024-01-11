@@ -100,6 +100,18 @@ function makieplot(::Model{Community,M,Spatial,D}, traj) where {M<:Union{Biomass
     f
 end 
 
+function makieplot(kern::DispersalKernel)
+    xs = LinRange(0, kern.max_distance, 99)
+    ys = [kern.func.(x, kern.decay) for x in xs]
+    
+    ys = ys ./ sum(ys)
+
+    xs = vcat(xs, 2xs[end]-xs[end-1])
+    ys = vcat(ys, 0)
+
+    lines(xs, ys)
+    current_figure()
+end
 
 function replplot(m::Model{Community,M,Local,D}, traj) where {M<:Union{Biomass,Abundance},D}
     ns = numspecies(m)

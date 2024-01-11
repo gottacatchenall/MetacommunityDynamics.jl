@@ -26,10 +26,12 @@ Base.length(p::Parameter{T,N}) where {T,N} = N == 1 ? 1 : size(p,1)
 
 
 function parameters(model::T) where T<:Model 
-    θ = []
+    θ = ()
     for f in fieldnames(T)
         field = getfield(model, f)
-        typeof(field) <: Parameter && push!(θ, getfield(field, :value))
+        if typeof(field) <: Parameter
+            θ =(θ...,  getfield(field, :value))
+        end 
     end
     θ
 end
