@@ -7,13 +7,15 @@
 BevertonHolt 
 ```
 
-
-
-## Logisitic Model
+## Logistic Model
 
 ```@docs
-LogisiticModel 
+LogisticModel 
 ```
 
+## Logistic Map
 
+```@docs
+LogisticMap
+```
 
