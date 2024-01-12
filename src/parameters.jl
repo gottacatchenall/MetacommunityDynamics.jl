@@ -1,17 +1,10 @@
+const _PARAM_TYPES = Union{Array{T,N},T} where {T,N}
+
 """
     Parameter{T<:Number,A<:Union{Array{T,1},Array{T,2}},V<:Union{A,Vector{A}}} 
 
 Yet-another Parameter struct. 
 """
-
-# Okay, this needs refactoring
-# 
-#
-# The parameter / constructor interface should be designed together. 
-# 
-#
-const _PARAM_TYPES = Union{Array{T,N},T} where {T,N}
-
 struct Parameter{T,N} 
     value::_PARAM_TYPES
 end 
