@@ -25,10 +25,11 @@ prob = problem(lv)
 
 ```@example 1
 traj = simulate(prob);
-traj = simulate(prob);
 ```
 
 ### Changing parameters
+
+foo
 
 ```@example 1
 lv_custom_params = TrophicLotkaVolterra(λ = 0.1, γ = 0.3)
@@ -37,12 +38,16 @@ simulate(problem(lv_custom_params))
 
 ### Changing the simulation length
 
+foo
+
 ```@example 1
 prob = problem(lv, tspan=(1,200))
 simulate(prob)
 ```
 
 ### Changing the initial condition
+
+foo
 
 ```@example 1
 prob = problem(lv, u0 = [0.5, 0.5])
@@ -51,12 +56,15 @@ simulate(prob)
 
 ### Using a custom differential-equation solver
 
+bar
 
 ```@example 1
 using DifferentialEquations
 prob = problem(lv)
 simulate(prob, solver=Vern7())
 ```
+
+foo
 
 
 ## Adding space
@@ -71,6 +79,7 @@ foo
 kern = DispersalKernel(decay=5.0, max_distance=0.5);
 ```
 
+foo
 
 ```@example 1
 makieplot(kern)
@@ -82,15 +91,12 @@ bar
 sg = SpatialGraph(coords, kern);
 ```
 
-```@example 1
-makieplot(sg)
-sg = SpatialGraph(coords, kern);
-```
+
+foo
 
 ```@example 1
 makieplot(sg)
 ```
-
 
 foobar
 
@@ -110,13 +116,16 @@ foobarbaz
 
 ```@example 1
 spatial_prob = problem(spatial_lv, diffusion; 
-    u0=rand(2,10),
+    u0=rand(2,numsites(sg)),
     tspan=(1,300)
 );
 ```
 
+foo
+
 ```@example 1
-simulate(spatial_prob);
+t = simulate(spatial_prob)
+makieplot(t)
 ```
 biz
 
@@ -130,7 +139,8 @@ spatial_prob = problem(spatial_lv, diffusion;
     tspan=(1,300)
 );
 
-simulate(spatial_prob)
+t = simulate(spatial_prob)
+makieplot(t)
 ```
 
 Notice the difference in synchrony

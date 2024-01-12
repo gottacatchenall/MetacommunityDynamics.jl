@@ -87,14 +87,14 @@ function makieplot(::Model{Community,M,Spatial,D}, traj) where {M<:Union{Biomass
     ax = Axis(
         f[1,1],
         xlabel="Time",
-        ylabel="Proportion Occupied",
+        ylabel="$M",
     )
     ylims!(ax, 0, ymax)
 
 
     for s in eachslice(u, dims=(2))
         for sp in 1:n_species
-            scatterlines!(ax, p, s[sp,:], color=cols[sp])
+            scatterlines!(ax, s[sp,:], color=(cols[sp], 0.5))
         end
     end 
     f
