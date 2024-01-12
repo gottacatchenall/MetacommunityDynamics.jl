@@ -25,6 +25,7 @@ prob = problem(lv)
 
 ```@example 1
 traj = simulate(prob);
+traj = simulate(prob);
 ```
 
 ### Changing parameters
@@ -83,7 +84,13 @@ sg = SpatialGraph(coords, kern);
 
 ```@example 1
 makieplot(sg)
+sg = SpatialGraph(coords, kern);
 ```
+
+```@example 1
+makieplot(sg)
+```
+
 
 foobar
 
@@ -109,7 +116,7 @@ spatial_prob = problem(spatial_lv, diffusion;
 ```
 
 ```@example 1
-simulate(spatial_prob)
+simulate(spatial_prob);
 ```
 biz
 
