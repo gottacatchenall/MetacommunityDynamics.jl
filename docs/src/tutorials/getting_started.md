@@ -7,13 +7,25 @@
     the end of this tutorial.
 
 
-First we'll load the package. 
+In this tutorial, we will learn how to use `MetacommunityDynamics.jl` from
+scratch. We'll start by learning how to simulate Lotka-Volterra dynamics, how to
+adjust model parameters and how to change differential equation solvers. In the
+secont part, we'll focus on how MetacommunityDynamics.jl enables
+reaction-diffusion dynamics on spatial graphs, where we'll simulate how
+dispersal causes an LV system across many patches to become synchronized.
+
+Let's start by loading the package. If you have not installed Julia or
+MetacommunityDynamics, see this [installing guide](TODO).
+
 
 ```@example 1
 using MetacommunityDynamics
 ```
 
 ## A simple Lotka-Volterra Model
+
+`MetacommunityDynamics.jl` includes a library of many common models for
+population and community dynamics. 
 
 ```@example 1
 lv = TrophicLotkaVolterra()
@@ -70,13 +82,13 @@ foo
 ## Adding space
 
 ```@example 1
-coords = Coordinates(10);
+coords = Coordinates(20);
 ```
 
 foo
 
 ```@example 1
-kern = DispersalKernel(decay=5.0, max_distance=0.5);
+kern = DispersalKernel(decay=1., max_distance=0.5);
 ```
 
 foo
@@ -103,8 +115,6 @@ foobar
 ```@example 1
 spatial_lv = spatialize(lv, sg, SpeciesPool(2));
 ```
-
-baz
 
 very low migration
 
@@ -135,7 +145,7 @@ Very high migration
 diffusion = Diffusion(sg, 0.1)
 
 spatial_prob = problem(spatial_lv, diffusion; 
-    u0=rand(2,10),
+    u0=rand(2,numsites(sg)),
     tspan=(1,300)
 );
 
