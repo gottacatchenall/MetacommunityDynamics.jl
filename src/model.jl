@@ -4,8 +4,8 @@ Base.string(m::Model{SC,M,SP,D}) where {SC,M,SP,D} = """
 {bold}$(typeof(m)){/bold}
 """
 
-Base.show(io::IO, ::MIME"text/plain", m::Model) = begin 
-    tprint(m)
+Base.show(io::IO, m::Model) = begin 
+    tprint(io, m)
 end 
 
 

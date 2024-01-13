@@ -23,7 +23,7 @@ Base.string(kern::DispersalKernel) = """
 {yellow}{bold}DispersalKernel{/bold}{/yellow}
 """
 
-Base.show(io::IO, ::MIME"text/plain", kern::DispersalKernel) = begin
+Base.show(io::IO, kern::DispersalKernel) = begin
     tprint(io, string(kern))
     print(io, 
         replplot(kern)
