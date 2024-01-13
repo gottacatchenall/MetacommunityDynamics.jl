@@ -37,6 +37,7 @@ prob = problem(lv)
 
 ```@example 1
 traj = simulate(prob);
+makieplot(traj)
 ```
 
 ### Changing parameters
@@ -45,7 +46,8 @@ foo
 
 ```@example 1
 lv_custom_params = TrophicLotkaVolterra(λ = 0.1, γ = 0.3)
-simulate(problem(lv_custom_params))
+traj = simulate(problem(lv_custom_params))
+makieplot(traj)
 ```
 
 ### Changing the simulation length
@@ -54,7 +56,7 @@ foo
 
 ```@example 1
 prob = problem(lv, tspan=(1,200))
-simulate(prob)
+makieplot(simulate(prob))
 ```
 
 ### Changing the initial condition
@@ -63,7 +65,7 @@ foo
 
 ```@example 1
 prob = problem(lv, u0 = [0.5, 0.5])
-simulate(prob)
+makieplot(simulate(prob))
 ```
 
 ### Using a custom differential-equation solver
@@ -73,7 +75,7 @@ bar
 ```@example 1
 using DifferentialEquations
 prob = problem(lv)
-simulate(prob, solver=Vern7())
+makieplot(simulate(prob, solver=Vern7()))
 ```
 
 foo
@@ -89,11 +91,6 @@ foo
 
 ```@example 1
 kern = DispersalKernel(decay=1., max_distance=0.5);
-```
-
-foo
-
-```@example 1
 makieplot(kern)
 ```
 
@@ -101,12 +98,6 @@ bar
 
 ```@example 1
 sg = SpatialGraph(coords, kern);
-```
-
-
-foo
-
-```@example 1
 makieplot(sg)
 ```
 
