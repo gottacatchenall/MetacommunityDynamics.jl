@@ -19,6 +19,27 @@ function problem(m::Model{SC,M,Local,D}; tspan=(0,100), u0=nothing) where {SC<:U
     
     f = factory(m) 
     u0 = isnothing(u0) ? initial(m) : u0
+    function makiephaseplot(m::Model{Community,M,Spatial,D}, traj; dims=(1,2)) where {M,D}
+        f = Figure()
+        ax = Axis(
+            f[1,1],
+            xlabel="Species $(dims[1]) $M",
+            ylabel="Species $(dims[2]) $M",
+        )
+    
+        u = Array(traj.sol)
+    
+    
+        x,y = u[dims[1],i_site,:], u[dims[2],i_site,:]
+    
+        @info y .- x
+    
+        for i_site in axes(u,2)
+            scatterlines!(ax, u[dims[1],i_site,:], u[dims[2],i_site,:])
+        end
+        f
+    end
+    
     θ = parameters(m)
 
     pr = prob(f, u0, tspan, θ) 

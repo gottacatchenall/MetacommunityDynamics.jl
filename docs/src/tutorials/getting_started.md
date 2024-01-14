@@ -85,6 +85,7 @@ foo
 
 ```@example 1
 coords = Coordinates(20);
+makieplot(coords)
 ```
 
 foo

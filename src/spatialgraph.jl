@@ -59,31 +59,6 @@ Base.show(io::IO, ::MIME"text/plain", sg::SpatialGraph) = begin
 end
 
 
-function makieplot(
-    sg::SpatialGraph;
-    markersize = 25,
-    alphamap = x->1.5x,
-    widthmap = x->5exp(x)
-)
-    coords = (coordinates(sg).coordinates)
-    x, y = [i[1] for i in coords], [i[2] for i in coords]
-    ϕ = sg.potential
-
-    f = Figure(resolution=(900,900))
-    ax = Axis(f[1,1])
-    for s in CartesianIndices(ϕ)
-        ϕᵢⱼ = ϕ[s[1],s[2]]
-
-        lw = widthmap(ϕᵢⱼ)
-        lc = (:grey30, alphamap(ϕᵢⱼ))
-        CairoMakie.lines!(ax, [x[s[1]], x[s[2]]], [y[s[1]], y[s[2]]], linewidth=lw, color=lc)
-    end
-    CairoMakie.scatter!(ax, x,y; markersize=markersize)
-
-    f
-end 
-
-
 # ====================================================
 #
 #   Tests

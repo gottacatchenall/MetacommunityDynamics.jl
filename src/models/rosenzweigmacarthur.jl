@@ -104,32 +104,6 @@ function RosenzweigMacArthur(;
     )   
 end
 
-# ====================================================
-#
-#   Plots
-#   
-# =====================================================
-
-function replplot(::RosenzweigMacArthur{Spatial}, traj::Trajectory) 
-    u = Array(traj.sol)    
-    n_species, n_locations, n_timesteps = size(u)
-    ymax = max(u...)
-
-    
-    p = lineplot(u[1,1,:], 
-        xlabel="time (t)", 
-        ylabel="Biomass", 
-        width=80,
-        ylim=(0,ymax))
-         
-    cols = n_species < 7 ? [:blue, :red, :green, :orange, :pink, :red] : fill(:dodgerblue, n_species)
-    for s in eachslice(u, dims=(2))
-        for sp in 1:n_species
-            lineplot!(p, s[sp,:], color=cols[sp])
-        end
-    end 
-    p
-end
 
 # ====================================================
 #

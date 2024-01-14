@@ -28,15 +28,3 @@ function LevinsMetapopulation(;
     )
 end
 
-function replplot(::LevinsMetapopulation, traj::Trajectory) 
-    u = traj.sol.u
-
-    ts = [sum(x)/length(x) for x in u]
-
-    lineplot(ts, 
-        xlabel="time (t)", 
-        ylabel="Prop. occupied", 
-        width=80,
-        xlim=(1,length(ts)),
-        ylim=(0,1))
-end

@@ -30,25 +30,6 @@ Base.show(io::IO, kern::DispersalKernel) = begin
     )
 end
 
-function replplot(kern::DispersalKernel)
-    height,width = displaysize(stdout)  
-    
-    xs = LinRange(0, kern.max_distance, 99)
-    ys = [kern.func.(x, kern.decay) for x in xs]
-    
-    ys = ys ./ sum(ys)
-
-    xs = vcat(xs, 2xs[end]-xs[end-1])
-    ys = vcat(ys, 0)
-
-
-    p = lineplot(xs, ys,
-        xlabel="distance", 
-        ylabel="dispersal prob. density", 
-        width=width-40,
-    )
-end
-
 function kernel_matrix(space, kernel)
     distmat = distance_matrix(space)
     broadcast(x -> x == 0 ? 0 : kernel(x), distmat)

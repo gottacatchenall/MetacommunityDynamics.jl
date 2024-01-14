@@ -70,3 +70,5 @@ export problem, model, solution, timeseries
 export numsites, coordinates, environment, envdims
 
 export makieplot
+export makiephaseplot
+export plotvectorfield
