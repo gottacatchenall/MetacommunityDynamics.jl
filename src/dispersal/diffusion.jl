@@ -1,11 +1,16 @@
 struct Diffusion{T}
+    dispersal_rate::T
     matrix::Matrix{T}
 end
 
+
+Base.string(diff:Diffusion) = "{purple}{bold}Diffusion{/bold}{/purple} matrix with base dispersal probability {blue}$(diff.dispersal_prob){/blue}"
+Base.show(io::IO, diff::Diffusion) = tprint(io, string(diff))
+
 numsites(d::Diffusion) = size(d.matrix, 1)
 
-Diffusion(sg::SpatialGraph, m::T) where T<:Number = Diffusion(_diffusion_mat(sg,m))
-Diffusion(m::T, sg::SpatialGraph) where T<:Number = Diffusion(_diffusion_mat(sg,m))
+Diffusion(sg::SpatialGraph, m::T) where T<:Number = Diffusion(m, _diffusion_mat(sg,m))
+Diffusion(m::T, sg::SpatialGraph) where T<:Number = Diffusion(m, _diffusion_mat(sg,m))
 
 function _diffusion_mat(sg::SpatialGraph, m::T) where T<:Number
     idx = CartesianIndices(sg.potential)
