@@ -4,7 +4,7 @@ function makieplot(
     alphamap = x->1.5x,
     widthmap = x->5exp(x)
 )
-    coords = (coordinates(sg).coordinates)
+    coords = coordinates(sg)
     ϕ = sg.potential
     x, y = [i[1] for i in coords.coordinates], [i[2] for i in coords.coordinates]
 
