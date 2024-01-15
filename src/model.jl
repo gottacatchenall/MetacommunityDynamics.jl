@@ -1,8 +1,6 @@
 abstract type Model{SC<:Scale,M<:Measurement,SP<:Spatialness,D<:Discreteness} end 
 
-Base.string(m::Model{SC,M,SP,D}) where {SC,M,SP,D} = """
-{bold}$(typeof(m)){/bold}
-"""
+Base.string(m::Model{SC,M,SP,D}) where {SC,M,SP,D} = "{bold}$(typeof(m)){/bold}"
 
 Base.show(io::IO, m::Model) = begin 
     tprint(io, m)

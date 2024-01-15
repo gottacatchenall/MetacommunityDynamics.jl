@@ -6,6 +6,7 @@ function makieplot(
 )
     coords = (coordinates(sg).coordinates)
     ϕ = sg.potential
+    x, y = [i[1] for i in coords.coordinates], [i[2] for i in coords.coordinates]
 
     f = Figure(resolution=(900,900))
     ax = Axis(f[1,1])

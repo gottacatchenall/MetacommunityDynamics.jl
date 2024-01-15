@@ -104,10 +104,8 @@ end
 
 # Printing
 
-Base.string(p::Problem{M,T,R}) where {M,T,R} = """
-A {blue}$M{/blue} {green}$(spatialness(p.model)){/green} {bold}{#a686eb}Problem{/#a686eb}{/bold} 
-"""
+Base.string(p::Problem{M,T,R}) where {M,T,R} = "A {blue}$M{/blue} {green}$(spatialness(p.model)){/green} {bold}{#a686eb}Problem{/#a686eb}{/bold}"
 
-Base.show(io::IO,  p::Problem{T,R}) where {T,R} = tprint(p)
+Base.show(io::IO,  p::Problem{T,R}) where {T,R} = tprint(io, p)
 
 
