@@ -234,6 +234,17 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="." class="md-nav__link md-nav__link--active">
         
   
@@ -243,6 +254,94 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Installation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#background-and-motivation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Background and Motivation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#documentation-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      Documentation Structure
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Documentation Structure">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tutorials" class="md-nav__link">
+    <span class="md-ellipsis">
+      🐛 Tutorials
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-to-guides" class="md-nav__link">
+    <span class="md-ellipsis">
+      🦋 How-to Guides
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      📚 Reference
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#explanation" class="md-nav__link">
+    <span class="md-ellipsis">
+      🧪 Explanation
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -676,6 +775,83 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Installation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#background-and-motivation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Background and Motivation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#documentation-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      Documentation Structure
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Documentation Structure">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tutorials" class="md-nav__link">
+    <span class="md-ellipsis">
+      🐛 Tutorials
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-to-guides" class="md-nav__link">
+    <span class="md-ellipsis">
+      🦋 How-to Guides
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      📚 Reference
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#explanation" class="md-nav__link">
+    <span class="md-ellipsis">
+      🧪 Explanation
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -702,7 +878,7 @@
 </div>
 <p><a id='Installation'></a></p>
 <p><a id='Installation-1'></a></p>
-<h1 id="installation">Installation</h1>
+<h2 id="installation">Installation</h2>
 <p>If you need to install Julia, you can do so using the <code>juliaup</code> installation manager with instructions found <a href="https://julialang.org/downloads/">here</a>. </p>
 <p>From within Julia, you can install the release with </p>
 <div class="highlight"><pre><span></span><code>using Pkg
@@ -713,13 +889,14 @@ Pkg.add(&quot;MetacommunityDynamics&quot;)
 </code></pre></div>
 <p><a id='Background-and-Motivation'></a></p>
 <p><a id='Background-and-Motivation-1'></a></p>
-<h1 id="background-and-motivation">Background and Motivation</h1>
+<h2 id="background-and-motivation">Background and Motivation</h2>
 <ul>
 <li>so this should justify the major elements that must be includeable in simulation</li>
 </ul>
+<hr />
 <p><a id='Documentation-Structure'></a></p>
 <p><a id='Documentation-Structure-1'></a></p>
-<h1 id="documentation-structure">Documentation Structure</h1>
+<h2 id="documentation-structure">Documentation Structure</h2>
 <p>This documentation is structured loosely using the <a href="https://diataxis.fr/">Diátaxis</a> format, which separates documentation into four forms:</p>
 <ol>
 <li>Tutorials (a <em>learning-oriented</em> guided exploration of the software)</li>
@@ -729,20 +906,37 @@ Pkg.add(&quot;MetacommunityDynamics&quot;)
 </ol>
 <p><a id='Tutorials'></a></p>
 <p><a id='Tutorials-1'></a></p>
-<h2 id="tutorials">🐛 Tutorials</h2>
+<h3 id="tutorials">🐛 Tutorials</h3>
 <ul>
 <li><a href="">Getting started with <code>MetacommunityDynamics.jl</code></a></li>
 <li><a href=""></a></li>
 </ul>
 <p><a id='How-to-Guides'></a></p>
 <p><a id='How-to-Guides-1'></a></p>
-<h2 id="how-to-guides">🦋 How-to Guides</h2>
+<h3 id="how-to-guides">🦋 How-to Guides</h3>
+<ul>
+<li><a href=""></a></li>
+</ul>
 <p><a id='Reference'></a></p>
 <p><a id='Reference-1'></a></p>
-<h2 id="reference">📚 Reference</h2>
+<h3 id="reference">📚 Reference</h3>
+<ul>
+<li>
+<p>Model Index</p>
+<ul>
+<li><a href="">Population Models</a></li>
+<li><a href="">Metapopulation Models</a></li>
+<li><a href="">Community Models</a></li>
+<li><a href="">Metacommunity Models</a></li>
+</ul>
+</li>
+</ul>
 <p><a id='Explanation'></a></p>
 <p><a id='Explanation-1'></a></p>
-<h2 id="explanation">🧪 Explanation</h2>
+<h3 id="explanation">🧪 Explanation</h3>
+<ul>
+<li><a href="">Model Design</a></li>
+</ul>
 
 
 
