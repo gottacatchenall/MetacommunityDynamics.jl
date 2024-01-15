@@ -74,7 +74,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#the-design-of-ecodynamicsjl" class="md-skip">
+        <a href="#the-design-of-metacommunitydynamicsjl" class="md-skip">
           Skip to content
         </a>
       
@@ -916,14 +916,14 @@
   
 
 
-<p><a id='The-design-of-EcoDynamics.jl'></a></p>
-<p><a id='The-design-of-EcoDynamics.jl-1'></a></p>
-<h1 id="the-design-of-ecodynamicsjl">The design of <code>EcoDynamics.jl</code></h1>
-<p>This document is for advanced users interested in contributing new models or building complicated custom models in <code>EcoDynamics.jl</code>.</p>
+<p><a id='The-design-of-MetacommunityDynamics.jl'></a></p>
+<p><a id='The-design-of-MetacommunityDynamics.jl-1'></a></p>
+<h1 id="the-design-of-metacommunitydynamicsjl">The design of <code>MetacommunityDynamics.jl</code></h1>
+<p>This document is for advanced users interested in contributing new models or building complicated custom models in <code>MetacommunityDynamics.jl</code>.</p>
 <p><a id='The-type-system'></a></p>
 <p><a id='The-type-system-1'></a></p>
 <h2 id="the-type-system">The type system</h2>
-<p>While EcoDynamics enables simulation of dynamics in a single place (<em>locally</em>), its main goal is to enable reaction-diffusion models on spatial graphs. Similarly, although EcoDynamics is perfectly adaquete for simulating the dynamics of single-species systems, the <em>core design goals</em> are motivated by an interest in simulating communities on spatial graphs, where environmental variation across each patch/node in the graph influences the dynamics at that node/patch, with a particular emphasis on understanding how different parameterizations of models causes regime shifts in resulting species  compositions across space, across different levels of neutral, niche, and dispersal proccesses.</p>
+<p>While MetacommunityDynamics enables simulation of dynamics in a single place (<em>locally</em>), its main goal is to enable reaction-diffusion models on spatial graphs. Similarly, although MetacommunityDynamics is perfectly adaquete for simulating the dynamics of single-species systems, the <em>core design goals</em> are motivated by an interest in simulating communities on spatial graphs, where environmental variation across each patch/node in the graph influences the dynamics at that node/patch, with a particular emphasis on understanding how different parameterizations of models causes regime shifts in resulting species  compositions across space, across different levels of neutral, niche, and dispersal proccesses.</p>
 <p>What are the essential things you need to build a simulation model that meets this criteria?</p>
 <ol>
 <li>We need a way to represent different types of <em>models</em> (e.g. Lotka-Volterra, Rosenzweig-MacArthur, etc).</li>
@@ -978,8 +978,8 @@
 <p><a id='QA-Methods-for-Included-Models'></a></p>
 <p><a id='QA-Methods-for-Included-Models-1'></a></p>
 <h2 id="qa-methods-for-included-models">QA Methods for Included Models</h2>
-<p>One main design goal of <code>EcoDynamics.jl</code> is to ensure it is as easy as possible to write customs models. "Easy", in this sense, means both involving writing the fewest lines of code possible, and not requiring a deep understanding of Julia or its type system. </p>
-<p>This means that the instructions on how to add custom models (see TBD docs section) doesn't include some of the extra methods added to included models to avoid possible mistakes. E.g.:</p>
+<p>One main design goal of <code>MetacommunityDynamics.jl</code> is to ensure it is as easy as possible to write customs models. "Easy", in this sense, means both involving writing the fewest lines of code possible, and not requiring a deep understanding of Julia or its type system. </p>
+<p>This means that the instructions on how to add custom models (see TBD docs section) doesn't include some of the extra methods added to included models to avoid possible mistakes. e.g.:</p>
 <ul>
 <li>Warnings about parameter values that are extreme or nonsensical (providing an intrinsic growth rate to a predator in a LV model, say)</li>
 <li>Warnings about whether a niche function leads toward "crucial" parameters going to 0/unreasonable values at most sites depending on the range of environmnetal variables provided in the SpatialGraph</li>
