@@ -1,4 +1,4 @@
-# Getting started with `EcoDynamics.jl`
+# Getting started with `MetacommunityDynamics.jl`
 
 !!! abstract
     In this tutorial, we create and simulate a simple model of community
@@ -22,7 +22,7 @@ MetacommunityDynamics, see this [installation guide](TODO).
 using MetacommunityDynamics
 ```
 
-## A simple Lotka-Volterra Model
+# A simple Lotka-Volterra Model
 
 `MetacommunityDynamics.jl` includes a library of many common models for
 population and community dynamics. 
@@ -81,7 +81,7 @@ makieplot(simulate(prob, solver=Vern7()))
 foo
 
 
-## Adding space
+# Making our model spatial
 
 ```@example 1
 coords = Coordinates(20);
