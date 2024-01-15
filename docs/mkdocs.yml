@@ -1,5 +1,5 @@
-site_name: EcoDynamics.jl
-repo_url: https://github.com/gottacatchenall/EcoDynamics.jl
+site_name: MetacommunityDynamics.jl
+repo_url: https://github.com/gottacatchenall/MetacommunityDynamics.jl
 site_description: Julia package for simulation of population and community dynamics across space
 site_author: Michael D. Catchen
 
@@ -31,8 +31,8 @@ docs_dir: 'build'
 nav:
   - Home: index.md
   - Tutorials: 
-    - Getting Started: tutorials/getting_started.md
-    - A Two Species Model: tutorials/two_species.md
+    - Getting Started: tutorials/01_getting_started.md
+    - Consumer Resource Modeling: tutorials/02_consumer_resource.md
   - Reference:
     - Population dynamics:
       - Overview: reference/model_index/population/overview.md

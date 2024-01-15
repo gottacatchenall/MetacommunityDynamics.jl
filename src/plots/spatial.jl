@@ -22,6 +22,10 @@ function makieplot(
     f
 end 
 
+function makieplot(diffusion::Diffusion)
+    
+end
+
 function makieplot(coords::Coordinates; markersize=25)
     x, y = [i[1] for i in coords.coordinates], [i[2] for i in coords.coordinates]
     f = Figure(resolution=(900,900))
