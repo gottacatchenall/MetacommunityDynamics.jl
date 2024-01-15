@@ -1,10 +1,10 @@
 struct Diffusion{T}
-    dispersal_rate::T
+    dispersal_probability::T
     matrix::Matrix{T}
 end
 
 
-Base.string(diff::Diffusion) = "{purple}{bold}Diffusion{/bold}{/purple} matrix with base dispersal probability {blue}$(diff.dispersal_prob){/blue}"
+Base.string(diff::Diffusion) = "{purple}{bold}Diffusion{/bold}{/purple} matrix with base dispersal probability {blue}$(diff.dispersal_probability){/blue}"
 Base.show(io::IO, diff::Diffusion) = tprint(io, string(diff))
 
 numsites(d::Diffusion) = size(d.matrix, 1)

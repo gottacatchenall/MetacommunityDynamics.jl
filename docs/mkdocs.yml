@@ -33,15 +33,16 @@ nav:
   - Tutorials: 
     - Getting Started: tutorials/01_getting_started.md
     - Consumer Resource Modeling: tutorials/02_consumer_resource.md
+    - Environmental Variation: tutorials/03_environmental_variation.md
+    - Occupancy Modeling: tutorials/04_occupancy_modeling.md
+
   - Reference:
-    - Population dynamics:
-      - Overview: reference/model_index/population/overview.md
-    - Metapopulation dynamics:
-      - Overview: reference/model_index/metapopulation/overview.md
-    - Community dynamics: 
-      - Overview: reference/model_index/community/overview.md
-    - Metacommunity dynamics:  
-      - Overview: model_index/metacommunity/overview.md
+    - Model Index:
+      - Population dynamics: reference/model_index/population/overview.md
+      - Metapopulation dynamics: reference/model_index/metapopulation/overview.md
+      - Community dynamics: reference/model_index/community/overview.md
+      - Metacommunity dynamics: model_index/metacommunity/overview.md
     - Public: lib/public.md
     - Internal: lib/internal.md
-  - Explanation: explanation/design.md
+  - Explanation:
+    - Design: explanation/design.md
