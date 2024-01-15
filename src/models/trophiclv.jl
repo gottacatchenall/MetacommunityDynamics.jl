@@ -5,7 +5,8 @@ end
 
 
 initial(::TrophicLotkaVolterra) = [0.1, 1.0]
-numspecies(lv::TrophicLotkaVolterra) = length(lv.r)
+numspecies(lv::TrophicLotkaVolterra{Local}) = length(lv.r)
+numspecies(lv::TrophicLotkaVolterra{Spatial}) = length(lv.r.value[1])
 
 function ∂u(::TrophicLotkaVolterra, u, θ)
     r, A = θ

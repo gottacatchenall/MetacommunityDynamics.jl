@@ -150,7 +150,17 @@ Notice the difference in synchrony
 
 ## Species specific dispersal
 
+```@example 1
+diffusion_vec = [Diffusion(sg, 0.1), Diffusion(sg, 0.01)]
 
+spatial_prob = problem(spatial_lv, diffusion_vec; 
+    u0=rand(2,numsites(sg)),
+    tspan=(1,300)
+);
+
+t = simulate(spatial_prob)
+makieplot(t)
+```
 
 ## Demographic stochasticity
 

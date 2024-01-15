@@ -18,28 +18,7 @@ function problem(m::Model{SC,M,Local,D}; tspan=(0,100), u0=nothing) where {SC<:U
     prob = D == Continuous ? ODEProblem : DiscreteProblem
     
     f = factory(m) 
-    u0 = isnothing(u0) ? initial(m) : u0
-    function makiephaseplot(m::Model{Community,M,Spatial,D}, traj; dims=(1,2)) where {M,D}
-        f = Figure()
-        ax = Axis(
-            f[1,1],
-            xlabel="Species $(dims[1]) $M",
-            ylabel="Species $(dims[2]) $M",
-        )
-    
-        u = Array(traj.sol)
-    
-    
-        x,y = u[dims[1],i_site,:], u[dims[2],i_site,:]
-    
-        @info y .- x
-    
-        for i_site in axes(u,2)
-            scatterlines!(ax, u[dims[1],i_site,:], u[dims[2],i_site,:])
-        end
-        f
-    end
-    
+    u0 = isnothing(u0) ? initial(m) : u0    
     θ = parameters(m)
 
     pr = prob(f, u0, tspan, θ) 
@@ -69,7 +48,7 @@ function problem(m::Model{SC,M,Local,D}, gd::GaussianDrift; tspan=(0,100), u0=no
     Problem{typeof(m),typeof(pr),Stochastic}(m, pr, tspan, u0)
 end
 
-function problem(model::Model{SC,M,SP,D}, diffusion::Diffusion; tspan=(0,100), u0=nothing) where {SC,M,SP,D}
+function problem(model::Model{SC,M,SP,D}, diffusion::DIFF; tspan=(0,100), u0=nothing) where {SC,M,SP,D,T,DIFF<:Union{Diffusion{T}, Vector{Diffusion{T}}}}
     SP != Spatial && throw(ArgumentError, "Can't combine Diffusion with a Local model.")
     f = factory(model, diffusion)
 
@@ -84,7 +63,7 @@ function problem(model::Model{SC,M,SP,D}, diffusion::Diffusion; tspan=(0,100), u
     Problem{typeof(model), typeof(pr),Deterministic}(model, pr, tspan, u0)
 end 
 
-function problem(model::Model{SC,M,S,D}, diffusion::Diffusion, gd::GaussianDrift; tspan=(0,100), u0=nothing) where {SC,M,S,D}
+function problem(model::Model{SC,M,S,D}, diffusion::DIFF, gd::GaussianDrift; tspan=(0,100), u0=nothing) where {SC,M,S,D, T, DIFF<:Union{Diffusion{T}, Vector{Diffusion{T}}}}
     S != Spatial && throw(ArgumentError("Can't combine Diffusion with a Local model."))
     D != Continuous && throw(ArgumentError("Can't combine Gaussian Drift with a Discrete time model."))
   

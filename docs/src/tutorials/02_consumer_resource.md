@@ -1,5 +1,8 @@
 # A tutorial on Consumer-Resource Modeling
 
+!!! warning
+    This is still a work in progress
+
 !!! abstract
     In this tutorial, we explore our first multi-species model: Lotka-Volterra
     dynamics. We'll learn about building consumer-resource models in

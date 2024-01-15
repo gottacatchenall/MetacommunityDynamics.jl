@@ -8,6 +8,7 @@ Base.string(diff::Diffusion) = "{purple}{bold}Diffusion{/bold}{/purple} matrix w
 Base.show(io::IO, diff::Diffusion) = tprint(io, string(diff))
 
 numsites(d::Diffusion) = size(d.matrix, 1)
+numsites(diffs::Vector{Diffusion{T}}) where T = numsites(diffs[begin])
 
 Diffusion(sg::SpatialGraph, m::T) where T<:Number = Diffusion(m, _diffusion_mat(sg,m))
 Diffusion(m::T, sg::SpatialGraph) where T<:Number = Diffusion(m, _diffusion_mat(sg,m))
