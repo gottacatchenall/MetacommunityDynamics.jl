@@ -15,7 +15,6 @@ Overview
 - Putting it all together
 
 
-
 First we'll load the package.
 
 ```@example 1

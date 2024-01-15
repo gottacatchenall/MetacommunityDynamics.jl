@@ -1,14 +1,14 @@
 
-# The design of `EcoDynamics.jl` 
+# The design of `MetacommunityDynamics.jl` 
 
 This document is for advanced users interested in contributing new models or
-building complicated custom models in `EcoDynamics.jl`.
+building complicated custom models in `MetacommunityDynamics.jl`.
 
 ## The type system
 
-While EcoDynamics enables simulation of dynamics in a single place (_locally_),
+While MetacommunityDynamics enables simulation of dynamics in a single place (_locally_),
 its main goal is to enable reaction-diffusion models on spatial graphs.
-Similarly, although EcoDynamics is perfectly adaquete for simulating the
+Similarly, although MetacommunityDynamics is perfectly adaquete for simulating the
 dynamics of single-species systems, the _core design goals_ are motivated by an
 interest in simulating communities on spatial graphs, where environmental
 variation across each patch/node in the graph influences the dynamics at that
@@ -124,14 +124,14 @@ conditions.
 
 ## QA Methods for Included Models
 
-One main design goal of `EcoDynamics.jl` is to ensure it is as easy as possible
+One main design goal of `MetacommunityDynamics.jl` is to ensure it is as easy as possible
 to write customs models. "Easy", in this sense, means both involving writing the
 fewest lines of code possible, and not requiring a deep understanding of Julia
 or its type system. 
 
 This means that the instructions on how to add custom models (see TBD docs
 section) doesn't include some of the extra methods added to included models to
-avoid possible mistakes. E.g.:
+avoid possible mistakes. e.g.:
 - Warnings about parameter values that are extreme or nonsensical (providing an
   intrinsic growth rate to a predator in a LV model, say)
 - Warnings about whether a niche function leads toward "crucial" parameters

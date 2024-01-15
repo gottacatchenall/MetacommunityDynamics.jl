@@ -30,7 +30,7 @@ function makieplot(coords::Coordinates; markersize=25)
 end
 
 function makieplot(kern::DispersalKernel)
-    xs = LinRange(0, kern.max_distance, 99)
+    xs = LinRange(0, kern.max_distance, 1000)
     ys = [kern.func.(x, kern.decay) for x in xs]
     
     ys = ys ./ sum(ys)
@@ -38,8 +38,15 @@ function makieplot(kern::DispersalKernel)
     xs = vcat(xs, 2xs[end]-xs[end-1])
     ys = vcat(ys, 0)
 
-    lines(xs, ys)
-    current_figure()
+    f = Figure()
+
+    ax = Axis(f[1,1], 
+        xticks= round.(LinRange(0, kern.max_distance, 11), digits=2),
+        xlabel="Dispersal Distance", 
+        ylabel="Dispersal Probability Density")
+
+    lines!(ax, xs, ys)
+    f
 end
 
 function replplot(kern::DispersalKernel)

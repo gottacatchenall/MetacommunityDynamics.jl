@@ -91,7 +91,7 @@ makieplot(coords)
 foo
 
 ```@example 1
-kern = DispersalKernel(decay=1., max_distance=0.5);
+kern = DispersalKernel(decay=3., max_distance=1.5);
 makieplot(kern)
 ```
 

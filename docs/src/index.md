@@ -1,13 +1,13 @@
-# EcoDynamics.jl
+# MetacommunityDynamics.jl 
 
-**EcoDynamics.jl** is a package for simulation of ecosystem processes,
+**MetacommunityDynamics.jl** is a package for simulation of ecosystem processes,
 specifically population and community dynamics on spatial graphs, written in the
 _Julia_ language. 
 
 !!! info
-    Note that EcoDynamics.jl is still under development, and although the API is
+    Note that MetacommunityDynamics.jl is still under development, and although the API is
     not expected to change a ton, we still do not yet guarantee it will remain
-    constant until the first `v1.0` productoin release. 
+    constant until the first `v1.0` production release. 
 
 # Installation 
 
@@ -19,14 +19,14 @@ From within Julia, you can install the release with
 
 ```
 using Pkg
-Pkg.add("EcoDynamics")
+Pkg.add("MetacommunityDynamics")
 ```
 
 Or from the [REPL Pkg mode](https://docs.julialang.org/en/v1/stdlib/Pkg/), you
 can use
 
 ```
-pkg> add EcoDynamics
+pkg> add MetacommunityDynamics
 ```
 
 # Background and Motivation
@@ -47,7 +47,7 @@ forms:
 
 ## 🐛 Tutorials
 
-- [Getting started with `EcoDynamics.jl`]()
+- [Getting started with `MetacommunityDynamics.jl`]()
 - []()
 
 ## 🦋 How-to Guides
