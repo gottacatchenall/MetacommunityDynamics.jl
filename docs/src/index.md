@@ -9,7 +9,7 @@ _Julia_ language.
     not expected to change a ton, we still do not yet guarantee it will remain
     constant until the first `v1.0` production release. 
 
-# Installation 
+## Installation 
 
 If you need to install Julia, you can do so using the `juliaup`
 installation manager with instructions found
@@ -29,12 +29,14 @@ can use
 pkg> add MetacommunityDynamics
 ```
 
-# Background and Motivation
+## Background and Motivation
 
 - so this should justify the major elements that must be includeable in
   simulation 
 
-# Documentation Structure
+---
+
+## Documentation Structure
 
 This documentation is structured loosely using the
 [Diátaxis](https://diataxis.fr/) format, which separates documentation into four
@@ -45,15 +47,24 @@ forms:
 3. Reference (_information-oriented_ "techinical descriptions of the machinery")
 4. Explanation (_understanding-oriented_ discussions on the software design)
 
-## 🐛 Tutorials
+
+### 🐛 Tutorials
 
 - [Getting started with `MetacommunityDynamics.jl`]()
 - []()
 
-## 🦋 How-to Guides
+### 🦋 How-to Guides
 
-## 📚 Reference
+- []()
 
-## 🧪 Explanation
+### 📚 Reference
 
+- Model Index
+    - [Population Models]()
+    - [Metapopulation Models]()
+    - [Community Models]()
+    - [Metacommunity Models]()
 
+### 🧪 Explanation
+
+- [Model Design]()

@@ -23,7 +23,7 @@ MetacommunityDynamics, see this [installation guide](TODO).
 using MetacommunityDynamics
 ```
 
-# A simple Lotka-Volterra Model
+## A simple Lotka-Volterra Model
 
 `MetacommunityDynamics.jl` includes a library of many common models for
 population and community dynamics. 
@@ -82,7 +82,7 @@ makieplot(simulate(prob, solver=Vern7()))
 foo
 
 
-# Making our model spatial
+## Making our model spatial
 
 ```@example 1
 coords = Coordinates(20);
@@ -147,3 +147,14 @@ makieplot(t)
 ```
 
 Notice the difference in synchrony
+
+## Species specific dispersal
+
+
+
+## Demographic stochasticity
+
+
+## Local environmental variation and niche effects
+
+
