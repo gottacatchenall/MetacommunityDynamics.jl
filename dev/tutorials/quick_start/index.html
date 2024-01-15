@@ -769,7 +769,7 @@ $$</p>
 <p>Next, we'll initialize a spatial graph with 20 patches. Note that when not initialized with environmental variable,<code>SpatialGraph</code>'s are initialized with a single environmental varaible <code>:e1</code>, similarly uniformally drawn from $[0,1]$.</p>
 <div class="highlight"><pre><span></span><code><span class="n">sg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SpatialGraph</span><span class="p">(</span><span class="n">Coordinates</span><span class="p">(</span><span class="mi">20</span><span class="p">),</span><span class="w"> </span><span class="n">DispersalKernel</span><span class="p">(</span><span class="n">max_distance</span><span class="o">=</span><span class="mf">0.3</span><span class="p">))</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code>             ┌──────────────────────────────┐  0.6    
+<div class="highlight"><pre><span></span><code>             ┌──────────────────────────────┐  1      
           20 │▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄│ ┌──┐    
              │▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄│ │▄▄│    
              │▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄│ │▄▄│    
@@ -812,7 +812,7 @@ $$</p>
 <div class="highlight"><pre><span></span><code><span class="n">m</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.01</span>
 <span class="n">diff</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Diffusion</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">sg</span><span class="p">)</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code>Diffusion{Float64}([0.99 0.0 … 0.0 0.0; 0.0 0.99 … 0.0 0.0; … ; 0.0 0.0 … 0.99 0.0; 0.0 0.0 … 0.0 0.99])
+<div class="highlight"><pre><span></span><code>Diffusion{Float64}([0.99 0.0 … 0.0 0.0; 0.0 0.99 … 0.0 0.0016530789608785012; … ; 0.0 0.0 … 0.99 0.0; 0.0 0.001419053542349924 … 0.0 0.99])
 </code></pre></div>
 <p>Now, we can finally construct the a <code>Problem</code> using our local dynamics <code>spatialrm</code> model and our diffusion model <code>diff</code>. Initial conditions and timespan can be provided here.</p>
 <div class="highlight"><pre><span></span><code><span class="n">prob</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">problem</span><span class="p">(</span><span class="n">spatialrm</span><span class="p">,</span><span class="w"> </span><span class="n">diff</span><span class="p">)</span>
@@ -824,21 +824,21 @@ $$</p>
 </code></pre></div>
 <div class="highlight"><pre><span></span><code>An trajectory of length 101.
                     ┌────────────────────────────────────────┐ 
-           0.273658 │⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣴⣿⠿⣿⢿⡵⣖⡤⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│ 
-                    │⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣴⣿⠛⠻⢿⣶⣭⡚⠵⡯⣳⢭⡓⢄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀│ 
-                    │⠀⠀⣀⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⡟⠀⠀⠀⠉⠻⣿⣷⣌⠹⢕⡯⡳⣬⠒⢄⠀⠀⠀⠀⠀⠀⠀│ 
-                    │⢀⠞⠻⣿⣷⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⠃⠀⠀⠀⠀⠀⠀⠙⣿⣿⡤⡑⢏⢪⠛⡦⡑⢄⠀⠀⠀⠀⠀│ 
-                    │⢣⠀⠀⠹⣿⣷⡀⠀⠀⠀⠀⠀⠀⠀⢰⣷⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠹⣿⣷⣄⣵⣿⣿⣿⣷⣵⡄⠀⠀⠀│ 
-                    │⢸⡄⠀⠀⢻⣿⣧⠀⠀⠀⠀⠀⠀⠀⣸⣻⡏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢈⣿⣿⣿⡺⠷⡣⣘⢮⣿⠀⠀⠀│ 
-                    │⠈⣧⠀⠀⠸⣿⣿⡆⠀⠀⠀⠀⠀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⡿⡯⡻⣿⣷⡤⠛⣽⡜⢗⠀⠀⠀│ 
-   Biomass          │⠀⢿⡄⠀⠀⢻⣿⣿⡀⠀⠀⠀⠀⢠⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⣤⡿⣿⡪⠏⠀⡹⣿⣯⡎⣹⢜⢇⠀⠀⠀│ 
-                    │⠀⢸⣷⠀⠀⠈⣿⣿⣧⠀⠀⠀⠀⢸⣿⡟⠀⠀⠀⠀⠀⠀⣰⣾⡿⡯⠚⠀⡤⠋⡠⠺⣿⣯⢇⡸⢆⠀⠀⠀│ 
-                    │⠀⠘⣿⡇⠀⠀⠸⣿⣻⣆⠀⠀⠀⣾⣿⡇⠀⠀⠀⠀⣤⣿⣿⡻⠋⢀⠴⠉⡤⢋⡰⠊⢸⣿⣿⢆⠀⠀⠀⠀│ 
-                    │⠀⠀⢿⣿⡀⠀⠀⢻⣿⣿⣦⠀⢀⣿⣿⠀⠀⣠⣴⣿⣿⠟⢉⡠⠖⡡⠔⣉⠖⢁⡠⠒⠁⠙⣿⣿⣇⠀⠀⠀│ 
-                    │⠀⠀⠸⣿⣧⠀⠀⠀⠻⣯⣻⣷⣼⣿⣿⣴⣿⡿⠿⠋⡡⠖⣩⠔⣪⠗⢊⡠⠖⠁⠀⠀⠀⠀⠙⣿⣷⠀⠀⠀│ 
-                    │⠀⠀⠀⢿⣿⡆⠀⠀⠀⠙⢿⣪⣿⣿⢟⣛⡩⠔⣚⢭⣶⡿⢚⡩⠔⠊⠁⠀⠀⠀⠀⠀⠀⠀⠀⠘⠟⠀⠀⠀│ 
-                    │⠀⠀⠀⠸⣿⣿⣄⠀⠀⠀⢈⣽⣿⣿⣿⣶⣾⡿⠿⠝⠒⠉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│ 
-                  0 │⠀⠀⠀⠀⠙⠷⣿⣷⣶⣾⡿⠟⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│ 
+           0.274557 │⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣴⣲⡚⠿⢭⣉⡑⠒⠤⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│ 
+                    │⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡴⡟⢻⠻⣿⣷⣶⣌⡛⠷⣤⡀⠉⠒⢤⡀⠀⠀⠀⠀⠀⠀⠀⠀│ 
+                    │⠀⠀⢀⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢰⣻⠁⡏⠀⠀⠉⠻⣿⣟⣦⣌⠙⢗⣄⠀⠈⠓⡄⠀⠀⠀⠀⠀⠀│ 
+                    │⢀⠞⢻⢿⣷⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⡿⡏⢰⠁⠀⠀⠀⠀⠀⠛⣿⢿⣷⣄⠑⢻⢄⡀⠈⠱⢄⠀⠀⠀⠀│ 
+                    │⢧⠀⠀⢫⣿⣷⠀⠀⠀⠀⠀⠀⠀⠀⢰⣿⠇⡎⠀⠀⠀⠀⠀⠀⠀⠈⠻⣿⣟⣧⣴⣟⣿⡿⣷⣤⡣⠀⠀⠀│ 
+                    │⢸⡄⠀⠈⡿⣿⣧⠀⠀⠀⠀⠀⠀⠀⣸⣼⢀⠇⠀⠀⠀⠀⠀⠀⠀⠀⠀⢈⣿⣯⣿⣯⣷⠿⣻⠙⢧⠀⠀⠀│ 
+                    │⠈⣧⠀⠀⢱⢿⣿⡆⠀⠀⠀⠀⠀⠀⣿⡏⢸⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣫⡿⣻⣿⣿⣧⡀⣸⣵⡇⠀⠀⠀│ 
+   Biomass          │⠀⣿⡄⠀⠈⡿⣽⣿⡀⠀⠀⠀⠀⢠⣷⡇⡜⠀⠀⠀⠀⠀⠀⠀⣤⣯⣿⣋⣿⠟⠻⣽⣯⣿⡔⠙⢎⠀⠀⠀│ 
+                    │⠀⢸⣷⠀⠀⠸⣱⢿⣧⠀⠀⠀⠀⢸⢿⠀⡇⠀⠀⠀⠀⠀⣰⣞⡿⣫⣾⠟⠁⠀⡰⡻⣿⣯⣿⡄⠀⠀⠀⠀│ 
+                    │⠀⠸⣿⡇⠀⠀⢫⣏⣿⣆⠀⠀⠀⣾⡿⢸⠁⠀⠀⠀⡤⣿⡿⣫⡿⠏⠁⢀⡔⡯⠊⠀⠹⣿⣯⢿⡇⠀⠀⠀│ 
+                    │⠀⠀⣿⣿⡀⠀⠈⢞⣾⣿⣦⠀⢀⣯⡇⡎⠀⣠⣴⣯⣟⣿⠾⠋⠁⡠⢴⠕⠋⠀⠀⢀⡤⠻⣿⣿⣿⠀⠀⠀│ 
+                    │⠀⠀⢸⣿⣧⠀⠀⠈⢟⣟⢿⣷⣼⣻⣡⣷⣿⣟⣿⠾⠋⠁⣠⣔⠯⠋⠁⠀⢀⡤⠚⠁⠀⠀⠹⣾⣷⠀⠀⠀│ 
+                    │⠀⠀⠈⣿⣿⡆⠀⠀⠀⠫⣻⣛⣿⣿⣿⠿⠟⢋⣁⣤⡶⠟⠊⠀⢀⡠⠴⠊⠁⠀⠀⠀⠀⠀⠀⠘⠏⠀⠀⠀│ 
+                    │⠀⠀⠀⢹⢿⣿⣄⠀⠀⠀⢈⡾⣿⣶⠷⠶⠛⢋⣉⣀⠤⠔⠒⠉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│ 
+                  0 │⠀⠀⠀⠀⠫⣯⣿⣷⣶⣶⣿⠮⠗⠁⠉⠉⠉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│ 
                     └────────────────────────────────────────┘ 
                     ⠀0⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀110⠀ 
                     ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀time (t)⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
