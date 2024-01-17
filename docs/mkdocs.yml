@@ -35,7 +35,6 @@ nav:
     - Consumer Resource Modeling: tutorials/02_consumer_resource.md
     - Environmental Variation: tutorials/03_environmental_variation.md
     - Occupancy Modeling: tutorials/04_occupancy_modeling.md
-
   - Reference:
     - Model Index:
       - Population dynamics: reference/model_index/population/overview.md
@@ -46,3 +45,4 @@ nav:
     - Internal: lib/internal.md
   - Explanation:
     - Design: explanation/design.md
+  - Bibliography: bibliography.md
