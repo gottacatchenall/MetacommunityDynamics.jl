@@ -7,6 +7,17 @@
 BevertonHolt 
 ```
 
+## Ricker Model
+
+```@docs
+RickerModel
+```
+
+
+### Ricker Model Stochasticity Types
+
+@Melbourne2008ExtRis
+
 ## Logistic Model
 
 ```@docs

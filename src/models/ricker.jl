@@ -24,17 +24,12 @@ _get_bitvec(X) = [x ∈ X for x in _STOCH_TYPES]
  
 
 RickerModel{A}(x...) where A = RickerModel{_get_bitvec([A])...,Local}(x...)
-RickerModel{A,B}(x...) where {A,B} = begin
-    @info "foo"
-    RickerModel{_get_bitvec([A,B])...,Local}(x...)
-end 
+RickerModel{A,B}(x...) where {A,B} = RickerModel{_get_bitvec([A,B])...,Local}(x...)
 RickerModel{A,B,C}(x...) where {A,B,C} = RickerModel{_get_bitvec([A,B,C])...,Local}(x...)
 RickerModel{A,B,C,D}(x...) where {A,B,C,D} = RickerModel{_get_bitvec([A,B,C,D])...,Local}(x...)
 
 
-
-
-initial(::RickerModel) where T = 10f0
+initial(::RickerModel) = 10f0
 numspecies(::RickerModel) = 1
 
 # Poisson Ricker Model (only demographic stochasticity)
