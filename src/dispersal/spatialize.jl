@@ -2,7 +2,12 @@ _deparameterize(::M) where {M<:Model} = M.name.wrapper
 
 function spatialize(model::M, sg::SpatialGraph, sp::SpeciesPool; niche=nothing) where {SC,N,D,SP<:Spatialness,M<:Model{SC,N,SP,D}}
     p = _spatial_parameters(model, sg, sp, niche)
-    _deparameterize(model){Spatial}(Parameter.(values(p))...)
+
+    # TODO this may need to handle models with additional parametric types
+    # We do this by assuming all custom parametric types are before the
+    # Local/Spatial one. 
+
+    _deparameterize(model){M.parameters[1:end-1]...,Spatial}(Parameter.(values(p))...)
 end 
 
 function _spatial_parameters(model::M, sg, sp, niche) where {M<:Model}

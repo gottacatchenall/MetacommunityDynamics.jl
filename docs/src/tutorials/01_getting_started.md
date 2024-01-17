@@ -164,6 +164,14 @@ makieplot(t)
 
 ## Demographic stochasticity
 
+something in the vector of diffusions + stochastic constructor is broken.
+
+```@example 1
+spatial_prob = problem(spatial_lv, diffusion_vec, GaussianDrift(0.05); 
+    tspan=(1,300)
+);
+```
+
 
 ## Local environmental variation and niche effects
 

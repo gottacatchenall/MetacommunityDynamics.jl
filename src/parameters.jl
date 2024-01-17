@@ -10,6 +10,8 @@ struct Parameter{T,N}
 end 
 Parameter(x) = Parameter{typeof(x),typeof(x)<:Number ? Nothing : size(x,1)}(x)
 
+Base.convert(::Type{Parameter}, x::T) where T<:Number = Parameter(x)
+
 dimension(::Parameter{T,N}) where {T,N} = N
 isscalar(p::Parameter) = dimension(p) == Nothing
 value(p::Parameter) = p.value 

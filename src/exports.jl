@@ -35,7 +35,14 @@ export Species, SpeciesPool, Niche, GaussianNiche
 export EnvironmentLayer
 
 export BevertonHolt
-export Ricker
+
+export RickerModel
+export RickerStochasticityType
+export DemographicStochasticity
+export EnvironmentalStochasticity
+export SexDeterminationStochasticity
+export DemographicHeterogeneity
+
 export CompetitiveLotkaVolterra
 export RosenzweigMacArthur 
 export LogisticModel
