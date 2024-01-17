@@ -1,7 +1,8 @@
 """
-    Melbourne & Hastings (2008)
-"""
+    abstract type RickerStochasticityType end
 
+
+"""
 abstract type RickerStochasticityType end
 
 abstract type DemographicStochasticity <:  RickerStochasticityType end

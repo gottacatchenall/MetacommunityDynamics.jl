@@ -1,7 +1,7 @@
 const _PARAM_TYPES = Union{Array{T,N},T} where {T,N}
 
 """
-    Parameter{T<:Number,A<:Union{Array{T,1},Array{T,2}},V<:Union{A,Vector{A}}} 
+    Parameter{T,N}
 
 Yet-another Parameter struct. 
 """
