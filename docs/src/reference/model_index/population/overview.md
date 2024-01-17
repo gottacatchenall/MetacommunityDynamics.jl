@@ -16,7 +16,7 @@ RickerModel
 
 ### Ricker Model Stochasticity Types
 
-[foobar](@Melbourne2008ExtRis)
+[Melbourne2008ExtRis](@ref)
 
 ## Logistic Model
 
