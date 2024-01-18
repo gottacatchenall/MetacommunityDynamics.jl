@@ -723,7 +723,7 @@ $$</p>
 <p>By default, in <code>MetacommunityDynamics</code> the <code>RosenzweigMacArthur</code> model is parameterized for two species exhibiting a limit cycle, though it can be used for an arbitrary number of species (See <em>TODO custom parameterization</em> section). </p>
 <div class="highlight"><pre><span></span><code><span class="n">rosen</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">RosenzweigMacArthur</span><span class="p">()</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code>RosenzweigMacArthur
+<div class="highlight"><pre><span></span><code>Local RosenzweigMacArthur
 </code></pre></div>
 <p>Here we'll consider the folliwing way in which environmental variation affects the dynamics of this model.</p>
 <p>At each patch $i$ in the spatial graph, the limiting growth rate of the resource at that patch, $\lambda_i$, is a function of the difference between a given trait for the consumer species $x$, and a single environmental variable associated with each patch, $e_i$. </p>
@@ -741,7 +741,7 @@ $$</p>
 <p>Next, we'll initialize a spatial graph with 20 patches. Note that when not initialized with environmental variable,<code>SpatialGraph</code>'s are initialized with a single environmental varaible <code>:e1</code>, similarly uniformally drawn from $[0,1]$.</p>
 <div class="highlight"><pre><span></span><code><span class="n">sg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SpatialGraph</span><span class="p">(</span><span class="n">Coordinates</span><span class="p">(</span><span class="mi">20</span><span class="p">),</span><span class="w"> </span><span class="n">DispersalKernel</span><span class="p">(</span><span class="n">max_distance</span><span class="o">=</span><span class="mf">0.3</span><span class="p">))</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code>             ┌──────────────────────────────┐  1      
+<div class="highlight"><pre><span></span><code>             ┌──────────────────────────────┐  0.6    
           20 │▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄│ ┌──┐    
              │▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄│ │▄▄│    
              │▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄│ │▄▄│    
@@ -773,7 +773,7 @@ $$</p>
 <p>Now, we use the <code>spatialize</code> method to combine our <code>Model</code>, <code>SpatialGraph</code>, <code>SpeciesPool</code>, and <code>niche</code>. Note that <code>niche</code> here is a keyword argument. If not provided, by default spatialize will used identical parameters across all sites. This may be of interested if the goal is understanding the consequences of dispersal absent environmental variation.</p>
 <div class="highlight"><pre><span></span><code><span class="n">spatialrm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spatialize</span><span class="p">(</span><span class="n">rosen</span><span class="p">,</span><span class="w"> </span><span class="n">sg</span><span class="p">,</span><span class="w"> </span><span class="n">sp</span><span class="p">;</span><span class="w"> </span><span class="n">niche</span><span class="o">=</span><span class="n">niche</span><span class="p">)</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code>RosenzweigMacArthur
+<div class="highlight"><pre><span></span><code>Spatial RosenzweigMacArthur
 </code></pre></div>
 <p>The final thing we need to run this model is our <code>Diffsion</code> model. <code>Diffusion</code> models are constructed using a few components, first a <code>DispersalKernel</code>. The dispersal kernel describes a relative likeliheed of how far an individual organism is going to disperse. By default, the <code>DispersalKernel</code>s are initialized with an exponential dispersal kernel, i.e. the kernel $f$ is given by </p>
 <p>$$
@@ -796,21 +796,21 @@ $$</p>
 </code></pre></div>
 <div class="highlight"><pre><span></span><code>An trajectory of length 101.
                     ┌────────────────────────────────────────┐ 
-           0.275578 │⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣠⣶⣟⠙⠛⠻⢿⣷⣶⣤⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│ 
-                    │⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡰⢻⣿⡿⣿⡿⣶⣤⡀⠈⠙⠻⢿⣿⣲⣄⡀⠀⠀⠀⠀⠀⠀⠀│ 
-                    │⠀⠀⢀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⠇⣿⣿⠁⠀⠙⠻⣽⡿⣷⣤⠀⠀⠉⠻⣳⡿⡦⣀⠀⠀⠀⠀⠀│ 
-                    │⢀⠞⢻⡻⣷⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⡿⢸⣿⡏⠀⠀⠀⠀⠀⠛⣯⡻⣿⣦⡀⠀⠀⠛⣯⣺⡳⡄⠀⠀⠀│ 
-                    │⢧⠀⠀⢿⣽⣷⠀⠀⠀⠀⠀⠀⠀⠀⢰⡇⣼⣿⠃⠀⠀⠀⠀⠀⠀⠈⠹⣮⡻⣷⣢⣶⠟⣻⣿⣮⣎⠀⠀⠀│ 
-                    │⢸⡄⠀⠘⣷⢿⣧⠀⠀⠀⠀⠀⠀⠀⣼⠁⣿⡿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⣷⡟⢿⣷⣿⣿⠿⠛⢿⠀⠀⠀│ 
-                    │⠸⣧⠀⠀⢻⡞⣿⡆⠀⠀⠀⠀⠀⠀⣿⢸⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⣰⡿⣋⣿⣿⣿⣯⣇⠀⠀⠀⠀⠀⠀│ 
-   Biomass          │⠀⣿⡄⠀⠈⣷⢻⣷⡀⠀⠀⠀⠀⢰⡇⣼⣿⠁⠀⠀⠀⠀⠀⠀⣠⡿⢫⣴⣿⡿⠻⣦⡳⣿⣦⠀⡀⠀⠀⠀│ 
-                    │⠀⢹⣷⠀⠀⢹⣎⣿⣧⠀⠀⠀⠀⢸⠇⣿⡿⠀⠀⠀⠀⠀⣠⡾⢏⣶⣿⡿⠏⠀⠀⠘⣧⣻⣿⣯⡆⠀⠀⠀│ 
-                    │⠀⢸⣿⡇⠀⠀⢿⡜⣿⣆⠀⠀⠀⣿⢰⣿⡇⠀⠀⠀⣤⡾⣫⣶⣿⡷⠋⠀⠀⠀⠀⣀⢾⣷⡿⣿⡧⠀⠀⠀│ 
-                    │⠀⠀⣯⣿⡀⠀⠘⢷⡹⣿⣦⠀⢀⡟⣸⣿⠃⣀⣴⢿⣯⣾⣿⠟⠃⠀⠀⠀⢀⡴⣺⣲⢗⣿⣿⡹⣟⠀⠀⠀│ 
-                    │⠀⠀⢹⣽⣧⠀⠀⠘⣷⡙⢿⡷⣼⣇⣿⣿⣿⣯⣿⣿⠟⠋⠀⠀⠀⣀⣤⣲⣵⣟⣫⠖⠋⠁⠘⢵⡝⠀⠀⠀│ 
-                    │⠀⠀⠘⣏⣿⡆⠀⠀⠈⢷⣌⢻⣿⣿⣿⡿⠿⠛⠉⠀⠀⣀⣠⣔⣯⣿⣿⠽⠟⠉⠀⠀⠀⠀⠀⠘⠗⠀⠀⠀│ 
-                    │⠀⠀⠀⢻⡼⣿⣄⠀⠀⠀⢘⡿⣷⣿⣏⣀⣤⣤⣶⣶⣿⡿⠿⠛⠋⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│ 
-                  0 │⠀⠀⠀⠈⠻⣮⣿⣷⣶⣾⣿⡴⠟⠋⠉⠉⠉⠉⠉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│ 
+           0.275883 │⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⣤⣾⣍⣙⠛⠿⢷⣲⠤⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│ 
+                    │⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣰⠟⣿⡿⣿⣽⣻⢿⣶⣄⡈⠙⠳⣍⡲⢄⡀⠀⠀⠀⠀⠀⠀⠀│ 
+                    │⠀⠀⢀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢰⡟⢰⢷⠁⠀⠙⠻⣷⣏⡫⢿⣶⣄⠀⠙⠲⣍⠢⢄⠀⠀⠀⠀⠀│ 
+                    │⢀⠞⢿⣻⣷⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⠇⣾⡎⠀⠀⠀⠀⠈⠻⣿⣮⡑⢟⣗⣄⠀⠈⠳⣬⠑⡄⠀⠀⠀│ 
+                    │⢧⠀⠀⢿⢿⣷⠀⠀⠀⠀⠀⠀⠀⠀⢰⣿⢠⣧⠃⠀⠀⠀⠀⠀⠀⠈⠻⣿⣆⢣⣹⣷⡿⣿⣾⣷⡄⠀⠀⠀│ 
+                    │⢸⡄⠀⠘⣟⣿⣧⠀⠀⠀⠀⠀⠀⠀⣸⡏⢸⡹⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⣿⣿⣿⢿⣯⣦⢒⢾⣿⠀⠀⠀│ 
+                    │⠸⣧⠀⠀⢻⣻⣿⡆⠀⠀⠀⠀⠀⠀⣿⠇⣾⡇⠀⠀⠀⠀⠀⠀⠀⠀⣰⣿⣟⠿⣿⣔⡫⡿⣿⡓⠁⠀⠀⠀│ 
+   Biomass          │⠀⣿⡄⠀⠘⣏⣿⣷⡀⠀⠀⠀⠀⢠⣿⢀⣷⠁⠀⠀⠀⠀⠀⠀⣠⣿⣿⠕⢁⠔⣻⣿⣯⠛⡝⣞⡆⠀⠀⠀│ 
+                    │⠀⢹⣷⠀⠀⢹⣽⣿⣧⠀⠀⠀⠀⢸⡟⢸⡿⠀⠀⠀⠀⠀⣠⣾⣿⠗⢁⠔⡣⣟⠾⠹⣿⣇⠘⣼⣏⠀⠀⠀│ 
+                    │⠀⢸⣿⡇⠀⠀⢷⢿⣿⣆⠀⠀⠀⣾⡇⣼⡇⠀⠀⠀⣤⣾⢿⠝⣁⢖⢵⣞⠟⠁⠀⠀⢸⣿⣿⠙⡎⠀⠀⠀│ 
+                    │⠀⠀⣿⣿⡀⠀⠈⢯⢿⣿⣆⠀⢀⣿⢀⣷⠁⣠⣴⡿⡿⢋⡡⡲⣷⡷⠛⠀⠀⠀⣠⡴⠏⣙⣿⣯⡈⠀⠀⠀│ 
+                    │⠀⠀⢹⣿⣧⠀⠀⠘⢧⢷⣽⣷⣼⣟⣼⣽⣿⡿⢝⡩⡶⣷⡾⠛⠁⠀⢀⣠⡴⠟⣩⠤⠋⠁⠙⣿⣧⠀⠀⠀│ 
+                    │⠀⠀⠘⡿⣿⡆⠀⠀⠈⢧⣽⢾⣿⣛⣿⣯⣵⣞⡿⠟⠋⠁⢀⣀⡤⠖⣛⠥⠖⠋⠀⠀⠀⠀⠀⠘⠏⠀⠀⠀│ 
+                    │⠀⠀⠀⢻⣻⣿⣄⠀⠀⠀⢘⣾⣯⣟⣟⣋⣉⣁⣠⢤⣶⡺⠯⠓⠊⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│ 
+                  0 │⠀⠀⠀⠀⠳⣟⣿⣷⣶⣾⣿⡭⠞⠋⠉⠉⠉⠉⠉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀│ 
                     └────────────────────────────────────────┘ 
                     ⠀0⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀110⠀ 
                     ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀time (t)⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
