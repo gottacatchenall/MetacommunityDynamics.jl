@@ -41,8 +41,8 @@ nav:
       - Metapopulation dynamics: reference/model_index/metapopulation/overview.md
       - Community dynamics: reference/model_index/community/overview.md
       - Metacommunity dynamics: model_index/metacommunity/overview.md
-    - Public: lib/public.md
-    - Internal: lib/internal.md
+    - Public: reference/public.md
+    - Internal: reference/internal.md
   - Explanation:
     - Design: explanation/design.md
   - Bibliography: bibliography.md
