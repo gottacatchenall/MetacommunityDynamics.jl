@@ -1,5 +1,5 @@
 """
-    abstract type RickerStochasticityType end
+    RickerStochasticityType
 
 
 """
