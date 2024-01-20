@@ -10,7 +10,7 @@ function factory(m::Model{SC,M,Spatial,D}, d::T) where {V<:Number,T<:Union{Diffu
     return _spatial_factory(m,d)
 end
 
-function factory(m::Model{SC,M,Spatial,D}, d::Diffusion, stoch::S) where {S<:Stochasticity,SC<:Union{Population,Community},M,D}
+function factory(m::Model{SC,M,Spatial,D}, d::T, stoch::S) where {S<:Stochasticity,V<:Number,T<:Union{Diffusion{V},Vector{Diffusion{V}}},SC<:Union{Population,Community},M,D}
     _spatial_factory(m,d), (u,_,_) -> ∂w(stoch, u)     
 end
 

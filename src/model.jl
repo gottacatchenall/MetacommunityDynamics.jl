@@ -11,6 +11,7 @@ Base.string(m::Model{SC,M,SP,D}) where {SC,M,SP,D} = "{blue}$SP{/blue} {bold}$(t
 
 Base.show(io::IO, m::Model) = begin 
     tprint(io, m)
+    #tprint(io, m)
 end 
 
 
