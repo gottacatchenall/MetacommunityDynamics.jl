@@ -13,7 +13,7 @@
       
       
       
-        <link rel="prev" href="../public/">
+        <link rel="prev" href="../spatialgraphs/">
       
       
         <link rel="next" href="../../explanation/design/">
@@ -543,11 +543,11 @@
   
   
     <li class="md-nav__item">
-      <a href="../public/" class="md-nav__link">
+      <a href="../spatialgraphs/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    Public
+    Spatial Subsystem
   </span>
   
 
@@ -719,6 +719,189 @@
 <p><a id='Documentation-for-internal-methods'></a></p>
 <p><a id='Documentation-for-internal-methods-1'></a></p>
 <h1 id="documentation-for-internal-methods">Documentation for internal methods</h1>
+<p><a id='MetacommunityDynamics.BevertonHolt' href='#MetacommunityDynamics.BevertonHolt'>#</a>
+<strong><code>MetacommunityDynamics.BevertonHolt</code></strong> &mdash; <em>Type</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="kt">BevertonHolt</span><span class="p">{</span><span class="kt">S</span><span class="p">}</span><span class="w"> </span><span class="o">&lt;:</span><span class="w"> </span><span class="kt">Model</span><span class="p">{</span><span class="kt">Population</span><span class="p">,</span><span class="kt">Biomass</span><span class="p">,</span><span class="kt">S</span><span class="p">,</span><span class="kt">Discrete</span><span class="p">}</span>
+</code></pre></div>
+<p>The <a href="https://en.wikipedia.org/wiki/Beverton%E2%80%93Holt_model">Beverton-Holt model</a> is a discrete-time, deterministic model of population dynamics. It is commonly interpreted as a discrete-time version of the logistic model.</p>
+<p>It is described by </p>
+<p>$N_{t+1} =\frac{R_0 M}{N_t + M}N_t$</p>
+<p>where $K = (R_0 - 1)M$ is the carrying capacity.</p>
+<p><a target='_blank' href='https://github.com/gottacatchenall/MetacommunityDynamics.jl/blob/93605c44a889b1dd8860e378735df65e9ded5eb5/src/models/bevertonholt.jl#L1-L15' class='documenter-source'>source</a><br></p>
+<p><a id='MetacommunityDynamics.CompetitiveLotkaVolterra' href='#MetacommunityDynamics.CompetitiveLotkaVolterra'>#</a>
+<strong><code>MetacommunityDynamics.CompetitiveLotkaVolterra</code></strong> &mdash; <em>Type</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="kt">CompetitiveLotkaVolterra</span><span class="p">{</span><span class="kt">S</span><span class="p">}</span><span class="w"> </span><span class="o">&lt;:</span><span class="w"> </span><span class="kt">Model</span><span class="p">{</span><span class="kt">Community</span><span class="p">,</span><span class="kt">Biomass</span><span class="p">,</span><span class="kt">S</span><span class="p">,</span><span class="kt">Continuous</span><span class="p">}</span>
+</code></pre></div>
+<p>Competitive Lotka-Voterra.</p>
+<p><a target='_blank' href='https://github.com/gottacatchenall/MetacommunityDynamics.jl/blob/93605c44a889b1dd8860e378735df65e9ded5eb5/src/models/lvcompetition.jl#L1-L5' class='documenter-source'>source</a><br></p>
+<p><a id='MetacommunityDynamics.Coordinates' href='#MetacommunityDynamics.Coordinates'>#</a>
+<strong><code>MetacommunityDynamics.Coordinates</code></strong> &mdash; <em>Type</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="kt">Coordinates</span><span class="p">{</span><span class="kt">T</span><span class="w"> </span><span class="o">&lt;:</span><span class="w"> </span><span class="kt">Number</span><span class="p">}</span>
+</code></pre></div>
+<p>A <code>Coordinates</code> consists of a set of nodes with coordinates and associated environmental variables for each site.  </p>
+<p><a target='_blank' href='https://github.com/gottacatchenall/MetacommunityDynamics.jl/blob/93605c44a889b1dd8860e378735df65e9ded5eb5/src/coordinates.jl#L2-L7' class='documenter-source'>source</a><br></p>
+<p>&lt;a id='MetacommunityDynamics.Coordinates-Tuple{E} where E&lt;:EnvironmentLayer' href='#MetacommunityDynamics.Coordinates-Tuple{E} where E&lt;:EnvironmentLayer'&gt;#</a>
+<strong><code>MetacommunityDynamics.Coordinates</code></strong> &mdash; <em>Method</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">Coordinates</span><span class="p">(</span><span class="n">layer</span><span class="o">::</span><span class="kt">E</span><span class="p">;</span><span class="w"> </span><span class="n">coords</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[(</span><span class="n">rand</span><span class="p">(),</span><span class="w"> </span><span class="n">rand</span><span class="p">())</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="o">:</span><span class="mi">20</span><span class="p">])</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="kt">E</span><span class="o">&lt;:</span><span class="kt">EnvironmentLayer</span>
+</code></pre></div>
+<p>Builds a <code>Coordinates</code> where the environmental variable is built from a single EnvironmentLayer, and optionally the set of coordinates can be passed as a keyword argument.</p>
+<p><a target='_blank' href='https://github.com/gottacatchenall/MetacommunityDynamics.jl/blob/93605c44a889b1dd8860e378735df65e9ded5eb5/src/coordinates.jl#L93-L99' class='documenter-source'>source</a><br></p>
+<p><a id='MetacommunityDynamics.Coordinates-Tuple{Integer}' href='#MetacommunityDynamics.Coordinates-Tuple{Integer}'>#</a>
+<strong><code>MetacommunityDynamics.Coordinates</code></strong> &mdash; <em>Method</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">Coordinates</span><span class="p">(</span><span class="n">n</span><span class="o">::</span><span class="kt">Integer</span><span class="p">)</span>
+</code></pre></div>
+<p>Builds a coordinate set with <code>n</code> nodes in it.</p>
+<p><a target='_blank' href='https://github.com/gottacatchenall/MetacommunityDynamics.jl/blob/93605c44a889b1dd8860e378735df65e9ded5eb5/src/coordinates.jl#L126-L130' class='documenter-source'>source</a><br></p>
+<p><a id='MetacommunityDynamics.Coordinates-Tuple{}' href='#MetacommunityDynamics.Coordinates-Tuple{}'>#</a>
+<strong><code>MetacommunityDynamics.Coordinates</code></strong> &mdash; <em>Method</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">Coordinates</span><span class="p">(;</span><span class="w"> </span><span class="n">coords</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">nothing</span><span class="p">,</span><span class="w"> </span><span class="n">env</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">nothing</span><span class="p">)</span>
+</code></pre></div>
+<p>Builds a <code>Coordinates</code>, where both the coordinates and the environmental variables can be passed as keyword arguments. The environment should be a dictionary where (key,value) pairs are names of each environmnetal variable and vectors of that variable across each node in the <code>Coordinates</code>.</p>
+<p><a target='_blank' href='https://github.com/gottacatchenall/MetacommunityDynamics.jl/blob/93605c44a889b1dd8860e378735df65e9ded5eb5/src/coordinates.jl#L104-L111' class='documenter-source'>source</a><br></p>
+<p>&lt;a id='MetacommunityDynamics.Coordinates-Union{Tuple{Dict{S, Vector{T}}}, Tuple{T}, Tuple{S}} where {S&lt;:Union{String, Symbol}, T}' href='#MetacommunityDynamics.Coordinates-Union{Tuple{Dict{S, Vector{T}}}, Tuple{T}, Tuple{S}} where {S&lt;:Union{String, Symbol}, T}'&gt;#</a>
+<strong><code>MetacommunityDynamics.Coordinates</code></strong> &mdash; <em>Method</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">Coordinates</span><span class="p">(</span><span class="n">env</span><span class="o">::</span><span class="kt">Dict</span><span class="p">{</span><span class="kt">S</span><span class="p">,</span><span class="kt">Vector</span><span class="p">})</span>
+</code></pre></div>
+<p>Builds a coordinate set for a given environment matrix. The environmental matrix should be a matrix where each column is the vector of environmental variables for each node.</p>
+<p><a target='_blank' href='https://github.com/gottacatchenall/MetacommunityDynamics.jl/blob/93605c44a889b1dd8860e378735df65e9ded5eb5/src/coordinates.jl#L136-L141' class='documenter-source'>source</a><br></p>
+<p>&lt;a id='MetacommunityDynamics.Coordinates-Union{Tuple{Vector{E}}, Tuple{E}} where E&lt;:EnvironmentLayer' href='#MetacommunityDynamics.Coordinates-Union{Tuple{Vector{E}}, Tuple{E}} where E&lt;:EnvironmentLayer'&gt;#</a>
+<strong><code>MetacommunityDynamics.Coordinates</code></strong> &mdash; <em>Method</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">Coordinates</span><span class="p">(</span><span class="n">layers</span><span class="o">::</span><span class="kt">Vector</span><span class="p">{</span><span class="kt">E</span><span class="p">};</span><span class="w"> </span><span class="n">coords</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[(</span><span class="n">rand</span><span class="p">(),</span><span class="w"> </span><span class="n">rand</span><span class="p">())</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="o">:</span><span class="mi">20</span><span class="p">])</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="kt">E</span><span class="o">&lt;:</span><span class="kt">EnvironmentLayer</span>
+</code></pre></div>
+<p>Builds a coordinate set with environmental variables passed as a vector of EnvironmentLayers, and optionally coordinates passed as a keyword argument. </p>
+<p><a target='_blank' href='https://github.com/gottacatchenall/MetacommunityDynamics.jl/blob/93605c44a889b1dd8860e378735df65e9ded5eb5/src/coordinates.jl#L83-L88' class='documenter-source'>source</a><br></p>
+<p>&lt;a id='MetacommunityDynamics.Coordinates-Union{Tuple{Vector{T}}, Tuple{T}} where T&lt;:Tuple' href='#MetacommunityDynamics.Coordinates-Union{Tuple{Vector{T}}, Tuple{T}} where T&lt;:Tuple'&gt;#</a>
+<strong><code>MetacommunityDynamics.Coordinates</code></strong> &mdash; <em>Method</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">Coordinates</span><span class="p">(</span><span class="n">coords</span><span class="o">::</span><span class="kt">Vector</span><span class="p">{</span><span class="kt">T</span><span class="p">})</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="kt">T</span><span class="o">&lt;:</span><span class="kt">Tuple</span>
+</code></pre></div>
+<p>Constructs a <code>Coordinates</code> from a set of coordinates <code>coords</code>, which is a vector of (x,y) pairs. Builds a random environment variable named :x.</p>
+<p><a target='_blank' href='https://github.com/gottacatchenall/MetacommunityDynamics.jl/blob/93605c44a889b1dd8860e378735df65e9ded5eb5/src/coordinates.jl#L146-L151' class='documenter-source'>source</a><br></p>
+<p><a id='MetacommunityDynamics.Discreteness' href='#MetacommunityDynamics.Discreteness'>#</a>
+<strong><code>MetacommunityDynamics.Discreteness</code></strong> &mdash; <em>Type</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">Discreteness</span>
+</code></pre></div>
+<p><a target='_blank' href='https://github.com/gottacatchenall/MetacommunityDynamics.jl/blob/93605c44a889b1dd8860e378735df65e9ded5eb5/src/types.jl#L37-L41' class='documenter-source'>source</a><br></p>
+<p><a id='MetacommunityDynamics.EnvironmentLayer' href='#MetacommunityDynamics.EnvironmentLayer'>#</a>
+<strong><code>MetacommunityDynamics.EnvironmentLayer</code></strong> &mdash; <em>Type</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="kt">EnvironmentLayer</span><span class="p">{</span><span class="kt">T</span><span class="p">}</span>
+</code></pre></div>
+<p>An <code>EnvironmentalLayer</code> stores a raster representation of a single environmental variable inside a matrix.</p>
+<p><a target='_blank' href='https://github.com/gottacatchenall/MetacommunityDynamics.jl/blob/93605c44a889b1dd8860e378735df65e9ded5eb5/src/environment.jl#L2-L7' class='documenter-source'>source</a><br></p>
+<p><a id='MetacommunityDynamics.EnvironmentLayer-Tuple{}' href='#MetacommunityDynamics.EnvironmentLayer-Tuple{}'>#</a>
+<strong><code>MetacommunityDynamics.EnvironmentLayer</code></strong> &mdash; <em>Method</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">EnvironmentLayer</span><span class="p">(;</span><span class="w"> </span><span class="n">generator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MidpointDisplacement</span><span class="p">(</span><span class="mf">0.7</span><span class="p">),</span><span class="w"> </span><span class="n">sz</span><span class="o">=</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span><span class="mi">50</span><span class="p">))</span>
+</code></pre></div>
+<p>Builds an <code>EnvironmentalLayer</code> with a <code>NeutralLandscapes</code> generator</p>
+<p><a target='_blank' href='https://github.com/gottacatchenall/MetacommunityDynamics.jl/blob/93605c44a889b1dd8860e378735df65e9ded5eb5/src/environment.jl#L12-L16' class='documenter-source'>source</a><br></p>
+<p><a id='MetacommunityDynamics.LogisticMap' href='#MetacommunityDynamics.LogisticMap'>#</a>
+<strong><code>MetacommunityDynamics.LogisticMap</code></strong> &mdash; <em>Type</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="kt">LogisticMap</span><span class="p">{</span><span class="kt">S</span><span class="p">}</span><span class="w"> </span><span class="o">&lt;:</span><span class="w"> </span><span class="kt">Model</span><span class="p">{</span><span class="kt">Population</span><span class="p">,</span><span class="kt">Biomass</span><span class="p">,</span><span class="kt">S</span><span class="p">,</span><span class="kt">Continuous</span><span class="p">}</span>
+</code></pre></div>
+<p>Logistic Map. </p>
+<p><a target='_blank' href='https://github.com/gottacatchenall/MetacommunityDynamics.jl/blob/93605c44a889b1dd8860e378735df65e9ded5eb5/src/models/logistic_map.jl#L1-L5' class='documenter-source'>source</a><br></p>
+<p><a id='MetacommunityDynamics.LogisticModel' href='#MetacommunityDynamics.LogisticModel'>#</a>
+<strong><code>MetacommunityDynamics.LogisticModel</code></strong> &mdash; <em>Type</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="kt">LogisticModel</span><span class="p">{</span><span class="kt">S</span><span class="p">}</span><span class="w"> </span><span class="o">&lt;:</span><span class="w"> </span><span class="kt">Model</span><span class="p">{</span><span class="kt">Population</span><span class="p">,</span><span class="kt">Biomass</span><span class="p">,</span><span class="kt">S</span><span class="p">,</span><span class="kt">Continuous</span><span class="p">}</span>
+</code></pre></div>
+<p>Logistic Model. </p>
+<p><a target='_blank' href='https://github.com/gottacatchenall/MetacommunityDynamics.jl/blob/93605c44a889b1dd8860e378735df65e9ded5eb5/src/models/logistic_model.jl#L1-L5' class='documenter-source'>source</a><br></p>
+<p><a id='MetacommunityDynamics.Measurement' href='#MetacommunityDynamics.Measurement'>#</a>
+<strong><code>MetacommunityDynamics.Measurement</code></strong> &mdash; <em>Type</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">Measurement</span>
+</code></pre></div>
+<p>The Measurement abstract type is a supertype for the different types of <em>measurements</em> a model describes, primarily <a href="@ref"><code>Biomass</code></a>: a continuous value representing relative amount of mass per species, <a href="@ref"><code>Abundance</code></a>: an integer valued count of individuals, and <a href="@ref"><code>Occupancy</code></a>: a binary value of whether is species is present at a location at a given time. </p>
+<p><a target='_blank' href='https://github.com/gottacatchenall/MetacommunityDynamics.jl/blob/93605c44a889b1dd8860e378735df65e9ded5eb5/src/types.jl#L23-L31' class='documenter-source'>source</a><br></p>
+<p><a id='MetacommunityDynamics.Model' href='#MetacommunityDynamics.Model'>#</a>
+<strong><code>MetacommunityDynamics.Model</code></strong> &mdash; <em>Type</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="kt">Model</span><span class="p">{</span><span class="kt">SC</span><span class="o">&lt;:</span><span class="kt">Scale</span><span class="p">,</span><span class="kt">M</span><span class="o">&lt;:</span><span class="kt">Measurement</span><span class="p">,</span><span class="kt">SP</span><span class="o">&lt;:</span><span class="kt">Spatialness</span><span class="p">,</span><span class="kt">D</span><span class="o">&lt;:</span><span class="kt">Discreteness</span><span class="p">}</span>
+</code></pre></div>
+<p>The abstract type from all models in MetacommunityDynamics. All <code>Model</code>'s are parametric types that stores four parameters that describe the model: <a href="./#MetacommunityDynamics.Scale"><code>Scale</code></a>, <a href="./#MetacommunityDynamics.Measurement"><code>Measurement</code></a>, <a href="@ref"><code>Spatialness</code></a>, and <a href="./#MetacommunityDynamics.Discreteness"><code>Discreteness</code></a>. </p>
+<p><a target='_blank' href='https://github.com/gottacatchenall/MetacommunityDynamics.jl/blob/93605c44a889b1dd8860e378735df65e9ded5eb5/src/model.jl#L1-L7' class='documenter-source'>source</a><br></p>
+<p><a id='MetacommunityDynamics.Parameter' href='#MetacommunityDynamics.Parameter'>#</a>
+<strong><code>MetacommunityDynamics.Parameter</code></strong> &mdash; <em>Type</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="kt">Parameter</span><span class="p">{</span><span class="kt">T</span><span class="p">,</span><span class="kt">N</span><span class="p">}</span>
+</code></pre></div>
+<p>Yet-another Parameter struct. </p>
+<p><a target='_blank' href='https://github.com/gottacatchenall/MetacommunityDynamics.jl/blob/93605c44a889b1dd8860e378735df65e9ded5eb5/src/parameters.jl#L3-L7' class='documenter-source'>source</a><br></p>
+<p><a id='MetacommunityDynamics.Population' href='#MetacommunityDynamics.Population'>#</a>
+<strong><code>MetacommunityDynamics.Population</code></strong> &mdash; <em>Type</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">Population</span>
+</code></pre></div>
+<p>The population scale refers to models that describe the population dynamics of a single species at a single local location.</p>
+<p><a target='_blank' href='https://github.com/gottacatchenall/MetacommunityDynamics.jl/blob/93605c44a889b1dd8860e378735df65e9ded5eb5/src/types.jl#L12-L17' class='documenter-source'>source</a><br></p>
+<p><a id='MetacommunityDynamics.RickerStochasticityType' href='#MetacommunityDynamics.RickerStochasticityType'>#</a>
+<strong><code>MetacommunityDynamics.RickerStochasticityType</code></strong> &mdash; <em>Type</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">RickerStochasticityType</span>
+</code></pre></div>
+<p><a target='_blank' href='https://github.com/gottacatchenall/MetacommunityDynamics.jl/blob/93605c44a889b1dd8860e378735df65e9ded5eb5/src/models/ricker.jl#L1-L5' class='documenter-source'>source</a><br></p>
+<p><a id='MetacommunityDynamics.RosenzweigMacArthur' href='#MetacommunityDynamics.RosenzweigMacArthur'>#</a>
+<strong><code>MetacommunityDynamics.RosenzweigMacArthur</code></strong> &mdash; <em>Type</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="k">struct</span> <span class="kt">RosenzweigMacArthur</span><span class="p">{</span><span class="kt">S</span><span class="o">&lt;:</span><span class="kt">Spatialness</span><span class="p">}</span><span class="w"> </span><span class="o">&lt;:</span><span class="w"> </span><span class="kt">Model</span><span class="p">{</span><span class="kt">Community</span><span class="p">,</span><span class="kt">Biomass</span><span class="p">,</span><span class="kt">S</span><span class="p">,</span><span class="kt">Continuous</span><span class="p">}</span>
+</code></pre></div>
+<p>Dynamics given by</p>
+<p>$\frac{dR}{dt} = \lambda R \bigg(1 - \frac{R}{K}\bigg) - \frac{\alpha CR}{1 +\alpha \eta R}$</p>
+<p>$\frac{dC}{dt} = \beta \frac{\alpha CR}{1 + \alpha \eta R} - \gamma   C$</p>
+<p><a target='_blank' href='https://github.com/gottacatchenall/MetacommunityDynamics.jl/blob/93605c44a889b1dd8860e378735df65e9ded5eb5/src/models/rosenzweigmacarthur.jl#L1-L11' class='documenter-source'>source</a><br></p>
+<p><a id='MetacommunityDynamics.Scale' href='#MetacommunityDynamics.Scale'>#</a>
+<strong><code>MetacommunityDynamics.Scale</code></strong> &mdash; <em>Type</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">Scale</span>
+</code></pre></div>
+<p>Abstract type that is a supertype for all model scales: <a href="./#MetacommunityDynamics.Population"><code>Population</code></a>, <a href="@ref"><code>Metapopulation</code></a>, <a href="@ref"><code>Community</code></a>, and <a href="@ref"><code>Metacommunity</code></a>. A model's scale is what it was <em>orginally</em> defined as. For example, <a href="@ref"><code>TrophicLotkaVolterra</code></a> is a <a href="@ref"><code>Community</code></a> model, regardless of whether is has been convert to run on a spatial-graph via <a href="@ref"><code>spatialize</code></a>.</p>
+<p><a target='_blank' href='https://github.com/gottacatchenall/MetacommunityDynamics.jl/blob/93605c44a889b1dd8860e378735df65e9ded5eb5/src/types.jl#L1-L9' class='documenter-source'>source</a><br></p>
+<p><a id='MetacommunityDynamics.SpeciesPool' href='#MetacommunityDynamics.SpeciesPool'>#</a>
+<strong><code>MetacommunityDynamics.SpeciesPool</code></strong> &mdash; <em>Type</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="kt">SpeciesPool</span><span class="p">{</span><span class="kt">T</span><span class="o">&lt;:</span><span class="kt">Number</span><span class="p">}</span>
+</code></pre></div>
+<p>A <code>SpeciesPool</code> consists of a set of species and their corresponding traits. </p>
+<p><a target='_blank' href='https://github.com/gottacatchenall/MetacommunityDynamics.jl/blob/93605c44a889b1dd8860e378735df65e9ded5eb5/src/species.jl#L2-L6' class='documenter-source'>source</a><br></p>
+<p><a id='MetacommunityDynamics.Trajectory' href='#MetacommunityDynamics.Trajectory'>#</a>
+<strong><code>MetacommunityDynamics.Trajectory</code></strong> &mdash; <em>Type</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="kt">Trajectory</span><span class="p">{</span><span class="kt">S</span><span class="o">&lt;:</span><span class="kt">SciMLBase</span><span class="o">.</span><span class="kt">AbstractTimeseriesSolution</span><span class="p">}</span>
+</code></pre></div>
+<p>A trajectory is a single output for a <code>Problem</code>.  </p>
+<p><a target='_blank' href='https://github.com/gottacatchenall/MetacommunityDynamics.jl/blob/93605c44a889b1dd8860e378735df65e9ded5eb5/src/trajectory.jl#L2-L6' class='documenter-source'>source</a><br></p>
+<p><a id='Base.size-Tuple{Coordinates}' href='#Base.size-Tuple{Coordinates}'>#</a>
+<strong><code>Base.size</code></strong> &mdash; <em>Method</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">Base</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">coords</span><span class="o">::</span><span class="kt">Coordinates</span><span class="p">)</span>
+</code></pre></div>
+<p>Returns the number of nodes in a coordinate set <code>coords</code>.</p>
+<p><a target='_blank' href='https://github.com/gottacatchenall/MetacommunityDynamics.jl/blob/93605c44a889b1dd8860e378735df65e9ded5eb5/src/coordinates.jl#L14-L18' class='documenter-source'>source</a><br></p>
+<p><a id='MetacommunityDynamics._env_from_layer-Tuple{Any, EnvironmentLayer}' href='#MetacommunityDynamics._env_from_layer-Tuple{Any, EnvironmentLayer}'>#</a>
+<strong><code>MetacommunityDynamics._env_from_layer</code></strong> &mdash; <em>Method</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">_env_from_layer</span><span class="p">(</span><span class="n">coords</span><span class="p">,</span><span class="w"> </span><span class="n">layer</span><span class="o">::</span><span class="kt">EnvironmentLayer</span><span class="p">)</span>
+</code></pre></div>
+<p>Returns the values in the layer at the given coordinates, given the bounding-box os the coordinates is the extent of the layer.</p>
+<p><a target='_blank' href='https://github.com/gottacatchenall/MetacommunityDynamics.jl/blob/93605c44a889b1dd8860e378735df65e9ded5eb5/src/coordinates.jl#L71-L76' class='documenter-source'>source</a><br></p>
+<p><a id='MetacommunityDynamics.distance_matrix-Tuple{Coordinates}' href='#MetacommunityDynamics.distance_matrix-Tuple{Coordinates}'>#</a>
+<strong><code>MetacommunityDynamics.distance_matrix</code></strong> &mdash; <em>Method</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">distance_matrix</span><span class="p">(</span><span class="n">coords</span><span class="o">::</span><span class="kt">Coordinates</span><span class="p">;</span><span class="w"> </span><span class="n">distance</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Euclidean</span><span class="p">())</span>
+</code></pre></div>
+<p>Returns a matrix of pairwise distances for all nodes in a <code>Coordinates</code>. The argument passed to <code>distance</code> must be of type <code>Distance</code> from <code>Distances.jl</code>.</p>
+<p><a target='_blank' href='https://github.com/gottacatchenall/MetacommunityDynamics.jl/blob/93605c44a889b1dd8860e378735df65e9ded5eb5/src/coordinates.jl#L49-L53' class='documenter-source'>source</a><br></p>
+<p><a id='MetacommunityDynamics.envdims-Tuple{Coordinates}' href='#MetacommunityDynamics.envdims-Tuple{Coordinates}'>#</a>
+<strong><code>MetacommunityDynamics.envdims</code></strong> &mdash; <em>Method</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">envdims</span><span class="p">(</span><span class="n">coords</span><span class="o">::</span><span class="kt">Coordinates</span><span class="p">)</span>
+</code></pre></div>
+<p>Returns the dimensionality of the environmental variable associated with each node in a <code>Coordinates</code> coords.</p>
+<p><a target='_blank' href='https://github.com/gottacatchenall/MetacommunityDynamics.jl/blob/93605c44a889b1dd8860e378735df65e9ded5eb5/src/coordinates.jl#L22-L27' class='documenter-source'>source</a><br></p>
+<p><a id='MetacommunityDynamics.environment-Tuple{Coordinates}' href='#MetacommunityDynamics.environment-Tuple{Coordinates}'>#</a>
+<strong><code>MetacommunityDynamics.environment</code></strong> &mdash; <em>Method</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">environment</span><span class="p">(</span><span class="n">coords</span><span class="o">::</span><span class="kt">Coordinates</span><span class="p">)</span>
+</code></pre></div>
+<p>Returns the dictionary of environmental variables of a <code>Coordinates</code> <code>coords</code></p>
+<p><a target='_blank' href='https://github.com/gottacatchenall/MetacommunityDynamics.jl/blob/93605c44a889b1dd8860e378735df65e9ded5eb5/src/coordinates.jl#L37-L41' class='documenter-source'>source</a><br></p>
+<p><a id='MetacommunityDynamics.numsites-Tuple{Coordinates}' href='#MetacommunityDynamics.numsites-Tuple{Coordinates}'>#</a>
+<strong><code>MetacommunityDynamics.numsites</code></strong> &mdash; <em>Method</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">numsites</span><span class="p">(</span><span class="n">coords</span><span class="o">::</span><span class="kt">Coordinates</span><span class="p">)</span>
+</code></pre></div>
+<p>Returns the number of nodes in a <code>Coordinates</code> <code>coords</code>. </p>
+<p><a target='_blank' href='https://github.com/gottacatchenall/MetacommunityDynamics.jl/blob/93605c44a889b1dd8860e378735df65e9ded5eb5/src/coordinates.jl#L30-L34' class='documenter-source'>source</a><br></p>
+<p><a id='MetacommunityDynamics.∂u-Tuple{BevertonHolt, Any, Any}' href='#MetacommunityDynamics.∂u-Tuple{BevertonHolt, Any, Any}'>#</a>
+<strong><code>MetacommunityDynamics.∂u</code></strong> &mdash; <em>Method</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">∂u</span><span class="p">(</span><span class="n">bm</span><span class="o">::</span><span class="kt">BevertonHolt</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p">)</span>
+</code></pre></div>
+<p>Single time-step for the <code>BevertonHolt</code> model. </p>
+<p><a target='_blank' href='https://github.com/gottacatchenall/MetacommunityDynamics.jl/blob/93605c44a889b1dd8860e378735df65e9ded5eb5/src/models/bevertonholt.jl#L22-L26' class='documenter-source'>source</a><br></p>
 
 
 
