@@ -5,7 +5,7 @@ using DocumenterCitations
 using DocumenterVitepress
 using MetacommunityDynamics
 
-bibliography = CitationBibliography(joinpath(@__DIR__, "MetacommunityDynamics.bib"))
+bib = CitationBibliography(joinpath(@__DIR__, "MetacommunityDynamics.bib")) 
 
 makedocs(
     sitename = "MetacommunityDynamics.jl",
@@ -15,6 +15,8 @@ makedocs(
         repo="https://github.com/gottacatchenall/MetacommunityDynamics.jl",
         devurl="dev",
     ),
+    warnonly = true,
+    plugins = [bib], 
 )
 
 deploydocs(;
