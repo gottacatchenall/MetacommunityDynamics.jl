@@ -2,6 +2,7 @@
 DifferentialEquations = "0c46a032-eb83-5123-abaf-570d42b7fbaa"
 Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
 DocumenterCitations = "daee34ce-89f3-4625-b898-19384cb65244"
-DocumenterMarkdown = "997ab1e6-3595-5248-9280-8efb232c3433"
+DocumenterTools = "35a29f4d-8980-5a13-9543-d66fff28ecb8"
+DocumenterVitepress = "4710194d-e776-4893-9690-8d956a29c365"
 MetacommunityDynamics = "fe88e339-4f5d-4d49-b138-24d030ba5b68"
 Turing = "fce5fe82-541a-59a6-adf8-730c64b5f9a0"

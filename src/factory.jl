@@ -3,7 +3,9 @@ function factory(m::Model{SC,M,Local,D}) where {SC<:Union{Population,Community},
 end
 
 function factory(m::Model{SC,M,SP,D}, stoch::T) where {SC<:Union{Population,Community},M,SP,D,T<:Stochasticity}
-    (u,θ,_) -> ∂u(m, u, θ), (u,_,_) -> ∂w(stoch, u)
+    du = (u,θ,_) -> ∂u(m, u, θ)
+    dw = (u,_,_) -> ∂w(stoch, u)
+    return du, dw
 end
 
 function factory(m::Model{SC,M,Spatial,D}, d::T) where {V<:Number,T<:Union{Diffusion{V},Vector{Diffusion{V}}},SC<:Union{Population,Community},M,D}

@@ -13,7 +13,7 @@ function makieplot(m::Model{Community,M,Local,D}, traj) where {M<:Union{Biomass,
 
     xs = hcat(Array(traj.sol.u)...)
     for s in 1:ns
-        scatterlines!(ax, time, xs[s,:])
+        lines!(ax, time, xs[s,:], linewidth=4)
     end
     f
 end 
@@ -27,7 +27,7 @@ function makieplot(::Model{Population,M,Local,D}, traj) where {M<:Union{Biomass,
         ylabel=string(M)
     )
     xs = Array(traj.sol)
-    scatterlines!(ax, time, xs)
+    lines!(ax, time, xs, linewidth=4)
     f
 end 
 
@@ -43,7 +43,7 @@ function makieplot(::Model{Metapopulation,Occupancy,S,D}, traj) where {S,D}
     xs = Array(traj.sol)
     prop = [sum(c)/length(c) for c in eachcol(xs)]
 
-    scatterlines!(ax, time, prop)
+    lines!(ax, time, prop, linewidth=4)
     f
 end 
 
@@ -65,7 +65,7 @@ function makieplot(::Model{Population,M,Spatial,D}, traj) where {M<:Union{Biomas
     ylims!(ax, 0, ymax)
 
     for ts in timeseries
-        scatterlines!(ax, ts)
+        lines!(ax, ts,linewidth=4)
     end
     f
 end 
@@ -89,7 +89,7 @@ function makieplot(::Model{Community,M,Spatial,D}, traj) where {M<:Union{Biomass
 
     for s in eachslice(u, dims=(2))
         for sp in 1:n_species
-            scatterlines!(ax, s[sp,:], color=(cols[sp], 1.0/n_locations))
+            lines!(ax, s[sp,:], linewidth=4, color=(cols[sp], 1.0/n_locations))
         end
     end 
     f

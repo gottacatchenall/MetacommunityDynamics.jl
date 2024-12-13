@@ -5,7 +5,8 @@ function plotvectorfield(
     numticks=30,
     lengthscale=0.3,
     arrowsize = 6,
-    dims=(1,2)) where {M,D}
+    dims=(1,2)
+) where {M,D}
     f = factory(m)    
     θ = parameters(m)
 

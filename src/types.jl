@@ -36,8 +36,6 @@ abstract type Occupancy <: Measurement end
 
 """
     Discreteness
-
-
 """
 abstract type Discreteness end 
 abstract type Discrete <: Discreteness end 

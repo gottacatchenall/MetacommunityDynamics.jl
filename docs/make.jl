@@ -2,24 +2,23 @@ push!(LOAD_PATH, "../src/")
 
 using Documenter
 using DocumenterCitations
-using DocumenterMarkdown
+using DocumenterVitepress
 using MetacommunityDynamics
 
-bibliography = CitationBibliography(joinpath(@__DIR__, "EcoDynamics.bib"))
+bibliography = CitationBibliography(joinpath(@__DIR__, "MetacommunityDynamics.bib"))
 
 makedocs(
-    bibliography;
     sitename = "MetacommunityDynamics.jl",
     authors = "Michael D. Catchen",
     modules = [MetacommunityDynamics],
-    format = Markdown(),
+    format = DocumenterVitepress.MarkdownVitepress(
+        repo="https://github.com/gottacatchenall/MetacommunityDynamics.jl",
+        devurl="dev",
+    ),
 )
 
 deploydocs(;
-    deps = Deps.pip("mkdocs", "pygments", "python-markdown-math", "mkdocs-material"),
     repo = "github.com/gottacatchenall/MetacommunityDynamics.jl.git",
-    devbranch = "main",
-    make = () -> run(`mkdocs build`),
-    target = "site",
     push_preview = true,
 )
+

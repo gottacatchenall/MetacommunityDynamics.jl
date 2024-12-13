@@ -5,9 +5,9 @@
 A `Coordinates` consists of a set of nodes with coordinates and associated environmental
 variables for each site.  
 """
-struct Coordinates{T <: Number, S<:Union{String,Symbol}} <: Spatialness
-    coordinates::Vector{Tuple{T,T}} 
-    environment::Dict{S,Vector{T}} 
+struct Coordinates{F<:Real, P, S<:Union{String,Symbol}} <: Spatialness
+    coordinates::Vector{Tuple{F,F}} 
+    environment::Dict{S,Vector{P}} 
 end
 
 
@@ -153,6 +153,11 @@ function Coordinates(coords::Vector{T}) where T<:Tuple
     Coordinates(coords, Dict(:x=>rand(length(coords))))
 end
 
+function Coordinates(;num_sites=30, env_dims=4, env_dist = MvNormal(ones(env_dims)))
+    coords = [(rand(), rand()) for _ = 1:num_sites]
+    env = Dict(:env => [rand(env_dist) for c in coords])
+    Coordinates(coords, env)
+end
 
 
 # ====================================================
