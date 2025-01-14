@@ -31,8 +31,7 @@ pkg> add MetacommunityDynamics
 
 ## Background and Motivation
 
-- so this should justify the major elements that must be includeable in
-  simulation 
+- so this should justify the major elements that must be includeable in simulation 
 
 ---
 
