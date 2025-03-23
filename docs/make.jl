@@ -14,6 +14,7 @@ makedocs(
     format = DocumenterVitepress.MarkdownVitepress(
         repo="https://github.com/gottacatchenall/MetacommunityDynamics.jl",
         devurl="dev",
+        ansicolor = true
     ),
     warnonly = true,
     plugins = [bib], 
