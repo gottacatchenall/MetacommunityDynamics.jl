@@ -52,10 +52,11 @@ sg.potential))){/blue} out of $(_possible_links(sg.potential)) possible links.
 """
 Base.show(io::IO, ::MIME"text/plain", sg::SpatialGraph) = begin 
     tprint(string(sg))
-    print(
-        io,
-        UnicodePlots.heatmap(sg.potential, xlabel="Node i", ylabel="Node j", zlabel="ϕᵢⱼ", width=30)
-    )
+    #print(
+    #    io,
+    plt = UnicodePlots.heatmap(sg.potential, xlabel="Node i", ylabel="Node j", zlabel="ϕᵢⱼ", width=30)
+    display(plt)
+    #)
 end
 
 

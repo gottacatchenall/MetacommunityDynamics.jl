@@ -74,6 +74,12 @@ single environmental varaible `:e1`, similarly uniformally drawn from $[0,1]$.
 sg = SpatialGraph(Coordinates(20), DispersalKernel(max_distance=0.3))
 ```
 
+second attempt without ansicolor
+```@example 1; 
+sg = SpatialGraph(Coordinates(20), DispersalKernel(max_distance=0.3))
+```
+
+
 Now, we provide a function that encodes our model of the niche as described
 above. Note that a niche function is expected to take a `model`, `traits`, and
 particular patch's environmental condition, and return the modified the parameters for that
@@ -131,6 +137,6 @@ prob = problem(spatialrm, diff)
 
 and run the model using `simulate`
 
-```@example 1; ansicolor=true
+```@example 1; 
 simulate(prob)
 ```
