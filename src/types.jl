@@ -1,11 +1,11 @@
 """
     Scale
 
-Abstract type that is a supertype for all model scales: [`Population`](@ref),
-[`Metapopulation`](@ref), [`Community`](@ref), and [`Metacommunity`](@ref). A
+Abstract type that is a supertype for all model scales: [`Population`],
+[`Metapopulation`], [`Community`], and [`Metacommunity`]. A
 model's scale is what it was _orginally_ defined as. For example,
-[`TrophicLotkaVolterra`](@ref) is a [`Community`](@ref) model, regardless of
-whether is has been convert to run on a spatial-graph via [`spatialize`](@ref).
+[`TrophicLotkaVolterra`] is a [`Community`] model, regardless of
+whether is has been convert to run on a spatial-graph via [`spatialize`].
 """
 abstract type Scale end 
 
@@ -24,9 +24,9 @@ abstract type Metacommunity <: Scale end
     Measurement
 
 The Measurement abstract type is a supertype for the different types of
-_measurements_ a model describes, primarily [`Biomass`](@ref): a continuous
-value representing relative amount of mass per species, [`Abundance`](@ref): an
-integer valued count of individuals, and [`Occupancy`](@ref): a binary value of
+_measurements_ a model describes, primarily [`Biomass`]: a continuous
+value representing relative amount of mass per species, [`Abundance`]: an
+integer valued count of individuals, and [`Occupancy`]: a binary value of
 whether is species is present at a location at a given time. 
 """
 abstract type Measurement end

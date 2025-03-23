@@ -2,8 +2,8 @@
     Model{SC<:Scale,M<:Measurement,SP<:Spatialness,D<:Discreteness}
 
 The abstract type from all models in MetacommunityDynamics. All `Model`'s are
-parametric types that stores four parameters that describe the model: [`Scale`](@ref),
-[`Measurement`](@ref), [`Spatialness`](@ref), and [`Discreteness`](@ref). 
+parametric types that stores four parameters that describe the model: [`Scale`],
+[`Measurement`], [`Spatialness`], and [`Discreteness`]. 
 """
 abstract type Model{SC<:Scale,M<:Measurement,SP<:Spatialness,D<:Discreteness} end 
 
