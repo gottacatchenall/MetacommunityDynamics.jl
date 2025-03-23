@@ -70,7 +70,7 @@ Next, we'll initialize a spatial graph with 20 patches. Note that when not
 initialized with environmental variable,`SpatialGraph`'s are initialized with a
 single environmental varaible `:e1`, similarly uniformally drawn from $[0,1]$.
 
-```@example 1
+```@example 1; ansicolor=true
 sg = SpatialGraph(Coordinates(20), DispersalKernel(max_distance=0.3))
 ```
 
@@ -131,6 +131,6 @@ prob = problem(spatialrm, diff)
 
 and run the model using `simulate`
 
-```@example 1
+```@example 1; ansicolor=true
 simulate(prob)
 ```
