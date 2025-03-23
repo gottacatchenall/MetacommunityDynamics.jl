@@ -16,7 +16,7 @@ using MetacommunityDynamics
 ```
 
 For this example, we are going to use one of the many models included in the
-`MetacommunityDynamics` library. The Rosenzweig-MacArthur [@cite] model of
+`MetacommunityDynamics` library. The Rosenzweig-MacArthur model of
 consumer-resource dynamics. Initially, the Rosenzweig-MacArthur was originally
 defined as  
 
