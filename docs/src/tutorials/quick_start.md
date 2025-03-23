@@ -72,13 +72,13 @@ single environmental varaible `:e1`, similarly uniformally drawn from $[0,1]$.
 
 ```@example 1; ansicolor=true
 sg = SpatialGraph(Coordinates(20), DispersalKernel(max_distance=0.3))
-UnicodePlots.heatmap(sg.potential, xlabel="Node i", ylabel="Node j", zlabel="ϕᵢⱼ", width=30)
+MetacommunityDynamics.UnicodePlots.heatmap(sg.potential, xlabel="Node i", ylabel="Node j", zlabel="ϕᵢⱼ", width=30)
 ```
 
 second attempt without ansicolor
 ```@example 1; 
 sg = SpatialGraph(Coordinates(20), DispersalKernel(max_distance=0.3))
-UnicodePlots.heatmap(sg.potential, xlabel="Node i", ylabel="Node j", zlabel="ϕᵢⱼ", width=30)
+MetacommunityDynamics.UnicodePlots.heatmap(sg.potential, xlabel="Node i", ylabel="Node j", zlabel="ϕᵢⱼ", width=30)
 ```
 
 
