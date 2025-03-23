@@ -16,7 +16,7 @@ reaction-diffusion dynamics on spatial graphs, where we'll simulate how
 dispersal causes an LV system across many patches to become synchronized.
 
 Let's start by loading the package. If you have not installed Julia or
-MetacommunityDynamics, see this [installation guide](TODO).
+MetacommunityDynamics, see this [installation guide].
 
 
 ```@example 1
