@@ -36,7 +36,7 @@ By default, in `MetacommunityDynamics` the `RosenzweigMacArthur` model is parame
 for two species exhibiting a limit cycle, though it can be used for an arbitrary
 number of species (See _TODO custom parameterization_ section). 
 
-```@example 1
+```@ansi 1
 rosen = RosenzweigMacArthur()
 ```
 
@@ -59,7 +59,7 @@ trait-environmental matching for consumer growth.
 
 We'll first do this by initializing a two-species `SpeciesPool`
 
-```@example 1
+```@ansi 1
 sp = SpeciesPool(2)
 ```
 
@@ -70,17 +70,9 @@ Next, we'll initialize a spatial graph with 20 patches. Note that when not
 initialized with environmental variable,`SpatialGraph`'s are initialized with a
 single environmental varaible `:e1`, similarly uniformally drawn from $[0,1]$.
 
-```@example 1; ansicolor=true
+```@ansi 1
 sg = SpatialGraph(Coordinates(20), DispersalKernel(max_distance=0.3))
-MetacommunityDynamics.UnicodePlots.heatmap(sg.potential, xlabel="Node i", ylabel="Node j", zlabel="ϕᵢⱼ", width=30)
 ```
-
-second attempt without ansicolor
-```@example 1; 
-sg = SpatialGraph(Coordinates(20), DispersalKernel(max_distance=0.3))
-MetacommunityDynamics.UnicodePlots.heatmap(sg.potential, xlabel="Node i", ylabel="Node j", zlabel="ϕᵢⱼ", width=30)
-```
-
 
 Now, we provide a function that encodes our model of the niche as described
 above. Note that a niche function is expected to take a `model`, `traits`, and
@@ -88,7 +80,7 @@ particular patch's environmental condition, and return the modified the paramete
 particular _patch_.
 
 
-```@example 1
+```@ansi 1
 function niche(model, traits, local_env)
     θ = paramdict(model)
     θ[:λ] = [λᵢ > 0 ? λᵢ*exp(-(traits[:x][i] - local_env[:e])^2) : 0 for (i,λᵢ) in enumerate(θ[:λ])]
@@ -102,7 +94,7 @@ provided, by default spatialize will used identical parameters across all sites.
 This may be of interested if the goal is understanding the consequences of
 dispersal absent environmental variation.
 
-```@example 1
+```@ansi 1
 spatialrm = spatialize(rosen, sg, sp; niche=niche)
 ```
 
@@ -125,7 +117,7 @@ will be equal to zero.
 
 Finally, we can define our `Diffusion` model using a base migration probability and the dispersal potential.
 
-```@example 1
+```@ansi 1
 m = 0.01
 diff = Diffusion(m, sg)
 ```
@@ -133,12 +125,12 @@ Now, we can finally construct the a `Problem` using our local dynamics
 `spatialrm` model and our diffusion model `diff`. Initial conditions and
 timespan can be provided here.
 
-```@example 1
+```@ansi 1
 prob = problem(spatialrm, diff)
 ```
 
 and run the model using `simulate`
 
-```@example 1; 
+```@ansi 1 
 simulate(prob)
 ```

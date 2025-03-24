@@ -11,14 +11,10 @@ makedocs(
     sitename = "MetacommunityDynamics.jl",
     authors = "Michael D. Catchen",
     modules = [MetacommunityDynamics],
-    #=format = DocumenterVitepress.MarkdownVitepress(
+    format = DocumenterVitepress.MarkdownVitepress(
         repo="https://github.com/gottacatchenall/MetacommunityDynamics.jl",
         devurl="dev",
-    ),=#
-    format = Documenter.HTML(
-        ansicolor=true, 
-        collapselevel=1,
-        size_threshold = 600_000),
+    ),
     warnonly = true,
     plugins = [bib], 
 )

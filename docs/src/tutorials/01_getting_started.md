@@ -28,24 +28,23 @@ using MetacommunityDynamics
 `MetacommunityDynamics.jl` includes a library of many common models for
 population and community dynamics. 
 
-```@example 1
+```@ansi 1
 lv = TrophicLotkaVolterra()
 ```
 
-```@example 1
+```@ansi 1
 prob = problem(lv)
 ```
 
-```@example 1
-traj = simulate(prob);
-makieplot(traj)
+```@ansi 1
+traj = simulate(prob)
 ```
 
 ### Changing parameters
 
 foo
 
-```@example 1
+```@ansi 1
 lv_custom_params = TrophicLotkaVolterra(λ = 0.1, γ = 0.3)
 traj = simulate(problem(lv_custom_params))
 makieplot(traj)
@@ -73,10 +72,10 @@ makieplot(simulate(prob))
 
 bar
 
-```@example 1
+```@ansi 1
 using DifferentialEquations
 prob = problem(lv)
-makieplot(simulate(prob, solver=Vern7()))
+simulate(prob, solver=Vern7())
 ```
 
 foo
@@ -84,40 +83,37 @@ foo
 
 ## Making our model spatial
 
-```@example 1
-coords = Coordinates(20);
-makieplot(coords)
+```@ansi 1
+coords = Coordinates(20)
 ```
 
 foo
 
-```@example 1
-kern = DispersalKernel(decay=3., max_distance=1.5);
-makieplot(kern)
+```@ansi 1
+kern = DispersalKernel(decay=3., max_distance=1.5)
 ```
 
 bar
 
-```@example 1
-sg = SpatialGraph(coords, kern);
-makieplot(sg)
+```@ansi 1
+sg = SpatialGraph(coords, kern)
 ```
 
 foobar
 
-```@example 1
-spatial_lv = spatialize(lv, sg, SpeciesPool(2));
+```@ansi 1
+spatial_lv = spatialize(lv, sg, SpeciesPool(2))
 ```
 
 very low migration
 
-```@example 1
+```@ansi 1
 diffusion = Diffusion(sg, 0.001)
 ```
 
 foobarbaz
 
-```@example 1
+```@ansi 1
 spatial_prob = problem(spatial_lv, diffusion; 
     u0=rand(2,numsites(sg)),
     tspan=(1,300)
@@ -126,31 +122,29 @@ spatial_prob = problem(spatial_lv, diffusion;
 
 foo
 
-```@example 1
+```@ansi 1
 t = simulate(spatial_prob)
-makieplot(t)
 ```
 biz
 
 Very high migration
 
-```@example 1
+```@ansi 1
 diffusion = Diffusion(sg, 0.1)
 
 spatial_prob = problem(spatial_lv, diffusion; 
     u0=rand(2,numsites(sg)),
     tspan=(1,300)
-);
+)
 
 t = simulate(spatial_prob)
-makieplot(t)
 ```
 
 Notice the difference in synchrony
 
 ## Species specific dispersal
 
-```@example 1
+```@ansi 1
 diffusion_vec = [Diffusion(sg, 0.1), Diffusion(sg, 0.01)]
 
 spatial_prob = problem(spatial_lv, diffusion_vec; 
@@ -159,17 +153,16 @@ spatial_prob = problem(spatial_lv, diffusion_vec;
 );
 
 t = simulate(spatial_prob)
-makieplot(t)
 ```
 
 ## Demographic stochasticity
 
 something in the vector of diffusions + stochastic constructor is broken.
 
-```@example 1
+```@ansi 1
 spatial_prob = problem(spatial_lv, diffusion_vec, GaussianDrift(0.05); 
     tspan=(1,300)
-);
+)
 ```
 
 
